@@ -12,5 +12,11 @@
   },
   "keywords": [
     "mongodb"
-  ]
+  ],
+  "dependencies": {
+    "mongodb": "^6.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12"
+  }
 }
