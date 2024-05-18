@@ -1,0 +1,16 @@
+{
+  "name": "xc-mongo-db",
+  "version": "0.0.1",
+  "author": "Fran Cadaval",
+  "description": "This library provides support for the MongoDB database.",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mongodb"
+  ]
+}
