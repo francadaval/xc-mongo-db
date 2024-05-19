@@ -1,11 +1,10 @@
-import { Filter } from "mongodb";
 import { ConnectionService } from "../connection";
-import { MongoOperations } from "../operations";
+import { RepositoryInterface } from "./repository.interface";
 
 const TEST_DB = 'test_db';
 const TEST_COLLECTION = 'test_collection';
 
-export class Repository<T> implements MongoOperations<T> {
+export class BaseRepository<T> implements RepositoryInterface<T> {
 
     constructor(private connectionService: ConnectionService) {};
 

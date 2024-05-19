@@ -1,8 +1,8 @@
 import { ConnectionService } from "./connection";
-import { Repository } from "./repositories/repository";
+import { TestRepo } from "./tests/test-repo";
 
 let connectionService = new ConnectionService();
-let repo = new Repository<any>(connectionService);
+let repo = new TestRepo(connectionService);
 
 repo.insertOne({
     name: 'test_document',
