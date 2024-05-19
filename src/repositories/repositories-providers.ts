@@ -1,4 +1,4 @@
-import { Abstract, FactoryProvider, Type } from "@nestjs/common";
+import { Abstract, FactoryProvider } from "@nestjs/common";
 import { ConnectionService } from "../connection";
 import { BaseRepository } from "./base-repository";
 
@@ -6,7 +6,7 @@ function createFactoryProvider(type: Abstract<any>): FactoryProvider {
     return {
         provide: type,
         useFactory: (connectionService: ConnectionService)=> {
-            return new BaseRepository(connectionService);
+            return new BaseRepository(connectionService, type.prototype.connectionParams);
         },
         inject: [ConnectionService]
     }
