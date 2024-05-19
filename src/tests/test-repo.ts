@@ -7,7 +7,6 @@ import { TestEntity } from "./test-entity";
 const TEST_DB = 'test_db';
 const TEST_COLLECTION = 'test_collection';
 
-@Injectable()
 @Repository(TEST_DB, TEST_COLLECTION)
 export class TestRepo extends BaseRepository<TestEntity> {
     constructor(connectionService: ConnectionService) {
