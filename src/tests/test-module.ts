@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConnectionService } from "../connection";
-import { RepositoriesProviders } from "../repositories/repositories-provider";
+import { RepositoriesProviders } from "../repositories/repositories-providers";
 import { TestRepo } from "./test-repo";
 
 @Module({
