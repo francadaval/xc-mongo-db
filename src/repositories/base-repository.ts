@@ -9,6 +9,7 @@ export class BaseRepository<T> implements RepositoryInterface<T> {
     constructor(private connectionService: ConnectionService) {};
 
     async insertOne(doc: T): Promise<void> {
+        console.log("BaseRepository: insertOne")
         let client = this.connectionService.getMongoClient();
         await client.connect();
         let db = client.db(TEST_DB);
@@ -17,6 +18,7 @@ export class BaseRepository<T> implements RepositoryInterface<T> {
     }
 
     async insertMany(docs: T[]): Promise<void> {
+        console.log("BaseRepository: insertMany")
         let client = this.connectionService.getMongoClient();
         await client.connect();
         let db = client.db(TEST_DB);
