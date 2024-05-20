@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { MongoClient } from "mongodb";
 
 const TEST_URI = "mongodb://root:epdsrntrMDB@localhost:27017";
 
 @Injectable()
 export class ConnectionService {
+    private readonly logger = new Logger(ConnectionService.name);
     private client: MongoClient;
 
     constructor() {
@@ -22,9 +23,9 @@ export class ConnectionService {
     private async testConnection() {
         try {
             await this.client.db("admin").command({ ping: 1 });
-            console.log("Pinged your deployment. You successfully connected to MongoDB!");
+            this.logger.log("Successfully connected to MongoDB!");
         } catch {
-            console.log("Error trying to connect to MongoDB!");
+            this.logger.error("Error trying to connect to MongoDB!");
         }
     }
 }

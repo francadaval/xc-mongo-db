@@ -1,9 +1,11 @@
-import { Abstract } from "@nestjs/common";
+import { Abstract, Logger } from "@nestjs/common";
+
+const logger = new Logger(Repository.name);
 
 export function Repository(db: string, collection: string) {
-        console.log("Repository(): factory evaluated");
+        logger.debug("Factory evaluated");
     return function (abstract: Abstract<any>) {
-        console.log("Repository(): called");
+        logger.debug(`Decorator called for ${abstract.name}.`);
         abstract.prototype.connectionParams = {
             db, collection
         }

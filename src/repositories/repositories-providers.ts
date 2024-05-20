@@ -1,9 +1,11 @@
-import { Abstract, FactoryProvider, Type } from "@nestjs/common";
+import { Abstract, FactoryProvider, Logger, Type } from "@nestjs/common";
 import { ConnectionService } from "../connection";
 import { BaseRepository } from "./base-repository";
 
 function createRepository(type: Abstract<any>, connectionService: ConnectionService): BaseRepository<any> {
-    return new (type as Type<any>)(connectionService, type.prototype.connectionParams);
+    const repo = new (type as Type<any>)(connectionService, type.prototype.connectionParams);
+    repo.logger = new Logger(type.name);
+    return repo;
 };
 
 function createFactoryProvider(type: Abstract<any>): FactoryProvider {

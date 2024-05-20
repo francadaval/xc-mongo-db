@@ -1,12 +1,13 @@
+import { Logger } from "@nestjs/common";
 import { ConnectionService } from "../connection";
 import { RepositoryInterface } from "./repository.interface";
 
-export class BaseRepository<T> implements RepositoryInterface<T> {
-
+export abstract class BaseRepository<T> implements RepositoryInterface<T> {
+    readonly logger: Logger
     constructor(private connectionService: ConnectionService, private connectionParams) {};
 
     async insertOne(doc: T): Promise<void> {
-        console.log("BaseRepository: insertOne")
+        this.logger.log(this.insertOne.name);
         let client = this.connectionService.getMongoClient();
         await client.connect();
         let db = client.db(this.connectionParams.db);
@@ -15,7 +16,7 @@ export class BaseRepository<T> implements RepositoryInterface<T> {
     }
 
     async insertMany(docs: T[]): Promise<void> {
-        console.log("BaseRepository: insertMany")
+        this.logger.log(this.insertMany.name);
         let client = this.connectionService.getMongoClient();
         await client.connect();
         let db = client.db(this.connectionParams.db);

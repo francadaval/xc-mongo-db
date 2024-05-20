@@ -1,12 +1,14 @@
-import { Type } from "@nestjs/common";
+import { Logger } from "@nestjs/common";
+
+const logger = new Logger(RepositoryMethod.name);
 
 export function RepositoryMethod() {
-        console.log("RepositoryMethod(): factory evaluated");
+        logger.debug("Factory evaluated");
     return function (target: Object, propertyKey: any, descriptor: PropertyDescriptor) {
-        console.log("RepositoryMethod(): called");
+        logger.debug(`Decorator called for ${propertyKey}`);
         descriptor.value = function() {
-            console.log(`Repo function ${propertyKey} called with arguments: ${JSON.stringify(arguments)}`);
-            console.log("Instance atribute: " + this.test_att);
+            logger.debug(`Repo function ${propertyKey} called with arguments: ${JSON.stringify(arguments)}`);
+            logger.debug("Instance atribute: " + this.test_att);
         }
     };
 }
