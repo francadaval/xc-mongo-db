@@ -1,26 +1,31 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "../connection";
 import { RepositoryInterface } from "./repository.interface";
+import { EntityInterface } from "../entities";
+import { Collection, InferIdType } from "mongodb";
 
-export abstract class BaseRepository<T> implements RepositoryInterface<T> {
-    readonly logger: Logger
-    constructor(private connectionService: ConnectionService, private connectionParams) {};
+export abstract class BaseRepository<T extends EntityInterface> implements RepositoryInterface<T> {
+    abstract readonly logger: Logger
+    readonly collection: Collection;
+
+    protected constructor(protected connectionService: ConnectionService, db: string, collection: string) {
+        let client = this.connectionService.getMongoClient();
+        this.collection = client.db(db).collection(collection);
+    };
 
     async insertOne(doc: T): Promise<void> {
-        this.logger.log(this.insertOne.name);
-        let client = this.connectionService.getMongoClient();
-        await client.connect();
-        let db = client.db(this.connectionParams.db);
-        let collection = db.collection(this.connectionParams.collection);
-        await collection.insertOne(doc);
+        this.logger.log(`insertOne`);
+        await this.collection.insertOne(doc);
     }
 
     async insertMany(docs: T[]): Promise<void> {
-        this.logger.log(this.insertMany.name);
-        let client = this.connectionService.getMongoClient();
-        await client.connect();
-        let db = client.db(this.connectionParams.db);
-        let collection = db.collection(this.connectionParams.collection);
-        await collection.insertMany(docs);
+        this.logger.log(`insertMany`);
+        await this.collection.insertMany(docs);
+    }
+
+    async findOne(_id: InferIdType<T>): Promise<T> {
+        this.logger.log(`findOne`);
+        const response = await this.collection.findOne({_id});
+        return response as T;
     }
 }

@@ -4,7 +4,7 @@ import { BaseRepository } from "./base-repository";
 
 function createRepository(type: Abstract<any>, connectionService: ConnectionService): BaseRepository<any> {
     const repo = new (type as Type<any>)(connectionService, type.prototype.connectionParams);
-    repo.logger = new Logger(type.name);
+    logger.log(`${createRepository.name}: ${type.name}`);
     return repo;
 };
 
@@ -19,3 +19,5 @@ function createFactoryProvider(type: Abstract<any>): FactoryProvider {
 export const RepositoriesProviders = (repoTypes: Abstract<any>[]) => {
     return repoTypes.map(type => createFactoryProvider(type));
 };
+
+const logger = new Logger(RepositoriesProviders.name)

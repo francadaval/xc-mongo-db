@@ -6,18 +6,14 @@ const TEST_URI = "mongodb://root:epdsrntrMDB@localhost:27017";
 @Injectable()
 export class ConnectionService {
     private readonly logger = new Logger(ConnectionService.name);
-    private client: MongoClient;
+    private client: MongoClient = new MongoClient(TEST_URI);;
 
     constructor() {
+        this.testConnection();
     }
 
     getMongoClient(): MongoClient {
-        if(!this.client) {
-            this.client = new MongoClient(TEST_URI);
-            this.testConnection();
-        }
-
-        return this.client;
+         return this.client;
     }
 
     private async testConnection() {
