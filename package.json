@@ -4,11 +4,11 @@
   "author": "Fran Cadaval",
   "description": "This library provides support for the MongoDB database.",
   "license": "ISC",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "node ./dist/test"
+    "test": "node ./dist/src/test"
   },
   "keywords": [
     "mongodb"

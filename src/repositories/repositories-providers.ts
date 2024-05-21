@@ -3,8 +3,9 @@ import { ConnectionService } from "../connection";
 import { BaseRepository } from "./base-repository";
 
 function createRepository(type: Abstract<any>, connectionService: ConnectionService): BaseRepository<any> {
-    const repo = new (type as Type<any>)(connectionService, type.prototype.connectionParams);
-    logger.log(`${createRepository.name}: ${type.name}`);
+    const repo = new (type as Type<any>)(connectionService);
+    const className = Object.getPrototypeOf(type).name;
+    logger.log(`${createRepository.name}: ${className}`);
     return repo;
 };
 

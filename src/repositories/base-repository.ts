@@ -5,10 +5,10 @@ import { EntityInterface } from "../entities";
 import { Collection, InferIdType } from "mongodb";
 
 export abstract class BaseRepository<T extends EntityInterface> implements RepositoryInterface<T> {
-    abstract readonly logger: Logger
+    protected logger?: Logger
     readonly collection: Collection;
 
-    protected constructor(protected connectionService: ConnectionService, db: string, collection: string) {
+    constructor(protected connectionService: ConnectionService, db: string, collection: string) {
         let client = this.connectionService.getMongoClient();
         this.collection = client.db(db).collection(collection);
     };

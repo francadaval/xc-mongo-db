@@ -1,16 +1,17 @@
-import { Abstract, Logger, Type } from "@nestjs/common";
-import { ConnectionService } from "../../connection";
+import { Logger } from "@nestjs/common";
 
 const logger = new Logger(Repository.name);
 
-export function Repository(db: string, collection: string, type: any) {
+export function Repository(db: string, collection: string) {
         logger.debug("Factory evaluated");
-    return function <T extends Abstract<any>> (RepoType: T) {
+    return function (RepoType: any) {
         logger.debug(`Decorator called for ${RepoType.name}.`);
-        return {[RepoType.name](connectionService: ConnectionService) {
-            const instance = new (RepoType as unknown as Type<any>)(connectionService, db, collection);
-            instance.logger = new Logger(RepoType.name);
-            return instance;
-        }}[RepoType.name] as unknown as typeof RepoType;
+
+        return class extends RepoType {
+            constructor(...args: any[]) {
+                super(args[0], db, collection);
+                this.logger = new Logger(RepoType.name);
+            }
+        } as typeof RepoType;
     };
 }
