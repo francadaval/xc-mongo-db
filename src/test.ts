@@ -29,7 +29,11 @@ async function bootstrap() {
         date: new Date()
     });
 
-    testRepo2.findByValue1(12);
+    try {
+        testRepo2.findByValue1(12);
+    } catch (err) {
+        logger.error(err);
+    }
 
     process.exit();
 }

@@ -1,8 +1,7 @@
 import { Logger, Type } from "@nestjs/common";
+import { MetadataKeys } from "./metadata-keys";
 
 const logger = new Logger(Property.name);
-
-const ENTITY_PROPERTIES = "entity:properties"
 
 type PropertyDecoratorParameters = {
     propertyDBName?: string
@@ -11,10 +10,12 @@ type PropertyDecoratorParameters = {
 
 export function Property(parameters?: PropertyDecoratorParameters) {
     return function (target: any, propertyKey: string) {
-        let properties = Reflect.getOwnMetadata(ENTITY_PROPERTIES, target.constructor) || {};
-        properties[propertyKey] = parameters || {};
-        Reflect.defineMetadata(ENTITY_PROPERTIES, properties, target.constructor);
+        let targetConstructor = target.constructor;
 
-        logger.debug(`Property ${propertyKey} registered for ${target.constructor.name}.`)
+        let properties = Reflect.getOwnMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor) || {};
+        properties[propertyKey] = parameters || {};
+        Reflect.defineMetadata(MetadataKeys.ENTITY_PROPERTIES, properties, targetConstructor);
+
+        logger.debug(`Property registered: ${targetConstructor.name}:${propertyKey}.`)
     };
 }

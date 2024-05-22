@@ -1,19 +1,16 @@
 import { Logger } from "@nestjs/common";
+import { MetadataKeys } from "./metadata-keys";
 
 const logger = new Logger(RepositoryMethod.name);
 
-const REPOSITORY_METHODS = 'repository:methods';
-
 export function RepositoryMethod() {
-    return function (target: Object, propertyKey: any, descriptor: PropertyDescriptor) {
-        logger.debug(`Decorator called for ${target.constructor.name}:${propertyKey}`);
+    return function (target: Object, propertyKey: any, descriptor: PropertyDescriptor) { 
+        let targetConstructor = target.constructor;
 
-        let methods = Reflect.getOwnMetadata(REPOSITORY_METHODS, target) || [];
+        let methods = Reflect.getOwnMetadata(MetadataKeys.REPOSITORY_METHODS, targetConstructor) || [];
         methods.push(propertyKey);
-        Reflect.defineMetadata(REPOSITORY_METHODS, [], target);
-
-        descriptor.value = function() {
-            this.logger.debug(`Repo function ${propertyKey} called with arguments: ${JSON.stringify(arguments)}`);
-        }
+        Reflect.defineMetadata(MetadataKeys.REPOSITORY_METHODS, methods, targetConstructor);
+       
+        logger.debug(`Method registered: ${targetConstructor.name}:${propertyKey}`);
     };
 }
