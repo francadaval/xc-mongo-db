@@ -6,7 +6,7 @@ import { TestRepo2 } from "./test-repo-2";
 
 @Module({
     providers: [
-        ConnectionService, 
+        ConnectionService,
         ...RepositoriesProviders([
             TestRepo,
             TestRepo2

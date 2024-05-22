@@ -2,11 +2,19 @@ import { NestFactory } from "@nestjs/core";
 import { TestModule } from "./tests/test-module";
 import { TestRepo } from "./tests/test-repo";
 import { TestRepo2 } from "./tests/test-repo-2";
+import { Logger } from "@nestjs/common";
+import { TestEntity } from "./tests/test-entity";
+
+const logger = new Logger("Main");
 
 async function bootstrap() {
+    logger.log("Start tests!!");
     const testApp = await NestFactory.createApplicationContext(TestModule);
+    logger.log("Application context created.");
 
     let testRepo = testApp.get(TestRepo);
+    let testEntity = new TestEntity();
+
     await testRepo.insertOne({
         name: "Test entity",
         value: 42,

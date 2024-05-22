@@ -2,6 +2,10 @@ import { Abstract, FactoryProvider, Logger, Type } from "@nestjs/common";
 import { ConnectionService } from "../connection";
 import { BaseRepository } from "./base-repository";
 
+export const RepositoriesProviders = (repoTypes: Abstract<any>[]) => {
+    return repoTypes.map(type => createFactoryProvider(type));
+};
+
 function createRepository(type: Abstract<any>, connectionService: ConnectionService): BaseRepository<any> {
     const repo = new (type as Type<any>)(connectionService);
     const className = Object.getPrototypeOf(type).name;
@@ -16,9 +20,5 @@ function createFactoryProvider(type: Abstract<any>): FactoryProvider {
         inject: [ConnectionService]
     }
 }
-
-export const RepositoriesProviders = (repoTypes: Abstract<any>[]) => {
-    return repoTypes.map(type => createFactoryProvider(type));
-};
 
 const logger = new Logger(RepositoriesProviders.name)

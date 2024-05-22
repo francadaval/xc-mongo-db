@@ -1,9 +1,11 @@
+import { Entity, Property } from "../decorators";
 import { EntityInterface } from "../entities";
 
+@Entity()
 export class TestEntity2 implements EntityInterface {
-    _id?: any;
-    name?: string;
-    value1?: number;
-    value2?: number;
-    date?: Date;
+    @Property() _id?: any;
+    @Property() name?: string;
+    @Property() value1?: number;
+    @Property() value2?: number;
+    @Property() date?: Date;
 }

@@ -3,7 +3,6 @@ import { Logger } from "@nestjs/common";
 const logger = new Logger(Repository.name);
 
 export function Repository(db: string, collection: string) {
-        logger.debug("Factory evaluated");
     return function (RepoType: any) {
         logger.debug(`Decorator called for ${RepoType.name}.`);
 

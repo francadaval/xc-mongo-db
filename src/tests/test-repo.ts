@@ -1,6 +1,5 @@
-import { RepositoryMethod } from "../repositories";
 import { BaseRepository } from "../repositories/base-repository";
-import { Repository } from "../repositories/decorators/repository.decorator";
+import { Repository, RepositoryMethod } from "../decorators";
 import { TestEntity } from "./test-entity";
 
 const TEST_DB = 'test_db';
