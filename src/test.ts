@@ -31,6 +31,8 @@ async function bootstrap() {
 
     try {
         testRepo2.findByValue1(12);
+        testRepo2.findByValue2(56);
+        testRepo.findByValue(40);
     } catch (err) {
         logger.error(err);
     }

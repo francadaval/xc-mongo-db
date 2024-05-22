@@ -7,6 +7,12 @@ export function Repository(db: string, collection: string) {
     return function (RepoType: any) {
         let methods = Reflect.getOwnMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
         logger.debug(`${RepoType.name} evaluated with ${methods.length} methods.`);
+
+        methods.forEach(method => {
+            RepoType.prototype[method] = function() {
+                logger.debug(`Repo function ${method} called with arguments: ${JSON.stringify(arguments)}`);
+            }
+        });
         
         return class extends RepoType {
             constructor(...args: any[]) {
