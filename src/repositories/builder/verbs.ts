@@ -1,4 +1,4 @@
 export const Verbs = {
-    findOne: 'findBy',
+    findBy: 'findBy',
     findOneBy: 'findOneBy'
 }
