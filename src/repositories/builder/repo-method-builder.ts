@@ -1,7 +1,8 @@
+import { EntityProperties } from "../../decorators";
 import { parseMethodName } from "./parser";
 import { Verbs } from "./verbs";
 
-export function buildRepositoryMethod(methodName) {
+export function buildRepositoryMethod(methodName: string, entityProperties: EntityProperties) {
     const result = parseMethodName(methodName)
 
     switch(result.verb) {
@@ -21,7 +22,6 @@ function buildFindOneByMethod(complementGroups) {
         this.logger.debug("Custom empty findByOne method!!");
     }
 }
-
 
 function buildFindOneMethod(complementGroups) {
     return function () {

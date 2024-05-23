@@ -3,9 +3,8 @@ import { BaseRepository} from "../repositories";
 import { TestEntity2 } from "./test-entity-2";
 
 const TEST_DB = 'test_db';
-const TEST_COLLECTION = 'test_collection_2';
 
-@Repository(TEST_DB, TEST_COLLECTION)
+@Repository(TEST_DB, TestEntity2)
 export abstract class TestRepo2 extends BaseRepository<TestEntity2> {
 
     @RepositoryMethod()

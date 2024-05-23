@@ -1,7 +1,9 @@
 import { Entity, Property } from "../decorators";
 import { EntityInterface } from "../entities";
 
-@Entity()
+@Entity({
+    collectionName: 'test_collection_2'
+})
 export class TestEntity2 implements EntityInterface {
     @Property() _id?: any;
     @Property() name?: string;
