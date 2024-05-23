@@ -1,5 +1,6 @@
 import { Logger } from "@nestjs/common";
 import { MetadataKeys } from "./metadata-keys";
+import { buildRepositoryMethod } from "../repositories/builder/repo-method-builder";
 
 const logger = new Logger(Repository.name);
 
@@ -9,9 +10,7 @@ export function Repository(db: string, collection: string) {
         logger.debug(`${RepoType.name} evaluated with ${methods.length} methods.`);
 
         methods.forEach(method => {
-            RepoType.prototype[method] = function() {
-                logger.debug(`Repo function ${method} called with arguments: ${JSON.stringify(arguments)}`);
-            }
+            RepoType.prototype[method] = buildRepositoryMethod(method);
         });
         
         return class extends RepoType {
@@ -20,6 +19,5 @@ export function Repository(db: string, collection: string) {
                 this.logger = new Logger(RepoType.name);
             }
         } as typeof RepoType;
-        
     };
 }
