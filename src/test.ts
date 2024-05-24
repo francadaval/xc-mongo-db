@@ -30,9 +30,13 @@ async function bootstrap() {
     });
 
     try {
-        testRepo2.findByValue1(12);
-        testRepo2.findByValue2(56);
-        testRepo.findByValue(40);
+        let test1 = await testRepo.findOneByValue(40);
+        let test2_1 = testRepo2.findOneByValue1(16);
+        let test2_2 = testRepo2.findOneByValue2(17);
+
+        logger.log(`test1: ${test1?'exist':'doesn\'t exist'}`);
+        logger.log(`test2_1: ${test2_1?'exist':'doesn\'t exist'}`);
+        logger.log(`test2_2: ${test2_2?'exist':'doesn\'t exist'}`);
     } catch (err) {
         logger.error(err);
     }

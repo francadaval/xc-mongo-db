@@ -8,12 +8,17 @@ const TEST_DB = 'test_db';
 export abstract class TestRepo extends BaseRepository<TestEntity> {
 
     @RepositoryMethod()
-    findByValue(value: number): Promise<TestEntity> {
+    findOneByValue(value: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     };
 
     @RepositoryMethod()
     findOneByLockAndStock(lockAndStock: number): Promise<TestEntity> {
+        throw new Error('Repository not implemented.');
+    }
+
+    @RepositoryMethod()
+    findOneByValueAndLockAndStock(lockAndStock: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     }
 }
