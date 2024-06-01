@@ -16,7 +16,7 @@ export class FindByBuilder implements MethodBuilder {
         if(!groups || !groups.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${FIND_BY}' method.`);
         }
-        let parameters = groups.map( group => group.attribute );
+        let parameters = groups.map( group => group.matchedProperty );
     
         this.logger.debug(`"${methodName}" created`);   
     

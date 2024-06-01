@@ -21,4 +21,9 @@ export abstract class TestRepo2 extends BaseRepository<TestEntity2> {
     findOneByValue1AndValue2(value1: number, value2: number): Promise<TestEntity2> {
         throw new Error('Repository not implemented.')
     };
+
+    @RepositoryMethod()
+    countByValue1(value1: number) {
+        throw new Error('Repository not implemented.')
+    };
 }
