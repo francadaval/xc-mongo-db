@@ -1,10 +1,11 @@
 import { Logger } from "@nestjs/common";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
 import { Collection } from "mongodb";
+import { MethodBuilder } from "./method-builder";
 
 const COUNT_ONE_BY = "countBy";
 
-export class CountByBuilder {
+export class CountByBuilder extends MethodBuilder{
     private logger = new Logger(CountByBuilder.name);
 
     getVerb(): string {
@@ -12,19 +13,16 @@ export class CountByBuilder {
     }
 
     buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
-        if(!groups || !groups.length) {
+        if(!groups?.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${COUNT_ONE_BY}' method.`);
         }
-        let parameters = groups.map( group => group.matchedProperty );
     
-        this.logger.debug(`"${methodName}" created`);   
+        this.logger.debug(`"${methodName}" created`);
+
+        let getFilter = (args) => this.getFilter(groups, args);
     
         return async function (...args) {
-            let filter = {};
-            parameters.forEach((param, i) => {
-                filter[param] = args[i];
-            });
-            return (this.collection as Collection).countDocuments(filter);
+            return (this.collection as Collection).countDocuments(getFilter(args));
         }
     }
 }

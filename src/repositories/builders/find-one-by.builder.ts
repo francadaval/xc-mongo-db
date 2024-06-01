@@ -1,11 +1,11 @@
 import { Logger } from "@nestjs/common";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
-import { MethodBuilder } from "../builder/repo-method-builder";
 import { Collection } from "mongodb";
+import { MethodBuilder } from "./method-builder";
 
 const FIND_ONE_BY = 'findOneBy';
 
-export class FindOneByBuilder implements MethodBuilder {
+export class FindOneByBuilder extends MethodBuilder {
     
     private logger = new Logger(FindOneByBuilder.name);
 
@@ -14,19 +14,15 @@ export class FindOneByBuilder implements MethodBuilder {
     }
 
     buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
-        if(!groups || !groups.length) {
+        if(!groups?.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${FIND_ONE_BY}' method.`);
         }
-        let parameters = groups.map( group => group.matchedProperty );
-    
-        this.logger.debug(`"${methodName}" created`);   
+        this.logger.debug(`"${methodName}" created`);
+        
+        let getFilter = (args) => this.getFilter(groups, args);
     
         return function (...args) {
-            let filter = {};
-            parameters.forEach((param, i) => {
-                filter[param] = args[i];
-            });
-            return (this.collection as Collection).findOne(filter);
+            return (this.collection as Collection).findOne(getFilter(args));
         }
     }
 }

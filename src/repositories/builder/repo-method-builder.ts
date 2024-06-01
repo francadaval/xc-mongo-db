@@ -1,14 +1,9 @@
-import { Collection } from "mongodb";
 import { EntityProperties } from "../../decorators";
 import { MethodNameParser, ParsedMethodGroup } from "./method-name-parser";
 import { Injectable, Logger } from "@nestjs/common";
+import { MethodBuilder } from "../builders/method-builder";
 
 const logger = new Logger("RepoMethodsbuilder");
-
-export abstract class MethodBuilder {
-    abstract getVerb(): string;
-    abstract buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any>
-}
 
 @Injectable()
 export class RepositoryMethodsBuilder {
@@ -41,7 +36,7 @@ export class RepositoryMethodsBuilder {
         return builder.buildFuction(methodName, parser.getMatchedGroups());
     }
 
-    throwError(message: string) {
+    private throwError(message: string) {
         this.logger.error(message);
         throw new Error(message);
     }

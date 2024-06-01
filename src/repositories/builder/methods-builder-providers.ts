@@ -1,5 +1,6 @@
-import { Abstract, FactoryProvider, Type } from "@nestjs/common";
-import { MethodBuilder, RepositoryMethodsBuilder } from "./repo-method-builder";
+import { FactoryProvider, Type } from "@nestjs/common";
+import { RepositoryMethodsBuilder } from "./repo-method-builder";
+import { MethodBuilder } from "../builders/method-builder";
 
 export const MethodsBuilderProviders = (builderTypes: Type<MethodBuilder>[]) => {
     return builderTypes.map(type => createFactoryProvider(type));

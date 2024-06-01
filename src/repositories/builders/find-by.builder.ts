@@ -1,10 +1,10 @@
 import { Logger } from "@nestjs/common";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
-import { MethodBuilder } from "../builder/repo-method-builder";
+import { MethodBuilder } from "./method-builder";
 
 const FIND_BY = 'findBy';
 
-export class FindByBuilder implements MethodBuilder {
+export class FindByBuilder extends MethodBuilder {
     
     private logger = new Logger(FindByBuilder.name);
 
@@ -13,10 +13,9 @@ export class FindByBuilder implements MethodBuilder {
     }
 
     buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
-        if(!groups || !groups.length) {
+        if(!groups?.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${FIND_BY}' method.`);
         }
-        let parameters = groups.map( group => group.matchedProperty );
     
         this.logger.debug(`"${methodName}" created`);   
     
