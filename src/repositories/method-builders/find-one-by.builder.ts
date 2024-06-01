@@ -17,10 +17,10 @@ export class FindOneByBuilder extends MethodBuilder {
         if(!groups?.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${FIND_ONE_BY}' method.`);
         }
-        this.logger.debug(`"${methodName}" created`);
         
         let getFilter = (args) => this.getFilter(groups, args);
-    
+        
+        this.logger.debug(`"${methodName}" created`);
         return function (...args) {
             return (this.collection as Collection).findOne(getFilter(args));
         }

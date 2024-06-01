@@ -35,12 +35,33 @@ async function bootstrap() {
         let test2_2 = await testRepo2.findOneByValue2(17);
         let count16 = await testRepo2.countByValue1(16);
         let count77 = await testRepo2.countByValue1(77);
+        let entities = await testRepo2.findAllByValue1AndValue2(16, 17);
+        let page = await testRepo2.findPageByValue1(16, {
+            page_index: 0,
+            page_size: 5
+        })
+        let page2 = await testRepo2.findPageByValue1(16, {
+            page_index: 30,
+            page_size: 5
+        })
+
 
         logger.log(`test1: ${test1?'exist':'doesn\'t exist'}`);
         logger.log(`test2_1: ${test2_1?'exist':'doesn\'t exist'}`);
         logger.log(`test2_2: ${test2_2?'exist':'doesn\'t exist'}`);
         logger.log(`count16 = ${count16}`);
         logger.log(`count77 = ${count77}`);
+        logger.log(`entities.length = ${entities.length}`);
+
+        logger.log(`page.page_size = ${page.page_size}`);
+        logger.log(`page.items.length = ${page.items.length}`);
+        logger.log(`page.total_size = ${page.total_size}`);
+        logger.log(`page.page_index = ${page.page_index}`);
+
+        logger.log(`page2.page_size = ${page2.page_size}`);
+        logger.log(`page2.items.length = ${page2.items.length}`);
+        logger.log(`page2.total_size = ${page2.total_size}`);
+        logger.log(`page2.page_index = ${page2.page_index}`);
     } catch (err) {
         logger.error(err);
     }

@@ -1,7 +1,7 @@
 import { EntityProperties } from "../../decorators";
 import { MethodNameParser, ParsedMethodGroup } from "./method-name-parser";
 import { Injectable, Logger } from "@nestjs/common";
-import { MethodBuilder } from "../builders/method-builder";
+import { MethodBuilder } from "../method-builders/method-builder";
 
 const logger = new Logger("RepoMethodsbuilder");
 
