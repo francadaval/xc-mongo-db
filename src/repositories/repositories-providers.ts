@@ -1,14 +1,26 @@
 import { Abstract, FactoryProvider, Logger, Type } from "@nestjs/common";
 import { ConnectionService } from "../connection";
 import { BaseRepository } from "./base-repository";
+import { MetadataKeys } from "../decorators/metadata-keys";
+import { EntityProperties } from "../decorators";
+import { RepositoryMethodsBuilder } from "./builder/repo-method-builder";
 
 export const RepositoriesProviders = (repoTypes: Abstract<any>[]) => {
     return repoTypes.map(type => createFactoryProvider(type));
 };
 
-function createRepository(type: Abstract<any>, connectionService: ConnectionService): BaseRepository<any> {
-    const repo = new (type as Type<any>)(connectionService);
-    const className = Object.getPrototypeOf(type).name;
+function createRepository(RepoType: Abstract<any>, connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder): BaseRepository<any> {
+    const className = Object.getPrototypeOf(RepoType).name;
+
+    let methods = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
+    let entityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType);
+    let entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, entityType);
+
+    methods.forEach(method => {
+        RepoType.prototype[method] = methodsBuilder.buildRepositoryMethod(method, entityProperties);
+    });
+
+    const repo = new (RepoType as Type<any>)(connectionService);
     logger.log(`${createRepository.name}: ${className}`);
     return repo;
 };
@@ -16,8 +28,9 @@ function createRepository(type: Abstract<any>, connectionService: ConnectionServ
 function createFactoryProvider(type: Abstract<any>): FactoryProvider {
     return {
         provide: type,
-        useFactory: (connectionService: ConnectionService)=> createRepository(type, connectionService),
-        inject: [ConnectionService]
+        useFactory: (connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder) =>
+            createRepository(type, connectionService, methodsBuilder),
+        inject: [ConnectionService, RepositoryMethodsBuilder]
     }
 }
 

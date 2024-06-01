@@ -1,11 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { Operators } from "./operators";
-import { Verbs } from "./verbs";
 
-const verbs = Object.values(Verbs).join('|');
 const operators = Object.values(Operators).join('|');
-
-const funcRegex = new RegExp(`(${verbs})(.*)$`);
 const complementRegex = new RegExp(`(?<group>(?<precedingOperator>^|${operators})(?<attribute>.+?(?=(?<followingOperator>${operators}|$))))`, 'g');
 
 export type ParsedMethodGroup = {
@@ -26,7 +22,7 @@ export class MethodNameParser {
 
     private static logger = new Logger(MethodNameParser.name);
 
-    constructor(private readonly methodName: string, private readonly properties: string[]) {
+    constructor(private readonly verbs: string[], private readonly methodName: string, private readonly properties: string[]) {
         this.parseMethodVerb();
         this.parseComplement();
         this.createCompundedGroups();
@@ -41,8 +37,12 @@ export class MethodNameParser {
         return this.firstMatchedGroups;
     }
 
+    private funcRegex(verbs: string[]) {
+        return new RegExp(`(${verbs.join('|')})(.*)$`);
+    }
+
     private parseMethodVerb() {
-        let match = funcRegex.exec(this.methodName);
+        let match = this.funcRegex(this.verbs).exec(this.methodName);
         if(match) {
             this.verb = match[1];
             this.complement = match[2];

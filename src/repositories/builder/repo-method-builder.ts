@@ -1,49 +1,48 @@
 import { Collection } from "mongodb";
 import { EntityProperties } from "../../decorators";
 import { MethodNameParser, ParsedMethodGroup } from "./method-name-parser";
-import { Verbs } from "./verbs";
-import { Logger } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 
 const logger = new Logger("RepoMethodsbuilder");
 
-export function buildRepositoryMethod(methodName: string, entityProperties: EntityProperties) {
-    const propertiesNames = Object.keys(entityProperties);
-    let parser = new MethodNameParser(methodName, propertiesNames);
-
-    switch(parser.getVerb()) {
-        case Verbs.findOneBy:
-            return buildFindOneByMethod(parser.getMatchedGroups(), methodName);
-        case Verbs.findBy:
-            return buildFindByMethod(parser.getMatchedGroups(), methodName);
-        default:
-            return function () {
-                logger.debug(`Method "${methodName}" not parseable!!`);        
-            }
-    }
+export abstract class MethodBuilder {
+    abstract getVerb(): string;
+    abstract buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any>
 }
 
-function buildFindOneByMethod(groups: ParsedMethodGroup[], methodName) {
-    if(!groups || !groups.length) {
-        logger.error(`${methodName}: Attributes are required on a '${Verbs.findOneBy}' method.`);
-    }
-    let parameters = groups.map( group => group.attribute );
+@Injectable()
+export class RepositoryMethodsBuilder {
+    private builders: {
+        [verb: string]: MethodBuilder
+    } = {};
+    private logger = new Logger(RepositoryMethodsBuilder.name);
 
-    return function (...args) {
-        let filter = {};
-        parameters.forEach((param, i) => {
-            filter[param] = args[i];
-        });
-        return (this.collection as Collection).findOne(filter);
+    registerBuilder(builder: MethodBuilder) {
+        let verb = builder.getVerb();
+        if(this.builders[verb]) {
+            this.throwError(`Builder for '${verb}' already exist.`)
+        } else {
+            this.logger.log(`Builder registered for ${verb}.`);
+            this.builders[verb] = builder;
+        }
     }
-}
 
-function buildFindByMethod(groups: ParsedMethodGroup[], methodName) {
-    if(!groups || !groups.length) {
-        logger.error(`${methodName}: Attributes are required on a '${Verbs.findOneBy}' method.`);
+    buildRepositoryMethod(methodName: string, entityProperties: EntityProperties): ((...args: any[]) => PromiseLike<any>) {
+        const propertiesNames = Object.keys(entityProperties);
+        let parser = new MethodNameParser(Object.keys(this.builders), methodName, propertiesNames);
+        let verb = parser.getVerb();
+
+        let builder = this.builders[verb];
+
+        if(!builder) {
+            throw new Error(`MethodBuilder not found for ${verb}!`);
+        }
+
+        return builder.buildFuction(methodName, parser.getMatchedGroups());
     }
-    let parameters = groups.map( group => group.attribute );
 
-    return function (...args) {
-        this.logger.debug("Custom empty findBy method!!");
+    throwError(message: string) {
+        this.logger.error(message);
+        throw new Error(message);
     }
 }
