@@ -1,14 +1,10 @@
 import { Logger } from "@nestjs/common";
-import { Operators } from "./operators";
 
-const operators = Object.values(Operators).join('|');
-const complementRegex = new RegExp(`(?<group>(?<precedingOperator>^|${operators})(?<attribute>.+?(?=(?<followingOperator>${operators}|$))))`, 'g');
+const complementRegex = new RegExp(`(?<group>(?<precedingOperator>^|And)(?<attribute>.+?(?=(?<followingOperator>And|$))))`, 'g');
 
 export type ParsedMethodGroup = {
     attribute: string,
     group: string,
-    precedingOperator: string,
-    followingOperator: string,
     matchedProperty?: string
 }
 
@@ -86,15 +82,9 @@ export class MethodNameParser {
     }
 
     private mergeGroups(groupA: ParsedMethodGroup, groupB: ParsedMethodGroup): ParsedMethodGroup {
-        if(groupA.followingOperator !== groupB.precedingOperator) {
-            this.throwError("Error on merging groups, join operators are different.")
-        }
-
         return {
-            precedingOperator: groupA.precedingOperator,
-            followingOperator: groupB.followingOperator,
-            attribute: groupA.attribute + groupA.followingOperator + groupB.attribute,
-            group: groupA.group + groupA.followingOperator + groupB.attribute
+            attribute: groupA.attribute + groupB.group,
+            group: groupA.group + groupB.group
         }
     }
 
