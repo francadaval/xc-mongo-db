@@ -3,7 +3,7 @@ import { MethodBuilder } from "./method-builder";
 
 import { FactoryProvider, Type } from "@nestjs/common";
 
-export const MethodsBuilderProviders = (builderTypes: Type<MethodBuilder>[]) => {
+export const MethodBuilderProviders = (builderTypes: Type<MethodBuilder>[]) => {
     return builderTypes.map(type => createFactoryProvider(type));
 };
 
