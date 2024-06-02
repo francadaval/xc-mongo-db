@@ -1,7 +1,6 @@
 import { Logger } from "@nestjs/common";
 
 const complementRegex = new RegExp(`(?<group>(?<precedingOperator>^|And)(?<attribute>.+?(?=(?<followingOperator>And|$))))`, 'g');
-const modifiersRegex = new RegExp(`(?<attribute>.*)(?<modifier>GreaterThan|LessThan)$`)
 
 export type ParsedMethodGroup = {
     attribute: string,
@@ -27,7 +26,7 @@ export class MethodNameParser {
 
     private static logger = new Logger(MethodNameParser.name);
 
-    constructor(private readonly verbs: string[], private readonly methodName: string, private readonly properties: string[]) {
+    constructor(private readonly verbs: string[], private readonly modifiers: string[], private readonly methodName: string, private readonly properties: string[]) {
         this.parseMethodVerb();
         this.parseComplement();
         this.createCompundedGroups();
@@ -43,12 +42,16 @@ export class MethodNameParser {
         return this.firstMatchedGroups;
     }
 
-    private funcRegex(verbs: string[]) {
-        return new RegExp(`(${verbs.join('|')})(.*)$`);
+    private funcRegex() {
+        return new RegExp(`(${this.verbs.join('|')})(.*)$`);
+    }
+
+    private modifiersRegex() {
+        return new RegExp(`(?<attribute>.*)(?<modifier>${this.modifiers.join('|')})$`)
     }
 
     private parseMethodVerb() {
-        let match = this.funcRegex(this.verbs).exec(this.methodName);
+        let match = this.funcRegex().exec(this.methodName);
         if(match) {
             this.verb = match[1];
             this.complement = match[2];
@@ -137,7 +140,7 @@ export class MethodNameParser {
     }
 
     private getModifier(attribute: string): ModifierGroup {
-        const result = modifiersRegex.exec(attribute);
+        const result = this.modifiersRegex().exec(attribute);
         return result ? {
             attribute: result.groups.attribute,
             modifier: result.groups.modifier
