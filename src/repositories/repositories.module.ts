@@ -1,7 +1,20 @@
 import { Module } from "@nestjs/common";
 import { RepositoryMethodsBuilder } from './builder/repo-method-builder';
-import { MethodBuilderProviders, CountByBuilder, FindAllByBuilder, FindOneByBuilder, FindPageByBuilder } from "./method-builders";
-import { GreaterThanModifier, FilterModifierProviders } from "./filter-modifiers";
+import {
+    MethodBuilderProviders,
+    CountByBuilder,
+    FindAllByBuilder,
+    FindOneByBuilder,
+    FindPageByBuilder
+} from "./method-builders";
+import {
+    GreaterThanModifier,
+    FilterModifierProviders,
+    GreaterThanEqualModifier,
+    BetweenModifier,
+    LessThanEqualModifier,
+    LessThanModifier
+} from "./filter-modifiers";
 
 const METHOD_BUILDERS = [
     CountByBuilder,
@@ -11,7 +24,11 @@ const METHOD_BUILDERS = [
 ];
 
 const FILTER_MODIFIERS = [
-    GreaterThanModifier
+    BetweenModifier,
+    GreaterThanEqualModifier,
+    GreaterThanModifier,
+    LessThanEqualModifier,
+    LessThanModifier
 ]
 
 @Module({

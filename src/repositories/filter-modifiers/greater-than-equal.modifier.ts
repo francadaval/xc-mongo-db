@@ -1,14 +1,14 @@
 import { Document, Condition } from "mongodb";
 import { FilterModifier } from "./filter-modifier";
 
-const GREATER_THAN = 'GreaterThan';
+const LESS_THAN_EQUAL = 'LessThanEqual';
 
-export class GreaterThanModifier extends FilterModifier {
+export class LessThanEqualModifier extends FilterModifier {
     getModifier(): string {
-        return GREATER_THAN;
+        return LESS_THAN_EQUAL;
     }
 
     getCondition(args: any[]): Condition<Document> {
-        return {'$gt': args.shift()};
+        return {'$lte': args.shift()};
     }
 }

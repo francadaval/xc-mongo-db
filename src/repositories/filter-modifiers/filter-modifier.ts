@@ -1,4 +1,4 @@
-import { Condition, Document, Filter } from "mongodb";
+import { Condition, Document } from "mongodb";
 
 export abstract class FilterModifier {
     abstract getModifier(): string;
