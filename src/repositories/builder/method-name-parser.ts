@@ -19,6 +19,7 @@ export class MethodNameParser {
     private initialGroups: ParsedMethodGroup[];
     private compoundedGroups: ParsedMethodGroup[][];
     private firstMatchedGroups: ParsedMethodGroup[];
+    private fomattedProperties: string[];
 
     private static logger = new Logger(MethodNameParser.name);
 
@@ -98,6 +99,8 @@ export class MethodNameParser {
     }
 
     private matchGroupsProperties(): void {
+        this.fomattedProperties = this.properties.map(property => this.formatProperty(property));
+
         this.matchProperties(this.initialGroups);
         this.compoundedGroups.forEach( groups => this.matchProperties(groups));
 
@@ -108,8 +111,8 @@ export class MethodNameParser {
 
     private matchProperties(groups: ParsedMethodGroup[]): void {
         groups.forEach(group => {
-            let formattedAttribute = this.firstLetterToLowerCase(group.attribute);
-            group.matchedProperty = this.properties.find(property => property === formattedAttribute);
+            let i = this.fomattedProperties.findIndex(property => property === group.attribute);
+            group.matchedProperty = i >= 0 ? this.properties[i] : null;
         });
     }
 
@@ -118,7 +121,7 @@ export class MethodNameParser {
         throw new Error(message);
     }
 
-    private firstLetterToLowerCase(str: string) {
-        return str.charAt(0).toLowerCase() + str.slice(1);
+    private formatProperty(property: string): string {
+        return property.split('.').map(part => (part.charAt(0).toUpperCase() + part.slice(1))).join('');
     }
 }

@@ -22,8 +22,7 @@ export class RepositoryMethodsBuilder {
         }
     }
 
-    buildRepositoryMethod(methodName: string, entityProperties: EntityProperties): ((...args: any[]) => PromiseLike<any>) {
-        const propertiesNames = Object.keys(entityProperties);
+    buildRepositoryMethod(methodName: string, propertiesNames: string[]): ((...args: any[]) => PromiseLike<any>) {
         let parser = new MethodNameParser(Object.keys(this.builders), methodName, propertiesNames);
         let verb = parser.getVerb();
 

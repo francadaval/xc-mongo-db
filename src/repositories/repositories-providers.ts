@@ -16,8 +16,10 @@ function createRepository(RepoType: Abstract<any>, connectionService: Connection
     let entityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType);
     let entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, entityType);
 
+    let propertiesNames = getPropertiesNames(entityProperties);
+
     methods.forEach(method => {
-        RepoType.prototype[method] = methodsBuilder.buildRepositoryMethod(method, entityProperties);
+        RepoType.prototype[method] = methodsBuilder.buildRepositoryMethod(method, propertiesNames);
     });
 
     const repo = new (RepoType as Type<any>)(connectionService);
@@ -32,6 +34,23 @@ function createFactoryProvider(type: Abstract<any>): FactoryProvider {
             createRepository(type, connectionService, methodsBuilder),
         inject: [ConnectionService, RepositoryMethodsBuilder]
     }
+}
+
+function getPropertiesNames(entityProperties: EntityProperties): string[] {
+    return addPropertiesNames([], entityProperties, '');
+}
+
+function addPropertiesNames(propertiesNames: string[], entityProperties: EntityProperties, root: string): string[] {
+    propertiesNames = propertiesNames.concat(Object.keys(entityProperties).map(name => root + name));
+
+    let subEntitiesNames = Object.keys(entityProperties).filter(propertyName => entityProperties[propertyName].type);
+    subEntitiesNames.forEach(subentityName => {
+        const subEntitytype = entityProperties[subentityName].type;
+        const subEntityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, subEntitytype); 
+        propertiesNames = addPropertiesNames(propertiesNames, subEntityProperties, `${subentityName}.`);
+    });
+
+    return propertiesNames;
 }
 
 const logger = new Logger(RepositoriesProviders.name)
