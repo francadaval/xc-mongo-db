@@ -14,7 +14,6 @@ export abstract class TestRepo2 extends BaseRepository<TestEntity2> {
         throw new Error('Repository not implemented.')
     };
 
-
     @RepositoryMethod()
     findPageByValue1(value1: number, pageRequest: PageRequest): Promise<Page<TestEntity2>> {
         throw new Error('Repository not implemented.')

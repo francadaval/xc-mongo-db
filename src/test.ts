@@ -18,7 +18,11 @@ async function bootstrap() {
     await testRepo.insertOne({
         name: "Test entity",
         value: 42,
-        date: new Date()
+        date: new Date(),
+        subEntity: {
+            name: "Test subentity",
+            value: 13
+        }
     });
 
     let testRepo2 = testApp.get(TestRepo2);
@@ -30,7 +34,9 @@ async function bootstrap() {
     });
 
     try {
-        let test1 = await testRepo.findOneByValue(40);
+        let test1_1 = await testRepo.findOneByValue(40);
+        let test1_2_count = await testRepo.countBySubEntityValue(13);
+
         let test2_1 = await testRepo2.findOneByValue1(16);
         let test2_2 = await testRepo2.findOneByValue2(17);
         let count16 = await testRepo2.countByValue1(16);
@@ -46,7 +52,8 @@ async function bootstrap() {
         })
 
 
-        logger.log(`test1: ${test1?'exist':'doesn\'t exist'}`);
+        logger.log(`test1: ${test1_1?'exist':'doesn\'t exist'}`);
+        logger.log(`test1_2_count: ${test1_2_count}`);
         logger.log(`test2_1: ${test2_1?'exist':'doesn\'t exist'}`);
         logger.log(`test2_2: ${test2_2?'exist':'doesn\'t exist'}`);
         logger.log(`count16 = ${count16}`);

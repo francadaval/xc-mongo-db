@@ -21,4 +21,9 @@ export abstract class TestRepo extends BaseRepository<TestEntity> {
     findOneByValueAndLockAndStock(lockAndStock: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     }
+
+    @RepositoryMethod()
+    countBySubEntityValue(value: number): Promise<TestEntity> {
+        throw new Error('Repository not implemented.');
+    }
 }

@@ -1,5 +1,6 @@
 import { Entity, Property } from "../decorators";
 import { EntityInterface } from "../entities";
+import { TestSubEntity } from "./test-sub-entity";
 
 @Entity()
 export class TestEntity implements EntityInterface {
@@ -8,4 +9,5 @@ export class TestEntity implements EntityInterface {
     @Property() value?: number;
     @Property() lockAndStock?: number
     @Property() date?: Date;
+    @Property({ type: TestSubEntity}) subEntity: TestSubEntity
 }
