@@ -1,11 +1,19 @@
 import { Logger } from "@nestjs/common";
 
 const complementRegex = new RegExp(`(?<group>(?<precedingOperator>^|And)(?<attribute>.+?(?=(?<followingOperator>And|$))))`, 'g');
+const modifiersRegex = new RegExp(`(?<attribute>.*)(?<modifier>GreaterThan|LessThan)$`)
 
 export type ParsedMethodGroup = {
     attribute: string,
+    modifier?: string,
     group: string,
     matchedProperty?: string
+}
+
+export type ModifierGroup = {
+    attribute: string,
+    modifier: string,
+    index?: number
 }
 
 export class MethodNameParser {
@@ -23,6 +31,7 @@ export class MethodNameParser {
         this.parseMethodVerb();
         this.parseComplement();
         this.createCompundedGroups();
+        this.splitModifiers();
         this.matchGroupsProperties();
     }
 
@@ -79,6 +88,60 @@ export class MethodNameParser {
         groups.push(newGroup);
 
         return groups;
+    }
+
+    private splitModifiers() {
+        const withModifiers = this.splitGroupsMofiers(this.initialGroups);
+
+        this.compoundedGroups.forEach(groups => {
+            withModifiers.push(...this.splitGroupsMofiers(groups));
+        });
+
+        this.compoundedGroups.push(...withModifiers);
+    }
+
+    private splitGroupsMofiers(groups: ParsedMethodGroup[]): ParsedMethodGroup[][] {
+        const splitted: ParsedMethodGroup[][] = [];
+        const modifiersGroups: ModifierGroup[] = [];
+
+        groups.forEach((group, i) => {
+            let modifierGroups = this.getModifier(group.attribute);
+            if(modifierGroups) {
+                modifierGroups.index = i;
+                modifiersGroups.push(modifierGroups);
+            }
+        });
+
+        modifiersGroups.forEach(modifierGroups => {
+            let toPush: ParsedMethodGroup[][] = [];
+            toPush.push(this.splitGroupsModifier(groups, modifierGroups));
+            splitted.forEach(spGroups => {
+                toPush.push(this.splitGroupsModifier(spGroups, modifierGroups));
+            })
+
+            splitted.push(...toPush);
+        })
+
+        return splitted;
+    }
+
+    private splitGroupsModifier(groups: ParsedMethodGroup[], modifier: ModifierGroup): ParsedMethodGroup[] {
+        let splitted = [...groups];
+        let original = groups[modifier.index];
+        splitted[modifier.index] = {
+            attribute: modifier.attribute,
+            group: original.group,
+            modifier: modifier.modifier
+        }
+        return splitted;
+    }
+
+    private getModifier(attribute: string): ModifierGroup {
+        const result = modifiersRegex.exec(attribute);
+        return result ? {
+            attribute: result.groups.attribute,
+            modifier: result.groups.modifier
+        } : null;
     }
 
     private mergeGroups(groupA: ParsedMethodGroup, groupB: ParsedMethodGroup): ParsedMethodGroup {
