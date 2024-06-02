@@ -13,15 +13,26 @@ async function bootstrap() {
     logger.log("Application context created.");
 
     let testRepo = testApp.get(TestRepo);
-    let testEntity = new TestEntity();
 
     await testRepo.insertOne({
         name: "Test entity",
         value: 42,
         date: new Date(),
+        lockAndStock: 16,
         subEntity: {
             name: "Test subentity",
             value: 13
+        }
+    });
+
+    await testRepo.insertOne({
+        name: "Higher test entity",
+        value: 45,
+        date: new Date(),
+        lockAndStock: 16,
+        subEntity: {
+            name: "Higher test subentity",
+            value: 16
         }
     });
 
@@ -36,6 +47,7 @@ async function bootstrap() {
     try {
         let test1_1 = await testRepo.findOneByValue(40);
         let test1_2_count = await testRepo.countBySubEntityValue(13);
+        let test1_3 = await testRepo.findOneByLockAndStockAndValueGreaterThan(16, 42);
 
         let test2_1 = await testRepo2.findOneByValue1(16);
         let test2_2 = await testRepo2.findOneByValue2(17);
@@ -54,6 +66,7 @@ async function bootstrap() {
 
         logger.log(`test1: ${test1_1?'exist':'doesn\'t exist'}`);
         logger.log(`test1_2_count: ${test1_2_count}`);
+        logger.log(`test1_3: ${test1_3.name}`);
         logger.log(`test2_1: ${test2_1?'exist':'doesn\'t exist'}`);
         logger.log(`test2_2: ${test2_2?'exist':'doesn\'t exist'}`);
         logger.log(`count16 = ${count16}`);
