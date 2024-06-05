@@ -42,7 +42,8 @@ export class RepositoryMethodsBuilder {
         const verbs = Object.keys(this.methodBuilders);
         const modifiers = Object.keys(this.filterModifiers);
 
-        let parser = new MethodNameParser(verbs, modifiers, methodName, propertiesNames);
+        let parser = new MethodNameParser(verbs, modifiers);
+        parser.parse(methodName, propertiesNames);
         let verb = parser.getVerb();
 
         let builder = this.methodBuilders[verb];

@@ -17,6 +17,9 @@ export type ModifierGroup = {
 
 export class MethodNameParser {
 
+    private methodName: string;
+    private properties: string[]
+
     private verb: string;
     private complement: string;
     private initialGroups: ParsedMethodGroup[];
@@ -26,7 +29,13 @@ export class MethodNameParser {
 
     private static logger = new Logger(MethodNameParser.name);
 
-    constructor(private readonly verbs: string[], private readonly modifiers: string[], private readonly methodName: string, private readonly properties: string[]) {
+    constructor(private readonly verbs: string[], private readonly modifiers: string[]) {}
+
+    parse(methodName: string, properties: string[]) {
+        this.methodName = methodName;
+        this.properties = properties;
+
+        this.reset();
         this.parseMethodVerb();
         this.parseComplement();
         this.createCompundedGroups();
@@ -40,6 +49,15 @@ export class MethodNameParser {
 
     getMatchedGroups() {
         return this.firstMatchedGroups;
+    }
+
+    private reset() {
+        this.verb = null;
+        this.complement = null;
+        this.initialGroups = null;
+        this.compoundedGroups = null;
+        this.firstMatchedGroups = null;
+        this.fomattedProperties = null;
     }
 
     private funcRegex() {
