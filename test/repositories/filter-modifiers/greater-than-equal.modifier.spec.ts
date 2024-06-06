@@ -1,4 +1,5 @@
 import { GreaterThanEqualModifier } from '@src/repositories/filter-modifiers'
+import { modifierShouldReturnName } from './utils';
 
 describe(GreaterThanEqualModifier.name, () => {
     let modifierUnderTest: GreaterThanEqualModifier;
@@ -8,13 +9,7 @@ describe(GreaterThanEqualModifier.name, () => {
     });
 
     describe('getModifier', () => {
-        it('should return modifier name', () => {
-            const name = modifierUnderTest.getModifier();
-
-            expect(typeof name).toBe('string');
-            expect(name).not.toBe('');
-            expect(name).not.toContain(' ');
-        })
+        it('should return modifier name', () => modifierShouldReturnName(modifierUnderTest))
     });
 
     describe('getCondition', () => {
