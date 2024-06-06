@@ -3,6 +3,9 @@
  * https://jestjs.io/docs/configuration
  */
 
+let ts_jest = require('ts-jest');
+let ts_config = require('./tsconfig.json');
+
 /** @type {import('jest').Config} */
 const config = {
   // All imported modules in your tests should be mocked automatically
@@ -72,9 +75,10 @@ const config = {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  // moduleDirectories: [
-  //   "node_modules"
-  // ],
+  moduleDirectories: [
+    "node_modules",
+    "<rootDir>"
+  ],
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
@@ -89,7 +93,7 @@ const config = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: ts_jest.pathsToModuleNameMapper(ts_config.compilerOptions.paths),
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
