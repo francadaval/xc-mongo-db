@@ -4,7 +4,7 @@
  */
 
 let ts_jest = require('ts-jest');
-let ts_config = require('./tsconfig.json');
+let ts_config = require('./tsconfig.paths.json');
 
 /** @type {import('jest').Config} */
 const config = {

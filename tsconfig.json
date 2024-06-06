@@ -1,4 +1,6 @@
 {
+    "extends": "./tsconfig.paths.json",
+
     "compilerOptions": {
         "composite": true,
         "module": "commonjs",
@@ -17,10 +19,7 @@
         "noImplicitAny": false,
         "strictBindCallApply": false,
         "forceConsistentCasingInFileNames": false,
-        "noFallthroughCasesInSwitch": false,
-        "paths": {
-            "@src/*": ["src/*"]
-        }
+        "noFallthroughCasesInSwitch": false
     },
 
     "include": ["src/**/*"],
