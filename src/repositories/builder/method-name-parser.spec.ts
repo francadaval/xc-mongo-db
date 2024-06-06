@@ -6,10 +6,10 @@ const METHOD_NAME = 'findValueGreaterThan';
 const PROPERTIES = ['value', 'data'];
 
 describe(MethodNameParser.name, () => {
-    let parser: MethodNameParser;
+    let parserUnderTest: MethodNameParser;
 
     beforeEach(() => {
-        parser = new MethodNameParser(
+        parserUnderTest = new MethodNameParser(
             VERBS,
             MODIFIERS
         );
@@ -17,14 +17,14 @@ describe(MethodNameParser.name, () => {
 
     describe(`parse ${METHOD_NAME}`, () => {
         it('getVerb should return the verb', () => {
-            parser.parse(METHOD_NAME, PROPERTIES);
+            parserUnderTest.parse(METHOD_NAME, PROPERTIES);
 
-            expect(parser.getVerb()).toBe('find');
+            expect(parserUnderTest.getVerb()).toBe('find');
         });
 
         it('getMatchedGroups should return correct property and modifier', () => {
-            parser.parse(METHOD_NAME, PROPERTIES);
-            let matchedGroups = parser.getMatchedGroups();
+            parserUnderTest.parse(METHOD_NAME, PROPERTIES);
+            let matchedGroups = parserUnderTest.getMatchedGroups();
             
             expect(matchedGroups.length).toBe(1);
             
