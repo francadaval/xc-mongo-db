@@ -11,6 +11,6 @@ export class BetweenModifier extends FilterModifier {
     getCondition(args: any[]): Condition<Document> {
         const from = args.shift();
         const to = args.shift();
-        return {'$gt': from, '$lt': to};
+        return {$gt: from, $lt: to};
     }
 }
