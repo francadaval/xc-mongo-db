@@ -48,10 +48,6 @@ export class RepositoryMethodsBuilder {
 
         let builder = this.methodBuilders[verb];
 
-        if(!builder) {
-            throw new Error(`MethodBuilder not found for ${verb}!`);
-        }
-
         builder.setModifiers(this.filterModifiers);
         return builder.buildFuction(methodName, parser.getMatchedGroups());
     }
