@@ -1,4 +1,4 @@
-import { MethodNameParser } from './method-name-parser'
+import { MethodNameParser } from '@src/repositories/builder/method-name-parser'
 
 const VERBS = ['findBy', 'deleteBy'];
 const MODIFIERS = ['GreaterThan', 'LessThan'];

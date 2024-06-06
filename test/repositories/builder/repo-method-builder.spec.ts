@@ -1,7 +1,7 @@
-import { RepositoryMethodsBuilder } from './repo-method-builder'
-import { MethodBuilder } from '../method-builders/method-builder'
-import { ParsedMethodGroup } from './method-name-parser';
-import { FilterModifier } from '../filter-modifiers';
+import { RepositoryMethodsBuilder } from '@src/repositories/builder/repo-method-builder'
+import { MethodBuilder } from '@src/repositories/method-builders/method-builder'
+import { FilterModifier } from '@src/repositories/filter-modifiers';
+import { ParsedMethodGroup } from '@src/repositories/builder/method-name-parser';
 
 const MOCk_MODIFIER = 'MockModifier';
 const BUILDER_VERB = 'builderVerb';
