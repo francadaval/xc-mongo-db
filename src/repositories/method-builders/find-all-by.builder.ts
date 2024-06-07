@@ -13,7 +13,7 @@ export class FindAllByBuilder extends MethodBuilder {
         return FIND_ALL_BY;
     }
 
-    buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any[]> {
+    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any[]> {
         if(!groups?.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${FIND_ALL_BY}' method.`);
         }

@@ -2,6 +2,7 @@ import { RepositoryMethodsBuilder } from '@src/repositories/builder/repo-method-
 import { MethodBuilder } from '@src/repositories/method-builders/method-builder'
 import { FilterModifier } from '@src/repositories/filter-modifiers';
 import { ParsedMethodGroup } from '@src/repositories/builder/method-name-parser';
+import { Logger } from '@nestjs/common';
 
 const MOCk_MODIFIER = 'MockModifier';
 const BUILDER_VERB = 'builderVerb';
@@ -11,8 +12,9 @@ const WRONG_VERB_METHOD_NAME = 'wrongVerbValueMockModifier';
 const PROPERTIES = ['value'];
 
 class MockBuilder extends MethodBuilder{
+    logger = new Logger(MockBuilder.name);
     getVerb = jest.fn(() => BUILDER_VERB);
-    buildFuction = jest.fn((methodName: string, groups: ParsedMethodGroup[]) =>{
+    buildMethod = jest.fn((methodName: string, groups: ParsedMethodGroup[]) =>{
         return async function (...args) {}
     });
     setModifiers = jest.fn(() => {});
@@ -75,7 +77,7 @@ describe(RepositoryMethodsBuilder.name, () => {
             expect(mockedMethodBuilder.setModifiers).toHaveBeenCalledWith({
                 'MockModifier': mockedFilterModifier
             });
-            expect(mockedMethodBuilder.buildFuction).toHaveBeenCalledTimes(1);
+            expect(mockedMethodBuilder.buildMethod).toHaveBeenCalledTimes(1);
             expect(typeof result).toBe('function');
         })
 
@@ -87,7 +89,7 @@ describe(RepositoryMethodsBuilder.name, () => {
                 builderUnderTest.buildRepositoryMethod(WRONG_VERB_METHOD_NAME, PROPERTIES);
             }).toThrow(`Function ${WRONG_VERB_METHOD_NAME}: Not parseable, verb doesn't match.`);
 
-            expect(mockedMethodBuilder.buildFuction).toHaveBeenCalledTimes(0);
+            expect(mockedMethodBuilder.buildMethod).toHaveBeenCalledTimes(0);
         })
     });
 });

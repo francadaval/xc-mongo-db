@@ -6,15 +6,15 @@ import { MethodBuilder } from "./method-builder";
 const COUNT_ONE_BY = "countBy";
 
 export class CountByBuilder extends MethodBuilder{
-    private logger = new Logger(CountByBuilder.name);
+    protected logger = new Logger(CountByBuilder.name);
 
     getVerb(): string {
         return COUNT_ONE_BY;
     }
 
-    buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
+    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
         if(!groups?.length) {
-            this.logger.error(`${methodName}: Attributes are required on a '${COUNT_ONE_BY}' method.`);
+            this.throwError(`${methodName}: Attributes are required on a '${COUNT_ONE_BY}' method.`);
         }
     
         let getFilter = (args) => this.getFilter(groups, args);

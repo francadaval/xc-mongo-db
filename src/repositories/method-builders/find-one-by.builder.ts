@@ -13,7 +13,7 @@ export class FindOneByBuilder extends MethodBuilder {
         return FIND_ONE_BY;
     }
 
-    buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
+    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
         if(!groups?.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${FIND_ONE_BY}' method.`);
         }

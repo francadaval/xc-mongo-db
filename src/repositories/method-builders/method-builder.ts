@@ -1,8 +1,10 @@
 import { Document, Filter } from "mongodb";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
 import { FilterModifier } from "../filter-modifiers";
+import { Logger } from "@nestjs/common";
 
 export abstract class MethodBuilder {
+    protected abstract logger: Logger;
 
     protected filterModifiers: {[modifier: string]: FilterModifier};
 
@@ -12,7 +14,7 @@ export abstract class MethodBuilder {
 
     abstract getVerb(): string;
 
-    abstract buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any>
+    abstract buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any>
 
     protected getFilter(groups: ParsedMethodGroup[], args: any[]): Filter<Document> {
         let filter: Filter<Document> = {};
@@ -24,5 +26,10 @@ export abstract class MethodBuilder {
         });
 
         return filter;
+    }
+
+    protected throwError(msg: string) {
+        this.logger.error(msg);
+        throw new Error(msg);
     }
 }

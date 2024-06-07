@@ -15,7 +15,7 @@ export class FindPageByBuilder extends MethodBuilder {
         return FIND_PAGE_BY;
     }
 
-    buildFuction(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<Page<any>> {
+    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<Page<any>> {
         if(!groups?.length) {
             this.logger.error(`${methodName}: Attributes are required on a '${FIND_PAGE_BY}' method.`);
         }

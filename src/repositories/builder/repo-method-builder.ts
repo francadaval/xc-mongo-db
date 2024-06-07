@@ -49,7 +49,7 @@ export class RepositoryMethodsBuilder {
         let builder = this.methodBuilders[verb];
 
         builder.setModifiers(this.filterModifiers);
-        return builder.buildFuction(methodName, parser.getMatchedGroups());
+        return builder.buildMethod(methodName, parser.getMatchedGroups());
     }
 
     private throwError(message: string) {
