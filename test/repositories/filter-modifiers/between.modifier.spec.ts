@@ -1,5 +1,5 @@
 import { BetweenModifier } from '@src/repositories/filter-modifiers'
-import { modifierShouldReturnName } from './utils';
+import { modifierShouldReturnConditionAndShiftArgsArray, modifierShouldReturnName } from './utils';
 
 describe(BetweenModifier.name, () => {
     let modifierUnderTest: BetweenModifier;
@@ -9,16 +9,16 @@ describe(BetweenModifier.name, () => {
     });
 
     describe('getModifier', () => {
-        it('should return modifier name', () => modifierShouldReturnName(modifierUnderTest));
+        it(
+            'should return modifier name',
+            () => modifierShouldReturnName(modifierUnderTest)
+        );
     });
 
     describe('getCondition', () => {
-        it('should return condition and shift arguments array', () => {
-            const args = [1, 2, 3, 4];
-            const condition = modifierUnderTest.getCondition(args);
-
-            expect(condition).toEqual({$gt: 1, $lt: 2});
-            expect(args).toEqual([3, 4]);
-        });
+        it(
+            'should return condition and shift arguments array',
+            () => modifierShouldReturnConditionAndShiftArgsArray(modifierUnderTest, {$gt: 1, $lt: 2}, 2)
+        );
     });
 });
