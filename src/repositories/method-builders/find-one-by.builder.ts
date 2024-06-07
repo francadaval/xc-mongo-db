@@ -7,7 +7,7 @@ const FIND_ONE_BY = 'findOneBy';
 
 export class FindOneByBuilder extends MethodBuilder {
     
-    private logger = new Logger(FindOneByBuilder.name);
+    protected logger = new Logger(FindOneByBuilder.name);
 
     getVerb(): string {
         return FIND_ONE_BY;

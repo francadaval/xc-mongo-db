@@ -9,7 +9,7 @@ const FIND_PAGE_BY = 'findPageBy';
 
 export class FindPageByBuilder extends MethodBuilder {
     
-    private logger = new Logger(FindPageByBuilder.name);
+    protected logger = new Logger(FindPageByBuilder.name);
 
     getVerb(): string {
         return FIND_PAGE_BY;

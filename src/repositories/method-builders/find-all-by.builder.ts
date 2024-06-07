@@ -7,7 +7,7 @@ const FIND_ALL_BY = 'findAllBy';
 
 export class FindAllByBuilder extends MethodBuilder {
     
-    private logger = new Logger(FindAllByBuilder.name);
+    protected logger = new Logger(FindAllByBuilder.name);
 
     getVerb(): string {
         return FIND_ALL_BY;
