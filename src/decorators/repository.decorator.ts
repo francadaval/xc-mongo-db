@@ -7,7 +7,7 @@ const logger = new Logger(Repository.name);
 
 export function Repository(db: string, entityType: Type<EntityInterface>) {
     return function (RepoType: any) {
-        let methods = Reflect.getOwnMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
+        let methods = Reflect.getOwnMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType) || [];
         let entityParameters: EntityDecoratorParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, entityType);
         Reflect.defineMetadata(MetadataKeys.ENTITY_TYPE, entityType, RepoType);
         logger.debug(`${RepoType.name} evaluated with ${methods.length} methods.`);
