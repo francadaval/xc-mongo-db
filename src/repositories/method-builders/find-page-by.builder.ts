@@ -2,8 +2,7 @@ import { Logger } from "@nestjs/common";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
 import { MethodBuilder } from "./method-builder";
 import { Collection, FindCursor, WithId } from "mongodb";
-import { Page } from "../../pagination/page";
-import { PageRequest } from "src/pagination/page_request";
+import { Page, PageRequest } from "src/pagination";
 
 const FIND_PAGE_BY = 'findPageBy';
 
@@ -17,7 +16,7 @@ export class FindPageByBuilder extends MethodBuilder {
 
     buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<Page<any>> {
         if(!groups?.length) {
-            this.logger.error(`${methodName}: Attributes are required on a '${FIND_PAGE_BY}' method.`);
+            this.throwError(`${methodName}: Attributes are required on a '${FIND_PAGE_BY}' method.`);
         }
     
         let getFilter = (args) => this.getFilter(groups, args);

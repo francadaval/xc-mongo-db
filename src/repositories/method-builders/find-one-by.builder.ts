@@ -15,7 +15,7 @@ export class FindOneByBuilder extends MethodBuilder {
 
     buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
         if(!groups?.length) {
-            this.logger.error(`${methodName}: Attributes are required on a '${FIND_ONE_BY}' method.`);
+            this.throwError(`${methodName}: Attributes are required on a '${FIND_ONE_BY}' method.`);
         }
         
         let getFilter = (args) => this.getFilter(groups, args);
