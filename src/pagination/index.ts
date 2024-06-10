@@ -1,2 +1,2 @@
-export * from './page'
-export * from './page-request'
+export * from './page.interface'
+export * from './page-request.interface'

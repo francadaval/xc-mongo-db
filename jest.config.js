@@ -33,7 +33,8 @@ const config = {
   coveragePathIgnorePatterns: [
      "node_modules",
      "src/tests",
-     "index.ts"
+     "index.ts",
+     "interface.ts"
   ],
 
   // Indicates which provider should be used to instrument code for coverage
