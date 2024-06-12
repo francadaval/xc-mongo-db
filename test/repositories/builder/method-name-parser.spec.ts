@@ -7,6 +7,8 @@ const PROPERTIES_DB_NAMES = ['value', 'name', 'questionsAndAnswers', 'test_value
 const METHOD_NAME = 'findByValueGreaterThan';
 const COMPLEX_METHOD_NAME = 'deleteByNameAndValueGreaterThan';
 const AND_TEST_METHOD_NAME = 'findByQuestionsAndAnswersAndValue';
+const DB_NAME_METHOD_NAME = 'findByTestValue';
+const NESTED_PROP_METHOD_NAME = 'findByTestValueIndex';
 
 describe(MethodNameParser.name, () => {
     let parserUnderTest: MethodNameParser;
@@ -70,6 +72,30 @@ describe(MethodNameParser.name, () => {
             expect(secondGroup.attribute).toBe('Value');
             expect(secondGroup.modifier).toBeUndefined();
             expect(secondGroup.matchedDbProperty).toBe('value');
+        });
+
+        it('getMatchedGroups should match db property', () => {
+            parserUnderTest.parse(DB_NAME_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
+            let matchedGroups = parserUnderTest.getMatchedGroups();
+            let firstGroup = matchedGroups[0];
+            
+            expect(matchedGroups.length).toBe(1);
+
+            expect(firstGroup.attribute).toBe('TestValue');
+            expect(firstGroup.modifier).toBeUndefined();
+            expect(firstGroup.matchedDbProperty).toBe('test_value');
+        });
+
+        it('getMatchedGroups should recognize nested properties', () => {
+            parserUnderTest.parse(NESTED_PROP_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
+            let matchedGroups = parserUnderTest.getMatchedGroups();
+            let firstGroup = matchedGroups[0];
+            
+            expect(matchedGroups.length).toBe(1);
+
+            expect(firstGroup.attribute).toBe('TestValueIndex');
+            expect(firstGroup.modifier).toBeUndefined();
+            expect(firstGroup.matchedDbProperty).toBe('test_value.index');
         });
     });
 });
