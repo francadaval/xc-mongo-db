@@ -12,7 +12,7 @@ class TestClass implements EntityInterface {
         propertyDBName: 'mainValue',
         type: Number
     })
-    value: number;
+    value: Number;
 }
 
 const PROPERTIES = {
@@ -23,14 +23,43 @@ const PROPERTIES = {
     }
 }
 
+const EXT_COLLECION_NAME = 'extCollectionName';
+const EXT_PARAMETERS = {collectionName: EXT_COLLECION_NAME};
+class ExtendedTestClass extends TestClass {
+    @Property({
+        propertyDBName: 'extended'
+    })
+    extendedProperty: string;
+}
+const EXT_PROPERTIES = {
+    _id: {},
+    value: {
+        propertyDBName: 'mainValue',
+        type: Number
+    },
+    extendedProperty: {
+        propertyDBName: 'extended'
+    }
+}
+
 describe(Entity.name, () => {
-    it('should ad parameters to reflect metadata, properties parameters should exist', () => {
+    it('should add parameters to reflect metadata, properties parameters should exist', () => {
         let decorator = Entity(PARAMETERS);
         decorator(TestClass);
-        let actualParameters = Reflect.getOwnMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, TestClass);
+        let actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, TestClass);
         let actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, TestClass);
 
         expect(actualParameters).toBe(PARAMETERS);
         expect(actualProperties).toEqual(PROPERTIES);
+    });
+
+    it('should include extended class properties', () => {
+        let decorator = Entity(EXT_PARAMETERS);
+        decorator(ExtendedTestClass);
+        let actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, ExtendedTestClass);
+        let actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, ExtendedTestClass);
+
+        expect(actualParameters).toBe(EXT_PARAMETERS);
+        expect(actualProperties).toEqual(EXT_PROPERTIES);
     });
 });
