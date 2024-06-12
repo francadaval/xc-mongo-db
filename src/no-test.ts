@@ -2,17 +2,44 @@ import { NestFactory } from "@nestjs/core";
 import { TestModule } from "./tests/test-module";
 import { TestRepo } from "./tests/test-repo";
 import { TestRepo2 } from "./tests/test-repo-2";
-import { Logger } from "@nestjs/common";
-import { TestEntity } from "./tests/test-entity";
+import { INestApplicationContext, Logger } from "@nestjs/common";
+import { ExtendedEntityRepository } from "./tests/extended-entity-repo";
 
 const logger = new Logger("Main");
+const RUN_TEST1 = false;
+const RUN_TEST2 = false;
+const RUN_EXTENDED_TEST = true;
 
 async function bootstrap() {
     logger.log("Start tests!!");
     const testApp = await NestFactory.createApplicationContext(TestModule);
     logger.log("Application context created.");
 
-    let testRepo = testApp.get(TestRepo);
+    if(RUN_TEST1) {
+        logger.log("Run Test1");
+        repo1Tests(testApp);
+    }
+
+    if(RUN_TEST2) {
+        logger.log("Run Test2");
+        repo2Tests(testApp);
+    }
+
+    if(RUN_EXTENDED_TEST) {
+        logger.log("Run Extended Test")
+        extendedRepoTest(testApp);
+    }
+
+    process.exit();
+}
+
+async function extendedRepoTest(appContext: INestApplicationContext) {
+    let extendedRepo = appContext.get(ExtendedEntityRepository);
+    extendedRepo.findOneByValue(14);
+}
+
+async function repo1Tests(appContext: INestApplicationContext) {
+    let testRepo = appContext.get(TestRepo);
 
     await testRepo.insertOne({
         name: "Test entity",
@@ -36,7 +63,21 @@ async function bootstrap() {
         }
     });
 
-    let testRepo2 = testApp.get(TestRepo2);
+    try {
+        let test1_1 = await testRepo.findOneByValue(40);
+        let test1_2_count = await testRepo.countBySubEntityValue(13);
+        let test1_3 = await testRepo.findOneByLockAndStockAndValueGreaterThan(16, 42);
+
+        logger.log(`test1: ${test1_1?'exist':'doesn\'t exist'}`);
+        logger.log(`test1_2_count: ${test1_2_count}`);
+        logger.log(`test1_3: ${test1_3.name}`);
+    } catch (err) {
+        logger.error(err);
+    }
+}
+
+async function repo2Tests(appContext: INestApplicationContext) {
+    let testRepo2 = appContext.get(TestRepo2);
     await testRepo2.insertOne({
         name: "Test entity 2",
         value1: 16,
@@ -45,10 +86,6 @@ async function bootstrap() {
     });
 
     try {
-        let test1_1 = await testRepo.findOneByValue(40);
-        let test1_2_count = await testRepo.countBySubEntityValue(13);
-        let test1_3 = await testRepo.findOneByLockAndStockAndValueGreaterThan(16, 42);
-
         let test2_1 = await testRepo2.findOneByValue1(16);
         let test2_2 = await testRepo2.findOneByValue2(17);
         let count16 = await testRepo2.countByValue1(16);
@@ -63,10 +100,6 @@ async function bootstrap() {
             page_size: 5
         })
 
-
-        logger.log(`test1: ${test1_1?'exist':'doesn\'t exist'}`);
-        logger.log(`test1_2_count: ${test1_2_count}`);
-        logger.log(`test1_3: ${test1_3.name}`);
         logger.log(`test2_1: ${test2_1?'exist':'doesn\'t exist'}`);
         logger.log(`test2_2: ${test2_2?'exist':'doesn\'t exist'}`);
         logger.log(`count16 = ${count16}`);
@@ -85,8 +118,6 @@ async function bootstrap() {
     } catch (err) {
         logger.error(err);
     }
-
-    process.exit();
 }
 
 bootstrap();
