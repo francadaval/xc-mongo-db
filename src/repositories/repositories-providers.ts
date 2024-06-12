@@ -23,7 +23,7 @@ function createRepository(RepoType: Abstract<any>, connectionService: Connection
     });
 
     const repo = new (RepoType as Type<any>)(connectionService);
-    logger.log(`${createRepository.name}: ${className}`);
+    logger.log(`${createRepository.name}: ${className}, ${methods.length} methods, ${propertiesNames.length} entity properties.`);
     return repo;
 };
 

@@ -1,3 +1,3 @@
-export type EntityInterface = {
+export interface EntityInterface {
     _id?: any;
 };
