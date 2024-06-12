@@ -3,6 +3,7 @@ import { MethodBuilder } from "../method-builders/method-builder";
 import { FilterModifier } from "../filter-modifiers";
 
 import { Injectable, Logger } from "@nestjs/common";
+import { EntityProperties } from "@src/decorators";
 
 const logger = new Logger("RepoMethodsbuilder");
 
@@ -38,12 +39,12 @@ export class RepositoryMethodsBuilder {
         }
     }
 
-    buildRepositoryMethod(methodName: string, propertiesNames: string[]): ((...args: any[]) => PromiseLike<any>) {
+    buildRepositoryMethod(methodName: string, propertiesNames: string[], dbPropertiesNames: string[]): ((...args: any[]) => PromiseLike<any>) {
         const verbs = Object.keys(this.methodBuilders);
         const modifiers = Object.keys(this.filterModifiers);
 
         let parser = new MethodNameParser(verbs, modifiers);
-        parser.parse(methodName, propertiesNames);
+        parser.parse(methodName, propertiesNames, dbPropertiesNames);
         let verb = parser.getVerb();
 
         let builder = this.methodBuilders[verb];

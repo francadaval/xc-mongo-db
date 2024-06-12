@@ -10,6 +10,7 @@ const BUILDER_VERB = 'builderVerb';
 const METHOD_NAME = 'builderVerbValueMockModifier';
 const WRONG_VERB_METHOD_NAME = 'wrongVerbValueMockModifier';
 const PROPERTIES = ['value'];
+const PROPERTIES_DB_NAMES = ['db_value'];
 
 class MockBuilder extends MethodBuilder{
     logger = new Logger(MockBuilder.name);
@@ -72,7 +73,7 @@ describe(RepositoryMethodsBuilder.name, () => {
             builderUnderTest.registerBuilder(mockedMethodBuilder);
             builderUnderTest.registerModifier(mockedFilterModifier);
 
-            let result = builderUnderTest.buildRepositoryMethod(METHOD_NAME, PROPERTIES);
+            let result = builderUnderTest.buildRepositoryMethod(METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
 
             expect(mockedMethodBuilder.setModifiers).toHaveBeenCalledWith({
                 'MockModifier': mockedFilterModifier
@@ -86,7 +87,7 @@ describe(RepositoryMethodsBuilder.name, () => {
             builderUnderTest.registerModifier(mockedFilterModifier);
 
             expect(() => {
-                builderUnderTest.buildRepositoryMethod(WRONG_VERB_METHOD_NAME, PROPERTIES);
+                builderUnderTest.buildRepositoryMethod(WRONG_VERB_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
             }).toThrow(`Function ${WRONG_VERB_METHOD_NAME}: Not parseable, verb doesn't match.`);
 
             expect(mockedMethodBuilder.buildMethod).toHaveBeenCalledTimes(0);

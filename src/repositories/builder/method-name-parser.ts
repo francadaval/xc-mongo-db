@@ -6,7 +6,7 @@ export type ParsedMethodGroup = {
     attribute: string,
     modifier?: string,
     group: string,
-    matchedProperty?: string
+    matchedDbProperty?: string
 }
 
 export type ModifierGroup = {
@@ -18,7 +18,8 @@ export type ModifierGroup = {
 export class MethodNameParser {
 
     private methodName: string;
-    private properties: string[]
+    private properties: string[];
+    private dbPropertyNames: string[];
 
     private verb: string;
     private complement: string;
@@ -31,9 +32,10 @@ export class MethodNameParser {
 
     constructor(private readonly verbs: string[], private readonly modifiers: string[]) {}
 
-    parse(methodName: string, properties: string[]) {
+    parse(methodName: string, properties: string[], dbPropertyNames: string[]) {
         this.methodName = methodName;
         this.properties = properties;
+        this.dbPropertyNames = dbPropertyNames;
 
         this.reset();
         this.parseMethodVerb();
@@ -178,15 +180,15 @@ export class MethodNameParser {
         this.matchProperties(this.initialGroups);
         this.compoundedGroups.forEach( groups => this.matchProperties(groups));
 
-        this.firstMatchedGroups = this.initialGroups.every( group => group.matchedProperty )
+        this.firstMatchedGroups = this.initialGroups.every( group => !!group.matchedDbProperty )
             ? this.initialGroups
-            : this.compoundedGroups.find( groups => groups.every( group => group.matchedProperty ) );
+            : this.compoundedGroups.find( groups => groups.every( group => !!group.matchedDbProperty ) );
     }
 
     private matchProperties(groups: ParsedMethodGroup[]): void {
         groups.forEach(group => {
             let i = this.fomattedProperties.findIndex(property => property === group.attribute);
-            group.matchedProperty = i >= 0 ? this.properties[i] : null;
+            group.matchedDbProperty = i >= 0 ? this.dbPropertyNames[i] : null;
         });
     }
 

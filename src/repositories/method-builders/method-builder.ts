@@ -22,7 +22,7 @@ export abstract class MethodBuilder {
 
         groups.forEach(group => {
             const modifier = this.filterModifiers[group.modifier];
-            filter[group.matchedProperty] = modifier ? modifier.getCondition(args) : args.shift();
+            filter[group.matchedDbProperty] = modifier ? modifier.getCondition(args) : args.shift();
         });
 
         return filter;

@@ -19,7 +19,7 @@ const GROUPS: ParsedMethodGroup[] = [
     {
         attribute: 'Value',
         group: 'ValueGreaterThan',
-        matchedProperty: 'attribute',
+        matchedDbProperty: 'attribute',
         modifier: 'GreaterThan'
     }
 ];
