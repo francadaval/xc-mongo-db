@@ -1,5 +1,5 @@
 import { Document, Condition } from "mongodb";
-import { FilterModifier } from "./filter-modifier";
+import { ConditionArguments, FilterModifier } from "./filter-modifier";
 
 const LESS_THAN_EQUAL = 'LessThanEqual';
 
@@ -8,7 +8,7 @@ export class LessThanEqualModifier extends FilterModifier {
         return LESS_THAN_EQUAL;
     }
 
-    getCondition(args: any[]): Condition<Document> {
+    getCondition(args: ConditionArguments): Condition<Document> {
         return {'$lte': args.shift()};
     }
 }

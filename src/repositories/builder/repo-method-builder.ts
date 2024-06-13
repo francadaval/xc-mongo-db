@@ -36,7 +36,7 @@ export class RepositoryMethodsBuilder {
         }
     }
 
-    buildRepositoryMethod(methodName: string, propertiesNames: string[], dbPropertiesNames: string[]): ((...args: any[]) => PromiseLike<any>) {
+    buildRepositoryMethod(methodName: string, propertiesNames: string[], dbPropertiesNames: string[]): ((...args: any[]) => PromiseLike<unknown>) {
         const verbs = Object.keys(this.methodBuilders);
         const modifiers = Object.keys(this.filterModifiers);
 

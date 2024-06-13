@@ -1,5 +1,5 @@
 import { Document, Condition } from "mongodb";
-import { FilterModifier } from "./filter-modifier";
+import { ConditionArguments, FilterModifier } from "./filter-modifier";
 
 const BETWEEN = 'Between';
 
@@ -8,7 +8,7 @@ export class BetweenModifier extends FilterModifier {
         return BETWEEN;
     }
 
-    getCondition(args: any[]): Condition<Document> {
+    getCondition(args: ConditionArguments): Condition<Document> {
         const from = args.shift();
         const to = args.shift();
         return {$gt: from, $lt: to};

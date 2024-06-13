@@ -1,6 +1,6 @@
 import { Logger } from "@nestjs/common";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
-import { Collection } from "mongodb";
+import { Collection, Document, WithId } from "mongodb";
 import { MethodBuilder } from "./method-builder";
 
 const FIND_ONE_BY = 'findOneBy';
@@ -13,7 +13,7 @@ export class FindOneByBuilder extends MethodBuilder {
         return FIND_ONE_BY;
     }
 
-    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
+    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<WithId<Document>> {
         if(!groups?.length) {
             this.throwError(`${methodName}: Attributes are required on a '${FIND_ONE_BY}' method.`);
         }

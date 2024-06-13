@@ -6,8 +6,8 @@ import { INestApplicationContext, Logger } from "@nestjs/common";
 import { ExtendedEntityRepository } from "./tests/extended-entity-repo";
 
 const logger = new Logger("Main");
-const RUN_TEST1 = false;
-const RUN_TEST2 = false;
+const RUN_TEST1 = true;
+const RUN_TEST2 = true;
 const RUN_EXTENDED_TEST = true;
 
 async function bootstrap() {

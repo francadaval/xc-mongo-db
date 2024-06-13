@@ -1,5 +1,5 @@
 import { Document, Condition } from "mongodb";
-import { FilterModifier } from "./filter-modifier";
+import { ConditionArguments, FilterModifier } from "./filter-modifier";
 
 const LESS_THAN = 'LessThan';
 
@@ -8,7 +8,7 @@ export class LessThanModifier extends FilterModifier {
         return LESS_THAN;
     }
 
-    getCondition(args: any[]): Condition<Document> {
+    getCondition(args: ConditionArguments): Condition<Document> {
         return {'$lt': args.shift()};
     }
 }

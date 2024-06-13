@@ -1,6 +1,6 @@
 import { Document, Filter } from "mongodb";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
-import { FilterModifier } from "../filter-modifiers";
+import { ConditionArguments, FilterModifier } from "../filter-modifiers";
 import { Logger } from "@nestjs/common";
 
 export abstract class MethodBuilder {
@@ -14,9 +14,9 @@ export abstract class MethodBuilder {
 
     abstract getVerb(): string;
 
-    abstract buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any>
+    abstract buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<unknown>
 
-    protected getFilter(groups: ParsedMethodGroup[], args: any[]): Filter<Document> {
+    protected getFilter(groups: ParsedMethodGroup[], args: ConditionArguments): Filter<Document> {
         const filter: Filter<Document> = {};
         args = [...args];
 

@@ -9,11 +9,11 @@ export type EntityProperties = {
 
 export type PropertyDecoratorParameters = {
     propertyDBName?: string
-    type?: Type<any>
+    type?: Type
 };
 
 export function Property(parameters?: PropertyDecoratorParameters) {
-    return function (target: any, propertyKey: string) {
+    return function (target: object, propertyKey: string) {
         const targetConstructor = target.constructor;
 
         const properties: PropertyDecoratorParameters = {...Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor)} || {};

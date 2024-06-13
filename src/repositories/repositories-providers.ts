@@ -4,12 +4,17 @@ import { BaseRepository } from "./base-repository";
 import { MetadataKeys } from "../decorators/metadata-keys";
 import { EntityProperties } from "../decorators";
 import { RepositoryMethodsBuilder } from "./builder/repo-method-builder";
+import { EntityInterface } from "@src/entities";
 
-export const RepositoriesProviders = (repoTypes: Abstract<any>[]) => {
+export const RepositoriesProviders = (repoTypes: Abstract<BaseRepository<EntityInterface>>[]) => {
     return repoTypes.map(type => createFactoryProvider(type));
 };
 
-function createRepository(RepoType: Abstract<any>, connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder): BaseRepository<any> {
+function createRepository<T extends EntityInterface>(
+    RepoType: Abstract<BaseRepository<T>>,
+    connectionService: ConnectionService,
+    methodsBuilder: RepositoryMethodsBuilder
+): BaseRepository<T> {
     const className = Object.getPrototypeOf(RepoType).name;
 
     const methods = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
@@ -28,7 +33,7 @@ function createRepository(RepoType: Abstract<any>, connectionService: Connection
     return repo;
 }
 
-function createFactoryProvider(type: Abstract<any>): FactoryProvider {
+function createFactoryProvider(type: Abstract<BaseRepository<EntityInterface>>): FactoryProvider {
     return {
         provide: type,
         useFactory: (connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder) =>

@@ -12,7 +12,7 @@ export class CountByBuilder extends MethodBuilder{
         return COUNT_ONE_BY;
     }
 
-    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any> {
+    buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<unknown> {
         if(!groups?.length) {
             this.throwError(`${methodName}: Attributes are required on a '${COUNT_ONE_BY}' method.`);
         }
