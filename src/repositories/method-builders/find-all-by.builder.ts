@@ -1,7 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { ParsedMethodGroup } from "../builder/method-name-parser";
 import { MethodBuilder } from "./method-builder";
-import { Collection, FindCursor, WithId } from "mongodb";
+import { Collection } from "mongodb";
 
 const FIND_ALL_BY = 'findAllBy';
 
@@ -18,7 +18,7 @@ export class FindAllByBuilder extends MethodBuilder {
             this.throwError(`${methodName}: Attributes are required on a '${FIND_ALL_BY}' method.`);
         }
     
-        let getFilter = (args) => this.getFilter(groups, args);
+        const getFilter = (args) => this.getFilter(groups, args);
     
         this.logger.debug(`"${methodName}" created`);   
         return async function (...args) {

@@ -17,7 +17,7 @@ export class CountByBuilder extends MethodBuilder{
             this.throwError(`${methodName}: Attributes are required on a '${COUNT_ONE_BY}' method.`);
         }
     
-        let getFilter = (args) => this.getFilter(groups, args);
+        const getFilter = (args) => this.getFilter(groups, args);
         
         this.logger.debug(`"${methodName}" created`);
         return async function (...args) {

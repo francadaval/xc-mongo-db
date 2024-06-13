@@ -9,9 +9,9 @@ export abstract class BaseRepository<T extends EntityInterface> implements Repos
     readonly collection: Collection;
 
     constructor(protected connectionService: ConnectionService, dbName: string, collectionName: string) {
-        let client = this.connectionService.getMongoClient();
+        const client = this.connectionService.getMongoClient();
         this.collection = client.db(dbName).collection(collectionName);
-    };
+    }
 
     async insertOne(doc: T): Promise<void> {
         this.logger.log(`insertOne`);

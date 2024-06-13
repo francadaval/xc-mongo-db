@@ -71,7 +71,7 @@ export class MethodNameParser {
     }
 
     private parseMethodVerb() {
-        let match = this.funcRegex().exec(this.methodName);
+        const match = this.funcRegex().exec(this.methodName);
         if(match) {
             this.verb = match[1];
             this.complement = match[2];
@@ -87,7 +87,7 @@ export class MethodNameParser {
     }
 
     private createCompundedGroups() {
-        let complexity = Math.pow(2, this.initialGroups.length - 1);
+        const complexity = Math.pow(2, this.initialGroups.length - 1);
         this.compoundedGroups = [];
 
         for(let i = 1; i < complexity; ++i) {
@@ -96,8 +96,8 @@ export class MethodNameParser {
     }
 
     private compoundGroup(i: number): ParsedMethodGroup[] {
-        let groups = [];
-        let N = this.initialGroups.length;
+        const groups = [];
+        const N = this.initialGroups.length;
 
         let newGroup = this.initialGroups[0];
         for(let e = 1; e < N; ++e) {
@@ -128,7 +128,7 @@ export class MethodNameParser {
         const modifiersGroups: ModifierGroup[] = [];
 
         groups.forEach((group, i) => {
-            let modifierGroups = this.getModifier(group.attribute);
+            const modifierGroups = this.getModifier(group.attribute);
             if(modifierGroups) {
                 modifierGroups.index = i;
                 modifiersGroups.push(modifierGroups);
@@ -136,7 +136,7 @@ export class MethodNameParser {
         });
 
         modifiersGroups.forEach(modifierGroups => {
-            let toPush: ParsedMethodGroup[][] = [];
+            const toPush: ParsedMethodGroup[][] = [];
             toPush.push(this.splitGroupsModifier(groups, modifierGroups));
             splitted.forEach(spGroups => {
                 toPush.push(this.splitGroupsModifier(spGroups, modifierGroups));
@@ -149,8 +149,8 @@ export class MethodNameParser {
     }
 
     private splitGroupsModifier(groups: ParsedMethodGroup[], modifier: ModifierGroup): ParsedMethodGroup[] {
-        let splitted = [...groups];
-        let original = groups[modifier.index];
+        const splitted = [...groups];
+        const original = groups[modifier.index];
         splitted[modifier.index] = {
             attribute: modifier.attribute,
             group: original.group,
@@ -187,8 +187,8 @@ export class MethodNameParser {
 
     private matchProperties(groups: ParsedMethodGroup[]): void {
         groups.forEach(group => {
-            let i = this.fomattedProperties.findIndex(property => property === group.attribute);
-            group.matchedDbProperty = i >= 0 ? this.dbPropertyNames[i] : null;
+            const matchedIndex = this.fomattedProperties.findIndex(property => property === group.attribute);
+            group.matchedDbProperty = matchedIndex >= 0 ? this.dbPropertyNames[matchedIndex] : null;
         });
     }
 

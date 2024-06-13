@@ -14,9 +14,9 @@ export type PropertyDecoratorParameters = {
 
 export function Property(parameters?: PropertyDecoratorParameters) {
     return function (target: any, propertyKey: string) {
-        let targetConstructor = target.constructor;
+        const targetConstructor = target.constructor;
 
-        let properties: PropertyDecoratorParameters = {...Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor)} || {};
+        const properties: PropertyDecoratorParameters = {...Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor)} || {};
         properties[propertyKey] = parameters || {};
         Reflect.defineMetadata(MetadataKeys.ENTITY_PROPERTIES, properties, targetConstructor);
 

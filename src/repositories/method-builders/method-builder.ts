@@ -17,7 +17,7 @@ export abstract class MethodBuilder {
     abstract buildMethod(methodName: string, groups: ParsedMethodGroup[]): (...args: any[]) => PromiseLike<any>
 
     protected getFilter(groups: ParsedMethodGroup[], args: any[]): Filter<Document> {
-        let filter: Filter<Document> = {};
+        const filter: Filter<Document> = {};
         args = [...args];
 
         groups.forEach(group => {

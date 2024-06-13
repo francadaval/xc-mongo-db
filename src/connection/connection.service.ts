@@ -6,7 +6,7 @@ const TEST_URI = "mongodb://root:epdsrntrMDB@localhost:27017";
 @Injectable()
 export class ConnectionService {
     private readonly logger = new Logger(ConnectionService.name);
-    private client: MongoClient = new MongoClient(TEST_URI);;
+    private client: MongoClient = new MongoClient(TEST_URI);
 
     constructor() {
         this.testConnection();

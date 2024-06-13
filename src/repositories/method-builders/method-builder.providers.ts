@@ -16,7 +16,7 @@ function createFactoryProvider(type: Type<MethodBuilder>): FactoryProvider {
 }
 
 function createBuilder(type: Type<MethodBuilder>, methodsBuilder: RepositoryMethodsBuilder): MethodBuilder {
-    let builder = new type();
+    const builder = new type();
     methodsBuilder.registerBuilder(builder);
     return builder;
 }

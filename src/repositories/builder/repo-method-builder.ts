@@ -3,9 +3,6 @@ import { MethodBuilder } from "../method-builders/method-builder";
 import { FilterModifier } from "../filter-modifiers";
 
 import { Injectable, Logger } from "@nestjs/common";
-import { EntityProperties } from "@src/decorators";
-
-const logger = new Logger("RepoMethodsbuilder");
 
 @Injectable()
 export class RepositoryMethodsBuilder {
@@ -20,7 +17,7 @@ export class RepositoryMethodsBuilder {
     private logger = new Logger(RepositoryMethodsBuilder.name);
 
     registerBuilder(builder: MethodBuilder) {
-        let verb = builder.getVerb();
+        const verb = builder.getVerb();
         if(this.methodBuilders[verb]) {
             this.throwError(`Builder for '${verb}' already exist.`)
         } else {
@@ -30,7 +27,7 @@ export class RepositoryMethodsBuilder {
     }
 
     registerModifier(filterModifier: FilterModifier) {
-        let modifier = filterModifier.getModifier();
+        const modifier = filterModifier.getModifier();
         if(this.filterModifiers[modifier]) {
             this.throwError(`Modifier for '${modifier}' already exist.`)
         } else {
@@ -43,11 +40,10 @@ export class RepositoryMethodsBuilder {
         const verbs = Object.keys(this.methodBuilders);
         const modifiers = Object.keys(this.filterModifiers);
 
-        let parser = new MethodNameParser(verbs, modifiers);
+        const parser = new MethodNameParser(verbs, modifiers);
         parser.parse(methodName, propertiesNames, dbPropertiesNames);
-        let verb = parser.getVerb();
 
-        let builder = this.methodBuilders[verb];
+        const builder = this.methodBuilders[parser.getVerb()];
 
         builder.setModifiers(this.filterModifiers);
         return builder.buildMethod(methodName, parser.getMatchedGroups());

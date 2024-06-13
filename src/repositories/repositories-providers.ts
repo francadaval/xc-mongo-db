@@ -12,21 +12,21 @@ export const RepositoriesProviders = (repoTypes: Abstract<any>[]) => {
 function createRepository(RepoType: Abstract<any>, connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder): BaseRepository<any> {
     const className = Object.getPrototypeOf(RepoType).name;
 
-    let methods = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
-    let entityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType);
-    let entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, entityType);
+    const methods = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
+    const entityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType);
+    const entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, entityType);
 
-    let propertiesNames = getPropertiesNames(entityProperties);
-    let dbPropertiesNames = getPropertiesNames(entityProperties, true);
+    const propertiesNames = getPropertiesNames(entityProperties);
+    const dbPropertiesNames = getPropertiesNames(entityProperties, true);
 
     methods.forEach(method => {
         RepoType.prototype[method] = methodsBuilder.buildRepositoryMethod(method, propertiesNames, dbPropertiesNames);
     });
 
-    const repo = new (RepoType as Type<any>)(connectionService);
+    const repo = new (RepoType as Type)(connectionService);
     logger.log(`${createRepository.name}: ${className}, ${methods.length} methods, ${propertiesNames.length} entity propert`);
     return repo;
-};
+}
 
 function createFactoryProvider(type: Abstract<any>): FactoryProvider {
     return {
@@ -42,10 +42,10 @@ function getPropertiesNames(entityProperties: EntityProperties, dbName: boolean 
 }
 
 function addPropertiesNames(propertiesNames: string[], entityProperties: EntityProperties, root: string, dbName: boolean): string[] {
-    let names = dbName ? Object.values(entityProperties).map(property => property.propertyDBName) : Object.keys(entityProperties);
+    const names = dbName ? Object.values(entityProperties).map(property => property.propertyDBName) : Object.keys(entityProperties);
     propertiesNames = propertiesNames.concat(names.map(name => root + name));
 
-    let subEntitiesNames = Object.keys(entityProperties).filter(propertyName => entityProperties[propertyName].type);
+    const subEntitiesNames = Object.keys(entityProperties).filter(propertyName => entityProperties[propertyName].type);
     subEntitiesNames.forEach(subentityName => {
         const subEntitytype = entityProperties[subentityName].type;
         const subEntityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, subEntitytype); 

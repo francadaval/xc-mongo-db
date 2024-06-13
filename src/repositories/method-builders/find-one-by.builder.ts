@@ -18,7 +18,7 @@ export class FindOneByBuilder extends MethodBuilder {
             this.throwError(`${methodName}: Attributes are required on a '${FIND_ONE_BY}' method.`);
         }
         
-        let getFilter = (args) => this.getFilter(groups, args);
+        const getFilter = (args) => this.getFilter(groups, args);
         
         this.logger.debug(`"${methodName}" created`);
         return function (...args) {

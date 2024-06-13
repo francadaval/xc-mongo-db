@@ -16,7 +16,7 @@ function createFactoryProvider(type: Type<FilterModifier>): FactoryProvider {
 }
 
 function createModifier(type: Type<FilterModifier>, methodsBuilder: RepositoryMethodsBuilder): FilterModifier {
-    let modifier = new type();
+    const modifier = new type();
     methodsBuilder.registerModifier(modifier);
     return modifier;
 }

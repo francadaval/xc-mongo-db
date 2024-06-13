@@ -4,10 +4,10 @@ import { MetadataKeys } from "./metadata-keys";
 const logger = new Logger(RepositoryMethod.name);
 
 export function RepositoryMethod() {
-    return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) { 
-        let targetConstructor = target.constructor;
+    return function (target: object, propertyKey: string) { 
+        const targetConstructor = target.constructor;
 
-        let methods: string[] = Reflect.getOwnMetadata(MetadataKeys.REPOSITORY_METHODS, targetConstructor) || [];
+        const methods: string[] = Reflect.getOwnMetadata(MetadataKeys.REPOSITORY_METHODS, targetConstructor) || [];
         methods.push(propertyKey);
         Reflect.defineMetadata(MetadataKeys.REPOSITORY_METHODS, methods, targetConstructor);
        
