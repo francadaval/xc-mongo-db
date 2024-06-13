@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { ConnectionService } from '@src/connection';
 import { Entity, Property, Repository, RepositoryMethod } from '@src/decorators';
 import { MetadataKeys } from '@src/decorators/metadata-keys';
@@ -22,6 +23,8 @@ class TestEntity implements EntityInterface {
 
 @Repository(DB_NAME, TestEntity)
 class TestRepo extends BaseRepository<TestEntity> {
+    protected logger = new Logger('TestRepo');
+
     @RepositoryMethod()
     findOneByValue(value: number) {
         throw new Error('Method not implemented.');
