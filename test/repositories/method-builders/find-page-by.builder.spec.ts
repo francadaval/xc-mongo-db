@@ -1,13 +1,14 @@
 import { FindPageByBuilder } from '@src/repositories/method-builders';
 import * as utils from './utils';
 import { Page, PageRequest } from '@src/pagination';
+import { Document } from 'mongodb';
 
 const COUNT_RESULT = 10;
 const PAGE_REQUEST: PageRequest = {
     page_index: 2,
     page_size: 5
 }
-const FIND_RESULT: Page<any> = {
+const FIND_RESULT: Page<Document> = {
     items: [],
     total_size: 10,
     page_size: 5,

@@ -10,7 +10,7 @@ export const MODIFIERS = {
     LessThan: new LessThanModifier()
 };
 const gtGetCondition = jest.spyOn(MODIFIERS.GreaterThan, 'getCondition');
-const ltGetCondition = jest.spyOn(MODIFIERS.LessThan, 'getCondition');
+// const ltGetCondition = jest.spyOn(MODIFIERS.LessThan, 'getCondition');
 
 const DUMMY_VALUE = 14;
 
@@ -36,7 +36,7 @@ export function builderShouldReturnVerb(modifierUnderTest: MethodBuilder): void 
     expect(name).not.toContain(' ');
 }
 
-export async function builderShouldReturnBuiltmethod(builderUnderTest: MethodBuilder, expectedResult: any, ...args: any) {
+export async function builderShouldReturnBuiltmethod(builderUnderTest: MethodBuilder, expectedResult: unknown, ...args: unknown[]) {
     args = args || [DUMMY_VALUE];
     const actualMethod = builderUnderTest.buildMethod(METHOD_NAME, GROUPS);
     const actualResult = await actualMethod.call({
@@ -48,6 +48,6 @@ export async function builderShouldReturnBuiltmethod(builderUnderTest: MethodBui
 }
 
 export function shouldThrowErrorIfNoprovidedGroups(builderUnderTest: MethodBuilder) {
-    let expectedErrorMessage = `${METHOD_NAME}: Attributes are required on a '${builderUnderTest.getVerb()}' method.`
+    const expectedErrorMessage = `${METHOD_NAME}: Attributes are required on a '${builderUnderTest.getVerb()}' method.`
     expect(() => builderUnderTest.buildMethod(METHOD_NAME, EMPTY_GROUPS)).toThrow(expectedErrorMessage);
 }

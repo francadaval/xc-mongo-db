@@ -29,11 +29,11 @@ describe(MethodNameParser.name, () => {
 
         it('getMatchedGroups should return correct property and modifier', () => {
             parserUnderTest.parse(METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
-            let matchedGroups = parserUnderTest.getMatchedGroups();
+            const matchedGroups = parserUnderTest.getMatchedGroups();
             
             expect(matchedGroups.length).toBe(1);
             
-            let firstGroup = matchedGroups[0];
+            const firstGroup = matchedGroups[0];
             
             expect(firstGroup.attribute).toBe('Value');
             expect(firstGroup.modifier).toBe('GreaterThan');
@@ -42,9 +42,9 @@ describe(MethodNameParser.name, () => {
 
         it('getMatchedGroups should return correct properties and modifiers on complex name', () => {
             parserUnderTest.parse(COMPLEX_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
-            let matchedGroups = parserUnderTest.getMatchedGroups();
-            let firstGroup = matchedGroups[0];
-            let secondGroup = matchedGroups[1];
+            const matchedGroups = parserUnderTest.getMatchedGroups();
+            const firstGroup = matchedGroups[0];
+            const secondGroup = matchedGroups[1];
             
             expect(matchedGroups.length).toBe(2);
 
@@ -59,9 +59,9 @@ describe(MethodNameParser.name, () => {
 
         it('getMatchedGroups should recognize names attributes names with "And"', () => {
             parserUnderTest.parse(AND_TEST_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
-            let matchedGroups = parserUnderTest.getMatchedGroups();
-            let firstGroup = matchedGroups[0];
-            let secondGroup = matchedGroups[1];
+            const matchedGroups = parserUnderTest.getMatchedGroups();
+            const firstGroup = matchedGroups[0];
+            const secondGroup = matchedGroups[1];
             
             expect(matchedGroups.length).toBe(2);
 
@@ -76,8 +76,8 @@ describe(MethodNameParser.name, () => {
 
         it('getMatchedGroups should match db property', () => {
             parserUnderTest.parse(DB_NAME_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
-            let matchedGroups = parserUnderTest.getMatchedGroups();
-            let firstGroup = matchedGroups[0];
+            const matchedGroups = parserUnderTest.getMatchedGroups();
+            const firstGroup = matchedGroups[0];
             
             expect(matchedGroups.length).toBe(1);
 
@@ -88,8 +88,8 @@ describe(MethodNameParser.name, () => {
 
         it('getMatchedGroups should recognize nested properties', () => {
             parserUnderTest.parse(NESTED_PROP_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
-            let matchedGroups = parserUnderTest.getMatchedGroups();
-            let firstGroup = matchedGroups[0];
+            const matchedGroups = parserUnderTest.getMatchedGroups();
+            const firstGroup = matchedGroups[0];
             
             expect(matchedGroups.length).toBe(1);
 

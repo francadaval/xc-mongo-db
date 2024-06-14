@@ -1,6 +1,6 @@
 import { RepositoryMethodsBuilder } from '@src/repositories/builder/repo-method-builder'
 import { MethodBuilder } from '@src/repositories/method-builders/method-builder'
-import { FilterModifier } from '@src/repositories/filter-modifiers';
+import { ConditionArguments, FilterModifier } from '@src/repositories/filter-modifiers';
 import { ParsedMethodGroup } from '@src/repositories/builder/method-name-parser';
 import { Logger } from '@nestjs/common';
 
@@ -15,15 +15,15 @@ const PROPERTIES_DB_NAMES = ['db_value'];
 class MockBuilder extends MethodBuilder{
     logger = new Logger(MockBuilder.name);
     getVerb = jest.fn(() => BUILDER_VERB);
-    buildMethod = jest.fn((methodName: string, groups: ParsedMethodGroup[]) =>{
-        return async function (...args) {}
+    buildMethod = jest.fn((_methodName: string, _groups: ParsedMethodGroup[]) =>{
+        return async function (..._args) {}
     });
     setModifiers = jest.fn(() => {});
 }
 
 class MockModifier extends FilterModifier{
     getModifier = jest.fn(() => MOCk_MODIFIER);
-    getCondition =  jest.fn((args: any[]) => {
+    getCondition =  jest.fn((_args: ConditionArguments[]) => {
         return {mock: true}
     });
 }
@@ -34,7 +34,6 @@ describe(RepositoryMethodsBuilder.name, () => {
     let mockedFilterModifier: FilterModifier;
     
     beforeEach(() => {
-        // mocks.forEach(mock => mock.mockClear());
         builderUnderTest = new RepositoryMethodsBuilder();
         mockedMethodBuilder = new MockBuilder();
         mockedFilterModifier = new MockModifier();
@@ -73,7 +72,7 @@ describe(RepositoryMethodsBuilder.name, () => {
             builderUnderTest.registerBuilder(mockedMethodBuilder);
             builderUnderTest.registerModifier(mockedFilterModifier);
 
-            let result = builderUnderTest.buildRepositoryMethod(METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
+            const result = builderUnderTest.buildRepositoryMethod(METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
 
             expect(mockedMethodBuilder.setModifiers).toHaveBeenCalledWith({
                 'MockModifier': mockedFilterModifier

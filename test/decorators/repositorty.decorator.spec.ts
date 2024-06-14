@@ -26,7 +26,7 @@ class TestRepo extends BaseRepository<TestEntity> {
     protected logger = new Logger('TestRepo');
 
     @RepositoryMethod()
-    findOneByValue(value: number) {
+    findOneByValue(_value: number) {
         throw new Error('Method not implemented.');
     }
 }
@@ -37,7 +37,7 @@ describe(Repository.name, () => {
         mockedMongoClient.db.mockReturnValue(mockedDb);
         mockedDb.collection.mockReturnValue(mockedCollection);
 
-        const repoInstance = new TestRepo(mockedConnectionService, null, null);
+        new TestRepo(mockedConnectionService, null, null);
         const reflectedEntityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, TestRepo);
         const reflectedMethods = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, TestRepo);
 

@@ -44,20 +44,20 @@ const EXT_PROPERTIES = {
 
 describe(Entity.name, () => {
     it('should add parameters to reflect metadata, properties parameters should exist', () => {
-        let decorator = Entity(PARAMETERS);
+        const decorator = Entity(PARAMETERS);
         decorator(TestClass);
-        let actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, TestClass);
-        let actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, TestClass);
+        const actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, TestClass);
+        const actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, TestClass);
 
         expect(actualParameters).toBe(PARAMETERS);
         expect(actualProperties).toEqual(PROPERTIES);
     });
 
     it('should include extended class properties', () => {
-        let decorator = Entity(EXT_PARAMETERS);
+        const decorator = Entity(EXT_PARAMETERS);
         decorator(ExtendedTestClass);
-        let actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, ExtendedTestClass);
-        let actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, ExtendedTestClass);
+        const actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, ExtendedTestClass);
+        const actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, ExtendedTestClass);
 
         expect(actualParameters).toBe(EXT_PARAMETERS);
         expect(actualProperties).toEqual(EXT_PROPERTIES);

@@ -4,7 +4,7 @@ import { BaseRepository } from "@src/repositories";
 import { Collection, Db, InsertManyResult, InsertOneResult, MongoClient } from "mongodb";
 import { mock } from "ts-jest-mocker";
 
-class TestImplementation extends BaseRepository<any> {
+class TestImplementation extends BaseRepository<unknown> {
     protected logger = new Logger('BaseRepository');
 }
 
@@ -36,7 +36,7 @@ const INSERT_MANY_RESULT: InsertManyResult = {
 }
 
 describe(BaseRepository.name, () => {
-    let underTest: BaseRepository<any>;
+    let underTest: BaseRepository<unknown>;
 
     beforeEach(() => {
         mockedConnectionService.getMongoClient.mockReturnValue(mockedClient);
@@ -50,7 +50,7 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.findOne.mockResolvedValue(DOC_ID);
 
-            let actual = await underTest.findOne(null);
+            const actual = await underTest.findOne(null);
 
             expect(actual).toBe(DOC_ID);
             expect(mockedCollection.findOne).toHaveBeenCalledTimes(1);
@@ -61,7 +61,7 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.insertOne.mockResolvedValue(INSERT_ONE_RESULT);
 
-            let actual = await underTest.insertOne(DOC_NO_ID);
+            const actual = await underTest.insertOne(DOC_NO_ID);
 
             expect(actual).toBeUndefined();
             expect(mockedCollection.insertOne).toHaveBeenCalledTimes(1);
@@ -73,7 +73,7 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.insertMany.mockResolvedValue(INSERT_MANY_RESULT);
 
-            let actual = await underTest.insertMany([DOC_NO_ID]);
+            const actual = await underTest.insertMany([DOC_NO_ID]);
 
             expect(actual).toBeUndefined();
             expect(mockedCollection.insertMany).toHaveBeenCalledTimes(1);
