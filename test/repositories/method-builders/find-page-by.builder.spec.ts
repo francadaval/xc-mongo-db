@@ -38,7 +38,7 @@ describe(FindPageByBuilder.name, () => {
             utils.mockedCollection.find.mockReturnValue(utils.mockedFindCursor);
             utils.mockedCollection.findOne.mockReturnValue(Promise.resolve(FIND_RESULT));
 
-            utils.builderShouldReturnBuiltmethod(builderUnderTest, FIND_RESULT, DUMMY_PARAM, PAGE_REQUEST);
+            utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT, DUMMY_PARAM, PAGE_REQUEST);
         });
 
         it(

@@ -6,7 +6,7 @@ import { EntityDecoratorParameters } from "./entity.decorator";
 const logger = new Logger(Repository.name);
 
 export function Repository(db: string, entityType: Type<EntityInterface>) {
-    // TODO: Find typeing for this
+    // TODO: Find typing for this
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (RepoType: any) {
         const methods = Reflect.getOwnMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType) || [];

@@ -35,6 +35,11 @@ const INSERT_MANY_RESULT: InsertManyResult = {
     insertedIds: null
 }
 
+const DELETE_ONE_RESULT = {
+    acknowledged: false,
+    deletedCount: null
+}
+
 describe(BaseRepository.name, () => {
     let underTest: BaseRepository<unknown>;
 
@@ -77,6 +82,17 @@ describe(BaseRepository.name, () => {
 
             expect(actual).toBeUndefined();
             expect(mockedCollection.insertMany).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('deleteOne', () => {
+        it('should delegate to Collection', async () => {
+            mockedCollection.deleteOne.mockResolvedValue(DELETE_ONE_RESULT);
+
+            const actual = await underTest.deleteOne(null);
+
+            expect(actual).toBeUndefined();
+            expect(mockedCollection.deleteOne).toHaveBeenCalledTimes(1);
         });
     });
 });

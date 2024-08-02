@@ -22,7 +22,7 @@ describe(CountByBuilder.name, () => {
     describe('buildMethod', () => {
         it('should return built method', () => {
             utils.mockedCollection.countDocuments.mockReturnValue(Promise.resolve(COUNT_RESULT));
-            utils.builderShouldReturnBuiltmethod(builderUnderTest, COUNT_RESULT);
+            utils.builderShouldReturnBuiltMethod(builderUnderTest, COUNT_RESULT);
         });
 
         it(

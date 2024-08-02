@@ -1,13 +1,17 @@
-import { FindOneByBuilder } from '@src/repositories/method-builders';
+import { DeleteAllByBuilder } from '@src/repositories/method-builders';
 import * as utils from './utils';
+import { DeleteResult } from 'mongodb';
 
-const FIND_RESULT = {};
+const DELETE_RESULT: DeleteResult = {
+    acknowledged: true,
+    deletedCount: 1
+};
 
-describe(FindOneByBuilder.name, () => {
-    let builderUnderTest: FindOneByBuilder;
+describe(DeleteAllByBuilder.name, () => {
+    let builderUnderTest: DeleteAllByBuilder;
 
     beforeEach(() => {
-        builderUnderTest = new FindOneByBuilder();
+        builderUnderTest = new DeleteAllByBuilder();
         builderUnderTest.setModifiers(utils.MODIFIERS);
     });
 
@@ -20,8 +24,8 @@ describe(FindOneByBuilder.name, () => {
     
     describe('buildMethod', () => {
         it('should return built method', () => {
-            utils.mockedCollection.findOne.mockReturnValue(Promise.resolve(FIND_RESULT));
-            utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT)
+            utils.mockedCollection.deleteMany.mockReturnValue(Promise.resolve(DELETE_RESULT));
+            utils.builderShouldReturnBuiltMethod(builderUnderTest, DELETE_RESULT.deletedCount);
         });
 
         it(

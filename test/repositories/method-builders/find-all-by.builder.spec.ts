@@ -22,7 +22,7 @@ describe(FindAllByBuilder.name, () => {
         it('should return built method', () => {
             utils.mockedFindCursor.toArray.mockReturnValue(Promise.resolve(FIND_RESULT));
             utils.mockedCollection.find.mockReturnValue(utils.mockedFindCursor);
-            utils.builderShouldReturnBuiltmethod(builderUnderTest, FIND_RESULT)
+            utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT);
         });
 
         it(

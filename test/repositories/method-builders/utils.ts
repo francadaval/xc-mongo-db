@@ -36,7 +36,7 @@ export function builderShouldReturnVerb(modifierUnderTest: MethodBuilder): void 
     expect(name).not.toContain(' ');
 }
 
-export async function builderShouldReturnBuiltmethod(builderUnderTest: MethodBuilder, expectedResult: unknown, ...args: unknown[]) {
+export async function builderShouldReturnBuiltMethod(builderUnderTest: MethodBuilder, expectedResult: unknown, ...args: unknown[]) {
     args = args || [DUMMY_VALUE];
     const actualMethod = builderUnderTest.buildMethod(METHOD_NAME, GROUPS);
     const actualResult = await actualMethod.call({

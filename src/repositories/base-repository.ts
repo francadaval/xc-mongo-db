@@ -28,4 +28,9 @@ export abstract class BaseRepository<T extends EntityInterface> implements Repos
         const response = await this.collection.findOne({_id});
         return response as T;
     }
+
+    async deleteOne(_id: EntityId): Promise<void> {
+        this.logger.log(`deleteOne`);
+        await this.collection.deleteOne({_id});
+    }
 }
