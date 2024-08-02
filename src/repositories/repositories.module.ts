@@ -5,7 +5,8 @@ import {
     CountByBuilder,
     FindAllByBuilder,
     FindOneByBuilder,
-    FindPageByBuilder
+    FindPageByBuilder,
+    DeleteAllByBuilder
 } from "./method-builders";
 import {
     GreaterThanModifier,
@@ -18,6 +19,7 @@ import {
 
 const METHOD_BUILDERS = [
     CountByBuilder,
+    DeleteAllByBuilder,
     FindAllByBuilder,
     FindOneByBuilder,
     FindPageByBuilder
