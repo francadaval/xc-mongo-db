@@ -105,4 +105,16 @@ describe(BaseRepository.name, () => {
             expect(mockedCollection.deleteOne).toHaveBeenCalledTimes(1);
         });
     });
+
+    describe('updateOne', () => {
+        it('should delegate to Collection', async () => {
+            mockedCollection.updateOne.mockResolvedValue(null);
+
+            const actual = await underTest.updateOne(_ID, DOC_NO_ID);
+
+            expect(actual).toBeUndefined();
+            expect(mockedCollection.updateOne).toHaveBeenCalledWith({_id: _ID}, {$set: DOC_NO_ID});
+            expect(mockedCollection.updateOne).toHaveBeenCalledTimes(1);
+        });
+    });
 });

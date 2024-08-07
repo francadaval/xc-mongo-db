@@ -33,4 +33,9 @@ export abstract class BaseRepository<T extends EntityInterface> implements Repos
         this.logger.log(`deleteOne`);
         await this.collection.deleteOne({_id});
     }
+
+    async updateOne(_id: EntityId, doc: T): Promise<void> {
+        this.logger.log(`updateOne`);
+        await this.collection.updateOne({_id}, {$set: doc});
+    }
 }
