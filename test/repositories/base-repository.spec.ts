@@ -15,8 +15,10 @@ const mockedCollection = mock<Collection>();
 const mockedClient = mock<MongoClient>();
 const mockedDb = mock<Db>();
 
+const _ID = 101;
+
 const DOC_ID = {
-    _id: 0,
+    _id: _ID,
     value: 10
 }
 
@@ -51,13 +53,18 @@ describe(BaseRepository.name, () => {
         underTest = new TestImplementation(mockedConnectionService, DB_NAME, COLLECTION_NAME);
     });
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     describe('findOne', () => {
         it('should delegate to Collection', async () => {
             mockedCollection.findOne.mockResolvedValue(DOC_ID);
 
-            const actual = await underTest.findOne(null);
+            const actual = await underTest.findOne(_ID);
 
             expect(actual).toBe(DOC_ID);
+            expect(mockedCollection.findOne).toHaveBeenCalledWith({_id: _ID});
             expect(mockedCollection.findOne).toHaveBeenCalledTimes(1);
         });
     });
@@ -69,6 +76,7 @@ describe(BaseRepository.name, () => {
             const actual = await underTest.insertOne(DOC_NO_ID);
 
             expect(actual).toBeUndefined();
+            expect(mockedCollection.insertOne).toHaveBeenCalledWith(DOC_NO_ID);
             expect(mockedCollection.insertOne).toHaveBeenCalledTimes(1);
         });
     });
@@ -81,6 +89,7 @@ describe(BaseRepository.name, () => {
             const actual = await underTest.insertMany([DOC_NO_ID]);
 
             expect(actual).toBeUndefined();
+            expect(mockedCollection.insertMany).toHaveBeenCalledWith([DOC_NO_ID]);
             expect(mockedCollection.insertMany).toHaveBeenCalledTimes(1);
         });
     });
@@ -89,9 +98,10 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.deleteOne.mockResolvedValue(DELETE_ONE_RESULT);
 
-            const actual = await underTest.deleteOne(null);
+            const actual = await underTest.deleteOne(_ID);
 
             expect(actual).toBeUndefined();
+            expect(mockedCollection.deleteOne).toHaveBeenCalledWith({_id: _ID});
             expect(mockedCollection.deleteOne).toHaveBeenCalledTimes(1);
         });
     });
