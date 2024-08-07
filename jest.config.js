@@ -33,6 +33,7 @@ const config = {
   coveragePathIgnorePatterns: [
      "node_modules",
      "src/tests",
+     "src/no-test.ts",
      "index.ts",
      "interface.ts"
   ],
