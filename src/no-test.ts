@@ -41,6 +41,8 @@ async function extendedRepoTest(appContext: INestApplicationContext) {
 async function repo1Tests(appContext: INestApplicationContext) {
     let testRepo = appContext.get(TestRepo);
 
+    await testRepo.deleteAll();
+
     await testRepo.insertOne({
         name: "Test entity",
         value: 42,
@@ -78,6 +80,9 @@ async function repo1Tests(appContext: INestApplicationContext) {
 
 async function repo2Tests(appContext: INestApplicationContext) {
     let testRepo2 = appContext.get(TestRepo2);
+
+    await testRepo2.deleteAll();
+
     await testRepo2.insertOne({
         name: "Test entity 2",
         value1: 16,
@@ -100,9 +105,13 @@ async function repo2Tests(appContext: INestApplicationContext) {
             page_size: 5
         })
 
+        await testRepo2.deleteAllByValue1(16);
+        let count16_b = await testRepo2.countByValue1(16);
+
         logger.log(`test2_1: ${test2_1?'exist':'doesn\'t exist'}`);
         logger.log(`test2_2: ${test2_2?'exist':'doesn\'t exist'}`);
         logger.log(`count16 = ${count16}`);
+        logger.log(`count16_b = ${count16_b}`);
         logger.log(`count77 = ${count77}`);
         logger.log(`entities.length = ${entities.length}`);
 

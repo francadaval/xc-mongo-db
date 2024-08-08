@@ -37,4 +37,14 @@ export abstract class TestRepo2 extends BaseRepository<TestEntity2> {
     countByValue1(_value1: number) {
         throw new Error('Repository not implemented.')
     }
+
+    @RepositoryMethod()
+    deleteAllByValue1(_value1: number) {
+        throw new Error('Repository not implemented.')
+    }
+
+    @RepositoryMethod()
+    deleteAllByValue2(_value2: number) {
+        throw new Error('Repository not implemented.')
+    }
 }
