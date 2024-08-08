@@ -39,19 +39,29 @@ function createRepository<T>(
     return repo;
 }
 
-function getPropertiesNames(entityProperties: EntityProperties, dbName: boolean = false): string[] {
-    return addPropertiesNames([], entityProperties, '', dbName);
+function getPropertiesNames(entityProperties: EntityProperties, forDb: boolean = false): string[] {
+    return addPropertiesNames([], entityProperties, '', forDb);
 }
 
-function addPropertiesNames(propertiesNames: string[], entityProperties: EntityProperties, root: string, dbName: boolean): string[] {
-    const names = dbName ? Object.values(entityProperties).map(property => property.propertyDBName) : Object.keys(entityProperties);
-    propertiesNames = propertiesNames.concat(names.map(name => root + name));
+function addPropertiesNames(propertiesNames: string[], entityProperties: EntityProperties, root: string, forDb: boolean): string[] {
+    const names = Object.keys(entityProperties);
+    const dbNames = Object.values(entityProperties).map(property => property.propertyDBName)
 
-    const subEntitiesNames = Object.keys(entityProperties).filter(propertyName => entityProperties[propertyName].type);
-    subEntitiesNames.forEach(subentityName => {
+    const newNames = names.map((name, index) => root + (forDb ? dbNames[index] || name : name));
+
+    propertiesNames = propertiesNames.concat(newNames);
+
+    const subEntitiesNames = Object.keys(entityProperties)
+        .filter(propertyName => entityProperties[propertyName].type);
+    const subEntitiesDbNames = Object.keys(entityProperties)
+        .map(propertyName => entityProperties[propertyName].propertyDBName);
+
+    subEntitiesNames.forEach((subentityName, index) => {
         const subEntitytype = entityProperties[subentityName].type;
-        const subEntityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, subEntitytype); 
-        propertiesNames = addPropertiesNames(propertiesNames, subEntityProperties, `${subentityName}.`, dbName);
+        const subEntitiesDbName = subEntitiesDbNames[index];
+        const name = forDb ? subEntitiesDbName || subentityName : subentityName;
+        const subEntityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, subEntitytype);
+        propertiesNames = addPropertiesNames(propertiesNames, subEntityProperties, `${root}${name}.`, forDb);
     });
 
     return propertiesNames;

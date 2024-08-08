@@ -17,17 +17,17 @@ async function bootstrap() {
 
     if(RUN_TEST1) {
         logger.log("Run Test1");
-        repo1Tests(testApp);
+        await repo1Tests(testApp);
     }
 
     if(RUN_TEST2) {
         logger.log("Run Test2");
-        repo2Tests(testApp);
+        await repo2Tests(testApp);
     }
 
     if(RUN_EXTENDED_TEST) {
         logger.log("Run Extended Test")
-        extendedRepoTest(testApp);
+        await extendedRepoTest(testApp);
     }
 
     process.exit();
