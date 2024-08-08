@@ -32,6 +32,11 @@ export abstract class BaseRepository<T extends Document> {
         await this.collection.deleteOne({_id});
     }
 
+    async deleteAll(): Promise<void> {  
+        this.logger.log(`removeAll`);
+        await this.collection.deleteMany({});
+    }
+
     async updateOne(_id: InferIdType<T>, doc: T): Promise<void> {
         this.logger.log(`updateOne`);
         await this.collection.updateOne({_id}, {$set: doc});

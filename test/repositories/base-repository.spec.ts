@@ -112,6 +112,18 @@ describe(BaseRepository.name, () => {
         });
     });
 
+    describe('deleteAll', () => {
+        it('should delegate to Collection', async () => {
+            mockedCollection.deleteMany.mockResolvedValue(null);
+
+            const actual = await underTest.deleteAll();
+
+            expect(actual).toBeUndefined();
+            expect(mockedCollection.deleteMany).toHaveBeenCalledWith({});
+            expect(mockedCollection.deleteMany).toHaveBeenCalledTimes(1);
+        });
+    });
+
     describe('updateOne', () => {
         it('should delegate to Collection', async () => {
             mockedCollection.updateOne.mockResolvedValue(null);
