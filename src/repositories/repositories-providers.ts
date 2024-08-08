@@ -4,13 +4,19 @@ import { BaseRepository } from "./base-repository";
 import { MetadataKeys } from "../decorators/metadata-keys";
 import { EntityProperties } from "../decorators";
 import { RepositoryMethodsBuilder } from "./builder/repo-method-builder";
-import { EntityInterface } from "@src/entities";
 
-export const RepositoriesProviders = (repoTypes: Abstract<BaseRepository<EntityInterface>>[]) => {
-    return repoTypes.map(type => createFactoryProvider(type));
-};
+const logger = new Logger('repositoryFactoryProvider');
 
-function createRepository<T extends EntityInterface>(
+export function repositoryFactoryProvider<T> (type: Abstract<BaseRepository<T>>): FactoryProvider {
+    return {
+        provide: type,
+        useFactory: (connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder) =>
+            createRepository(type, connectionService, methodsBuilder),
+        inject: [ConnectionService, RepositoryMethodsBuilder]
+    }
+}
+
+function createRepository<T>(
     RepoType: Abstract<BaseRepository<T>>,
     connectionService: ConnectionService,
     methodsBuilder: RepositoryMethodsBuilder
@@ -33,15 +39,6 @@ function createRepository<T extends EntityInterface>(
     return repo;
 }
 
-function createFactoryProvider(type: Abstract<BaseRepository<EntityInterface>>): FactoryProvider {
-    return {
-        provide: type,
-        useFactory: (connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder) =>
-            createRepository(type, connectionService, methodsBuilder),
-        inject: [ConnectionService, RepositoryMethodsBuilder]
-    }
-}
-
 function getPropertiesNames(entityProperties: EntityProperties, dbName: boolean = false): string[] {
     return addPropertiesNames([], entityProperties, '', dbName);
 }
@@ -59,5 +56,3 @@ function addPropertiesNames(propertiesNames: string[], entityProperties: EntityP
 
     return propertiesNames;
 }
-
-const logger = new Logger(RepositoriesProviders.name)

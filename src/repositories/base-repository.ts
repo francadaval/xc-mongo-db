@@ -1,10 +1,8 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "../connection";
-import { RepositoryInterface } from "./repository.interface";
-import { EntityId, EntityInterface } from "../entities";
-import { Collection } from "mongodb";
+import { Collection, Document, InferIdType, WithId } from "mongodb";
 
-export abstract class BaseRepository<T extends EntityInterface> implements RepositoryInterface<T> {
+export abstract class BaseRepository<T extends Document> {
     protected abstract logger: Logger
     readonly collection: Collection;
 
@@ -23,18 +21,18 @@ export abstract class BaseRepository<T extends EntityInterface> implements Repos
         await this.collection.insertMany(docs);
     }
 
-    async findOne(_id: EntityId): Promise<T> {
+    async findOne(_id: InferIdType<T>): Promise<WithId<T>> {
         this.logger.log(`findOne`);
         const response = await this.collection.findOne({_id});
-        return response as T;
+        return response as WithId<T>;
     }
 
-    async deleteOne(_id: EntityId): Promise<void> {
+    async deleteOne(_id: InferIdType<T>): Promise<void> {
         this.logger.log(`deleteOne`);
         await this.collection.deleteOne({_id});
     }
 
-    async updateOne(_id: EntityId, doc: T): Promise<void> {
+    async updateOne(_id: InferIdType<T>, doc: T): Promise<void> {
         this.logger.log(`updateOne`);
         await this.collection.updateOne({_id}, {$set: doc});
     }

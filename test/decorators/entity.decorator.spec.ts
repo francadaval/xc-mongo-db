@@ -1,10 +1,9 @@
 import { Entity, Property } from '@src/decorators'; 
 import { MetadataKeys } from '@src/decorators/metadata-keys';
-import { EntityInterface } from '@src/entities';
 
 const COLLECION_NAME = 'collectionName';
 const PARAMETERS = {collectionName: COLLECION_NAME};
-class TestClass implements EntityInterface {
+class TestEntity {
     @Property()
     _id?: string;
 
@@ -12,6 +11,7 @@ class TestClass implements EntityInterface {
         propertyDBName: 'mainValue',
         type: Number
     })
+    // eslint-disable-next-line @typescript-eslint/ban-types
     value: Number;
 }
 
@@ -25,7 +25,7 @@ const PROPERTIES = {
 
 const EXT_COLLECION_NAME = 'extCollectionName';
 const EXT_PARAMETERS = {collectionName: EXT_COLLECION_NAME};
-class ExtendedTestClass extends TestClass {
+class ExtendedTestClass extends TestEntity {
     @Property({
         propertyDBName: 'extended'
     })
@@ -45,9 +45,9 @@ const EXT_PROPERTIES = {
 describe(Entity.name, () => {
     it('should add parameters to reflect metadata, properties parameters should exist', () => {
         const decorator = Entity(PARAMETERS);
-        decorator(TestClass);
-        const actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, TestClass);
-        const actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, TestClass);
+        decorator(TestEntity);
+        const actualParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, TestEntity);
+        const actualProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, TestEntity);
 
         expect(actualParameters).toBe(PARAMETERS);
         expect(actualProperties).toEqual(PROPERTIES);

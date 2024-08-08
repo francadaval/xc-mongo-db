@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConnectionService } from "../connection";
-import { RepositoriesProviders, RepositoriesModule } from "../repositories";
+import { RepositoriesModule, repositoryFactoryProvider } from "../repositories";
 import { TestRepo } from "./test-repo";
 import { TestRepo2 } from "./test-repo-2";
 import { ExtendedEntityRepository } from "./extended-entity-repo";
@@ -11,11 +11,9 @@ import { ExtendedEntityRepository } from "./extended-entity-repo";
     ],
     providers: [
         ConnectionService,
-        ...RepositoriesProviders([
-            TestRepo,
-            TestRepo2,
-            ExtendedEntityRepository
-        ])
+        repositoryFactoryProvider(TestRepo),
+        repositoryFactoryProvider(TestRepo2),
+        repositoryFactoryProvider(ExtendedEntityRepository)
     ]
 })
 export class TestModule {}

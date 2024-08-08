@@ -4,12 +4,18 @@ import { BaseRepository } from "@src/repositories";
 import { Collection, Db, InsertManyResult, InsertOneResult, MongoClient } from "mongodb";
 import { mock } from "ts-jest-mocker";
 
-class TestImplementation extends BaseRepository<unknown> {
+class TestEntity {
+    _id?: number;
+    value: number;
+}
+
+class TestRepository extends BaseRepository<TestEntity> {
     protected logger = new Logger('BaseRepository');
 }
 
 const DB_NAME = 'dbName';
 const COLLECTION_NAME = 'collectionName';
+
 const mockedConnectionService = mock<ConnectionService>();
 const mockedCollection = mock<Collection>();
 const mockedClient = mock<MongoClient>();
@@ -17,12 +23,12 @@ const mockedDb = mock<Db>();
 
 const _ID = 101;
 
-const DOC_ID = {
+const DOC_WITH_ID = {
     _id: _ID,
     value: 10
 }
 
-const DOC_NO_ID = {
+const DOC_WITHOUT_ID = {
     value: 10
 }
 
@@ -43,14 +49,14 @@ const DELETE_ONE_RESULT = {
 }
 
 describe(BaseRepository.name, () => {
-    let underTest: BaseRepository<unknown>;
+    let underTest: TestRepository;
 
     beforeEach(() => {
         mockedConnectionService.getMongoClient.mockReturnValue(mockedClient);
         mockedClient.db.mockReturnValue(mockedDb);
         mockedDb.collection.mockReturnValue(mockedCollection);
 
-        underTest = new TestImplementation(mockedConnectionService, DB_NAME, COLLECTION_NAME);
+        underTest = new TestRepository(mockedConnectionService, DB_NAME, COLLECTION_NAME);
     });
 
     afterEach(() => {
@@ -59,11 +65,11 @@ describe(BaseRepository.name, () => {
 
     describe('findOne', () => {
         it('should delegate to Collection', async () => {
-            mockedCollection.findOne.mockResolvedValue(DOC_ID);
+            mockedCollection.findOne.mockResolvedValue(DOC_WITH_ID);
 
             const actual = await underTest.findOne(_ID);
 
-            expect(actual).toBe(DOC_ID);
+            expect(actual).toBe(DOC_WITH_ID);
             expect(mockedCollection.findOne).toHaveBeenCalledWith({_id: _ID});
             expect(mockedCollection.findOne).toHaveBeenCalledTimes(1);
         });
@@ -73,10 +79,10 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.insertOne.mockResolvedValue(INSERT_ONE_RESULT);
 
-            const actual = await underTest.insertOne(DOC_NO_ID);
+            const actual = await underTest.insertOne(DOC_WITHOUT_ID);
 
             expect(actual).toBeUndefined();
-            expect(mockedCollection.insertOne).toHaveBeenCalledWith(DOC_NO_ID);
+            expect(mockedCollection.insertOne).toHaveBeenCalledWith(DOC_WITHOUT_ID);
             expect(mockedCollection.insertOne).toHaveBeenCalledTimes(1);
         });
     });
@@ -86,10 +92,10 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.insertMany.mockResolvedValue(INSERT_MANY_RESULT);
 
-            const actual = await underTest.insertMany([DOC_NO_ID]);
+            const actual = await underTest.insertMany([DOC_WITHOUT_ID]);
 
             expect(actual).toBeUndefined();
-            expect(mockedCollection.insertMany).toHaveBeenCalledWith([DOC_NO_ID]);
+            expect(mockedCollection.insertMany).toHaveBeenCalledWith([DOC_WITHOUT_ID]);
             expect(mockedCollection.insertMany).toHaveBeenCalledTimes(1);
         });
     });
@@ -110,10 +116,10 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.updateOne.mockResolvedValue(null);
 
-            const actual = await underTest.updateOne(_ID, DOC_NO_ID);
+            const actual = await underTest.updateOne(_ID, DOC_WITHOUT_ID);
 
             expect(actual).toBeUndefined();
-            expect(mockedCollection.updateOne).toHaveBeenCalledWith({_id: _ID}, {$set: DOC_NO_ID});
+            expect(mockedCollection.updateOne).toHaveBeenCalledWith({_id: _ID}, {$set: DOC_WITHOUT_ID});
             expect(mockedCollection.updateOne).toHaveBeenCalledTimes(1);
         });
     });

@@ -1,10 +1,8 @@
 import { Entity, Property } from "../decorators";
-import { EntityInterface } from "../entities";
 import { TestSubEntity } from "./test-sub-entity";
 
 @Entity()
-export class TestEntity implements EntityInterface {
-    @Property() _id?: string;
+export class TestEntity {
     @Property() name?: string;
     @Property() value?: number;
     @Property() lockAndStock?: number

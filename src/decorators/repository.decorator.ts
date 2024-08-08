@@ -1,11 +1,11 @@
 import { Logger, Type } from "@nestjs/common";
 import { MetadataKeys } from "./metadata-keys";
-import { EntityInterface } from "../entities";
 import { EntityDecoratorParameters } from "./entity.decorator";
+import { Document } from "mongodb";
 
 const logger = new Logger(Repository.name);
 
-export function Repository(db: string, entityType: Type<EntityInterface>) {
+export function Repository(db: string, entityType: Type<Document>) {
     // TODO: Find typing for this
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (RepoType: any) {
