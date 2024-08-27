@@ -30,12 +30,12 @@ function createRepository<T>(
     const propertiesNames = getPropertiesNames(entityProperties);
     const dbPropertiesNames = getPropertiesNames(entityProperties, true);
 
-    methods.forEach(method => {
+    methods?.forEach(method => {
         RepoType.prototype[method] = methodsBuilder.buildRepositoryMethod(method, propertiesNames, dbPropertiesNames);
     });
 
     const repo = new (RepoType as Type)(connectionService);
-    logger.log(`${createRepository.name}: ${className}, ${methods.length} methods, ${propertiesNames.length} entity propert`);
+    logger.log(`${createRepository.name}: ${className}, ${methods?.length || 0} methods, ${propertiesNames.length} entity propert`);
     return repo;
 }
 
