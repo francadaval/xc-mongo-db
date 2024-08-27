@@ -1,11 +1,11 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "@src/connection";
+import { BaseEntity } from "@src/entity";
 import { BaseRepository } from "@src/repositories";
 import { Collection, Db, InsertManyResult, InsertOneResult, MongoClient } from "mongodb";
 import { mock } from "ts-jest-mocker";
 
-class TestEntity {
-    _id?: number;
+class TestEntity extends BaseEntity<number> {
     value: number;
 }
 
@@ -23,14 +23,12 @@ const mockedDb = mock<Db>();
 
 const _ID = 101;
 
-const DOC_WITH_ID = {
-    _id: _ID,
-    value: 10
-}
+const DOC_WITH_ID = new TestEntity();
+DOC_WITH_ID._id = _ID;
+DOC_WITH_ID.value = 10;
 
-const DOC_WITHOUT_ID = {
-    value: 10
-}
+const DOC_WITHOUT_ID = new TestEntity();
+DOC_WITHOUT_ID.value = 10;
 
 const INSERT_ONE_RESULT: InsertOneResult = {
     acknowledged: false,

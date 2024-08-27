@@ -1,8 +1,9 @@
+import { BaseEntity } from "../entity";
 import { Entity, Property } from "../decorators";
 import { TestSubEntity } from "./test-sub-entity";
 
 @Entity()
-export class TestEntity {
+export class TestEntity extends BaseEntity {
     @Property() name?: string;
     @Property() value?: number;
     @Property() lockAndStock?: number

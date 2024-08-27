@@ -1,12 +1,10 @@
 import { Entity, Property } from '@src/decorators'; 
 import { MetadataKeys } from '@src/decorators/metadata-keys';
+import { BaseEntity } from '@src/entity';
 
 const COLLECION_NAME = 'collectionName';
 const PARAMETERS = {collectionName: COLLECION_NAME};
-class TestEntity {
-    @Property()
-    _id?: string;
-
+class TestEntity extends BaseEntity<string> {
     @Property({
         propertyDBName: 'mainValue',
         type: Number
@@ -16,7 +14,6 @@ class TestEntity {
 }
 
 const PROPERTIES = {
-    _id: {},
     value: {
         propertyDBName: 'mainValue',
         type: Number
@@ -32,7 +29,6 @@ class ExtendedTestClass extends TestEntity {
     extendedProperty: string;
 }
 const EXT_PROPERTIES = {
-    _id: {},
     value: {
         propertyDBName: 'mainValue',
         type: Number

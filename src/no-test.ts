@@ -4,6 +4,8 @@ import { TestRepo } from "./tests/test-repo";
 import { TestRepo2 } from "./tests/test-repo-2";
 import { INestApplicationContext, Logger } from "@nestjs/common";
 import { ExtendedEntityRepository } from "./tests/extended-entity-repo";
+import { TestEntity2 } from "./tests/test-entity-2";
+import { TestEntity } from "./tests/test-entity";
 
 const logger = new Logger("Main");
 const RUN_TEST1 = true;
@@ -43,32 +45,22 @@ async function repo1Tests(appContext: INestApplicationContext) {
 
     await testRepo.deleteAll();
 
-    await testRepo.insertOne({
-        name: "Test entity",
-        value: 42,
-        date: new Date(),
-        lockAndStock: 16,
-        subEntity: {
-            name: "Test subentity",
-            value: 13
-        }
-    });
+    let entity = new TestEntity();
+    entity.name = "Test entity";
+    entity.value = 42;
+    entity.date = new Date();
+    entity.lockAndStock = 16;
+    entity.subEntity = {
+        name: "Test subentity",
+        value: 13
+    };
 
-    await testRepo.insertOne({
-        name: "Higher test entity",
-        value: 45,
-        date: new Date(),
-        lockAndStock: 16,
-        subEntity: {
-            name: "Higher test subentity",
-            value: 16
-        }
-    });
+    await testRepo.insertOne(entity);
 
     try {
         let test1_1 = await testRepo.findOneByValue(40);
         let test1_2_count = await testRepo.countBySubEntityValue(13);
-        let test1_3 = await testRepo.findOneByLockAndStockAndValueGreaterThan(16, 42);
+        let test1_3 = await testRepo.findOneByLockAndStockAndValueGreaterThan(16, 40);
 
         logger.log(`test1: ${test1_1?'exist':'doesn\'t exist'}`);
         logger.log(`test1_2_count: ${test1_2_count}`);
@@ -83,12 +75,13 @@ async function repo2Tests(appContext: INestApplicationContext) {
 
     await testRepo2.deleteAll();
 
-    await testRepo2.insertOne({
-        name: "Test entity 2",
-        value1: 16,
-        value2: 17,
-        date: new Date()
-    });
+    let entity = new TestEntity2();
+    entity.name = "Test entity 2";
+    entity.value1 = 16;
+    entity.value2 = 17;
+    entity.date = new Date();
+
+    await testRepo2.insertOne(entity);
 
     try {
         let test2_1 = await testRepo2.findOneByValue1(16);

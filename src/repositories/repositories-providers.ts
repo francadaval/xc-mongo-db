@@ -4,10 +4,11 @@ import { BaseRepository } from "./base-repository";
 import { MetadataKeys } from "../decorators/metadata-keys";
 import { EntityProperties } from "../decorators";
 import { RepositoryMethodsBuilder } from "./builder/repo-method-builder";
+import { BaseEntity } from "@src/entity";
 
 const logger = new Logger('repositoryFactoryProvider');
 
-export function repositoryFactoryProvider<T> (type: Abstract<BaseRepository<T>>): FactoryProvider {
+export function repositoryFactoryProvider<T extends BaseEntity<unknown>> (type: Abstract<BaseRepository<T>>): FactoryProvider {
     return {
         provide: type,
         useFactory: (connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder) =>
@@ -16,7 +17,7 @@ export function repositoryFactoryProvider<T> (type: Abstract<BaseRepository<T>>)
     }
 }
 
-function createRepository<T>(
+function createRepository<T extends BaseEntity<unknown>>(
     RepoType: Abstract<BaseRepository<T>>,
     connectionService: ConnectionService,
     methodsBuilder: RepositoryMethodsBuilder

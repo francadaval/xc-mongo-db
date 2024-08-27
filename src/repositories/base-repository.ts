@@ -1,8 +1,10 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "../connection";
-import { Collection, Document, InferIdType, WithId, WithoutId } from "mongodb";
+import { Collection, InferIdType, WithId, WithoutId } from "mongodb";
+import { BaseEntity } from "../entity";
 
-export abstract class BaseRepository<T extends Document> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class BaseRepository<T extends BaseEntity<any>> {
     protected abstract logger: Logger
     readonly collection: Collection;
 
