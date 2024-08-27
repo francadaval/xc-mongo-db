@@ -1,6 +1,6 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "../connection";
-import { Collection, Document, InferIdType, WithId } from "mongodb";
+import { Collection, Document, InferIdType, WithId, WithoutId } from "mongodb";
 
 export abstract class BaseRepository<T extends Document> {
     protected abstract logger: Logger
@@ -37,7 +37,7 @@ export abstract class BaseRepository<T extends Document> {
         await this.collection.deleteMany({});
     }
 
-    async updateOne(_id: InferIdType<T>, doc: T): Promise<void> {
+    async updateOne(_id: InferIdType<T>, doc: Partial<WithoutId<T>>): Promise<void> {
         this.logger.log(`updateOne`);
         await this.collection.updateOne({_id}, {$set: doc});
     }
