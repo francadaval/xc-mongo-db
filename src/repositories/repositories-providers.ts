@@ -22,22 +22,38 @@ function createRepository<T extends BaseEntity<unknown>>(
     connectionService: ConnectionService,
     methodsBuilder: RepositoryMethodsBuilder
 ): BaseRepository<T> {
-    const className = Object.getPrototypeOf(RepoType).name;
-
+    
     const methods = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
     const entityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType);
     const entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, entityType);
+    
+    createRepoMethods<T>(entityProperties, methods, RepoType, methodsBuilder);
+
+    const repo = new (RepoType as Type)(connectionService);
+    
+    createIndexes(entityProperties, repo);
+    
+    return repo;
+}
+
+function createIndexes(entityProperties: EntityProperties, repository: BaseRepository<BaseEntity<unknown>>) {
+    Object.entries(entityProperties)
+        .filter(property => property[1].unique)
+        .map(property => property[1].propertyDBName || property[0])
+        .forEach(property => repository.collection.createIndex(property, {unique: true}));
+}
+
+function createRepoMethods<T extends BaseEntity<unknown>>(entityProperties: EntityProperties, methods: any, RepoType: Abstract<BaseRepository<T>>, methodsBuilder: RepositoryMethodsBuilder) {
+    const className = Object.getPrototypeOf(RepoType).name;
 
     const propertiesNames = getPropertiesNames(entityProperties);
     const dbPropertiesNames = getPropertiesNames(entityProperties, true);
-
+    
     methods?.forEach(method => {
         RepoType.prototype[method] = methodsBuilder.buildRepositoryMethod(method, propertiesNames, dbPropertiesNames);
     });
-
-    const repo = new (RepoType as Type)(connectionService);
     logger.log(`${createRepository.name}: ${className}, ${methods?.length || 0} methods, ${propertiesNames.length} entity propert`);
-    return repo;
+    return propertiesNames;
 }
 
 function getPropertiesNames(entityProperties: EntityProperties, forDb: boolean = false): string[] {

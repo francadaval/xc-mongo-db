@@ -10,6 +10,7 @@ export type EntityProperties = {
 export type PropertyDecoratorParameters = {
     propertyDBName?: string
     type?: Type
+    unique?: boolean
 };
 
 export function Property(parameters?: PropertyDecoratorParameters) {
