@@ -11,13 +11,17 @@ class TestEntity extends BaseEntity<string> {
     })
     // eslint-disable-next-line @typescript-eslint/ban-types
     value: Number;
+
+    @Property()
+    name: string;
 }
 
 const PROPERTIES = {
     value: {
         propertyDBName: 'mainValue',
         type: Number
-    }
+    },
+    name: {}
 }
 
 const EXT_COLLECION_NAME = 'extCollectionName';
@@ -29,14 +33,15 @@ class ExtendedTestClass extends TestEntity {
     extendedProperty: string;
 }
 const EXT_PROPERTIES = {
-    value: {
-        propertyDBName: 'mainValue',
-        type: Number
-    },
+    ...PROPERTIES,
     extendedProperty: {
         propertyDBName: 'extended'
     }
 }
+
+const ID = '123';
+const VALUE = 123;
+const NAME = 'test';
 
 describe(Entity.name, () => {
     it('should add parameters to reflect metadata, properties parameters should exist', () => {
@@ -57,5 +62,44 @@ describe(Entity.name, () => {
 
         expect(actualParameters).toBe(EXT_PARAMETERS);
         expect(actualProperties).toEqual(EXT_PROPERTIES);
+    });
+
+    it('should populate all properties on creation', () => {
+        const instance = new TestEntity({
+            _id: ID,
+            mainValue: VALUE,
+            name: NAME
+        });
+
+        expect(instance._id).toBe(ID);
+        expect(instance.value).toBe(VALUE);
+        expect(instance.name).toBe(NAME);
+    });
+
+    it('should populate all properties', () => {
+        const instance = new TestEntity();
+        instance.populate({
+            _id: ID,
+            mainValue: VALUE,
+            name: NAME
+        });
+
+        expect(instance._id).toBe(ID);
+        expect(instance.value).toBe(VALUE);
+        expect(instance.name).toBe(NAME);
+    });
+
+    it('should serialize all properties', () => {
+        const instance = new TestEntity({
+            _id: ID,
+            mainValue: VALUE,
+            name: NAME
+        });
+
+        const serialized = instance.serialize();
+
+        expect(serialized._id).toBe(ID);
+        expect(serialized.mainValue).toBe(VALUE);
+        expect(serialized.name).toBe(NAME);
     });
 });
