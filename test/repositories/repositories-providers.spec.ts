@@ -19,7 +19,9 @@ const TEST_ENTITY_PROPERTIES: EntityProperties = {
         propertyDBName: 'prop_1',
         type: TestSubEntity
     },
-    prop2: {}
+    prop2: {
+        unique: true
+    }
 }
 
 const TEST_SUBENTITY_PROPERTIES: EntityProperties = {
@@ -50,6 +52,7 @@ describe(repositoryFactoryProvider.name, () => {
         mockedConnectionService.getMongoClient.mockReturnValue(mockedMongoClient);
         mockedMongoClient.db.mockReturnValue(mockedDb);
         mockedDb.collection.mockReturnValue(mockedCollection);
+        mockedCollection.createIndex.mockReturnValue(Promise.resolve('index'));
         
         Reflect.defineMetadata(MetadataKeys.REPOSITORY_METHODS, ['method1', 'method2'], TestRepo);
         Reflect.defineMetadata(MetadataKeys.ENTITY_TYPE, TestEntity, TestRepo);
@@ -77,5 +80,6 @@ describe(repositoryFactoryProvider.name, () => {
             EXPECTED_DB_PROP_NAMES
         );
         expect(methodsBuilder.buildRepositoryMethod).toHaveBeenCalledTimes(2);
+        expect(mockedCollection.createIndex).toHaveBeenCalledWith('prop2', {unique: true});
     });
 });
