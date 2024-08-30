@@ -32,8 +32,8 @@ const config = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
      "node_modules",
-     "src/tests",
-     "src/no-test.ts",
+     "src/e2e-tests",
+     "src/e2e-test.ts",
      "index.ts",
      "interface.ts"
   ],
