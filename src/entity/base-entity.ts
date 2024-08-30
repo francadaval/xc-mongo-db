@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export abstract class BaseEntity {
-    constructor(data: any = {}) {
-        this.populate(data);
+    constructor(data: any = {}, fromDB = true) {
+        if (fromDB) {
+            this.populate(data);
+        } else {
+            this.deserialize(data);
+        }
     }
 
     serialize(): any {
@@ -9,4 +13,6 @@ export abstract class BaseEntity {
     }
 
     populate(_data: any = {}): void {}
+
+    deserialize(_data: any = {}): void {}
 }

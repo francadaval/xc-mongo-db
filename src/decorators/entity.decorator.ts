@@ -13,7 +13,8 @@ export type EntityDecoratorParameters = {
 export function Entity(parameters?: EntityDecoratorParameters) {
     return function (target: Type<BaseEntity>) {
         Reflect.defineMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, parameters || {}, target);
-        const entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, target) || {};
+        const entityProperties: EntityProperties = Reflect.getOwnMetadata(MetadataKeys.ENTITY_PROPERTIES, target) || {};
+        const idProperty: string = Reflect.getOwnMetadata(MetadataKeys.ID_PROPERTY, target);
 
         logger.debug(`${target.name} evaluated.`);
 
@@ -40,5 +41,20 @@ export function Entity(parameters?: EntityDecoratorParameters) {
             }
             return serialized;
         };
+
+        target.prototype.deserialize = function (data: any): void {
+            superPrototype.deserialize.apply(this, [data]);
+
+            if (idProperty) {
+                this[idProperty] = data[idProperty];
+            }
+
+            for (const property in entityProperties) {
+                const parameters = entityProperties[property];
+                const value = data[property];
+
+                this[property] = (parameters.type && value !== undefined) ? new parameters.type(value, false) : value;
+            }
+        }
     };
 }

@@ -1,4 +1,4 @@
-import { Entity, Property } from '@src/decorators'; 
+import { Entity, Id, Property } from '@src/decorators'; 
 import { MetadataKeys } from '@src/decorators/metadata-keys';
 import { BaseDocEntity, BaseEntity } from '@src/entity';
 
@@ -22,6 +22,11 @@ class TestEntity extends BaseDocEntity<string> {
 
     @Property()
     name: string;
+}
+
+class TestIdEntity extends BaseDocEntity<string> {
+    @Id()
+    customId: string;
 }
 
 const PROPERTIES = {
@@ -128,5 +133,54 @@ describe(Entity.name, () => {
         expect(serialized._id).toBe(ID);
         expect(serialized.mainValue).toStrictEqual(VALUE);
         expect(serialized.name).toBe(NAME);
+    });
+
+    it('should deserialize all properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntity);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+
+        const instance = new TestEntity();
+        instance.deserialize({
+            _id: ID,
+            value: VALUE,
+            name: NAME
+        });
+
+        expect(instance._id).toBe(ID);
+        expect(instance.value).toStrictEqual(VALUE_ENTITY);
+        expect(instance.name).toBe(NAME);
+    });
+
+    it('should deserialize all properties on creation with fromDB = false', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntity);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+
+        const instance = new TestEntity({
+            _id: ID,
+            value: VALUE_ENTITY,
+            name: NAME
+        }, false);
+
+        expect(instance._id).toBe(ID);
+        expect(instance.value).toStrictEqual(VALUE_ENTITY);
+        expect(instance.name).toBe(NAME);
+    });
+
+    it('should deserialize id property as well', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestIdEntity);
+
+        const instance = new TestIdEntity();
+        instance.deserialize({
+            customId: ID
+        });
+
+        expect(instance._id).toBe(ID);
     });
 });

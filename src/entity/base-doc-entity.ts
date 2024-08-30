@@ -23,4 +23,8 @@ export abstract class BaseDocEntity<T = ObjectId> extends BaseEntity{
     populate(data: any = {}): void {
         this._id = data._id;
     }
+
+    deserialize(data: any = {}): void {
+        this._id = data._id;
+    }
 }
