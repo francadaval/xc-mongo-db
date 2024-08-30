@@ -1,16 +1,31 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "@src/connection";
-import { BaseEntity } from "@src/entity";
+import { BaseDocEntity } from "@src/entity";
 import { BaseRepository } from "@src/repositories";
-import { Collection, Db, InsertManyResult, InsertOneResult, MongoClient } from "mongodb";
+import { Collection, Db, Document, InsertManyResult, InsertOneResult, MongoClient } from "mongodb";
 import { mock } from "ts-jest-mocker";
 
-class TestEntity extends BaseEntity<number> {
+class TestEntity extends BaseDocEntity<number> {
     value: number;
+
+    serialize() {
+        return {
+            _id: this._id,
+            value: this.value
+        };
+    }
+
+    populate(data?: Document): void {
+        super.populate(data);
+        this.value = data.value
+    }
 }
 
 class TestRepository extends BaseRepository<TestEntity> {
     protected logger = new Logger('BaseRepository');
+    protected createEntity(data: Document): TestEntity {
+        return new TestEntity(data);
+    }
 }
 
 const DB_NAME = 'dbName';
@@ -23,9 +38,10 @@ const mockedDb = mock<Db>();
 
 const _ID = 101;
 
-const DOC_WITH_ID = new TestEntity();
-DOC_WITH_ID._id = _ID;
-DOC_WITH_ID.value = 10;
+const DOC_WITH_ID = {
+    _id: _ID,
+    value: 10
+};
 
 const DOC_WITHOUT_ID = new TestEntity();
 DOC_WITHOUT_ID.value = 10;
@@ -67,7 +83,9 @@ describe(BaseRepository.name, () => {
 
             const actual = await underTest.findOne(_ID);
 
-            expect(actual).toBe(DOC_WITH_ID);
+            expect(actual).toBeInstanceOf(TestEntity);
+            expect(actual.serialize()).toStrictEqual(DOC_WITH_ID);
+
             expect(mockedCollection.findOne).toHaveBeenCalledWith({_id: _ID});
             expect(mockedCollection.findOne).toHaveBeenCalledTimes(1);
         });

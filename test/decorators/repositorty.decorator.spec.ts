@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { ConnectionService } from '@src/connection';
 import { Entity, Property, Repository, RepositoryMethod } from '@src/decorators';
 import { MetadataKeys } from '@src/decorators/metadata-keys';
-import { BaseEntity } from '@src/entity';
+import { BaseDocEntity } from '@src/entity';
 import { BaseRepository } from '@src/repositories';
 import { Collection, Db, MongoClient } from 'mongodb';
 import { mock } from 'ts-jest-mocker';
@@ -14,7 +14,7 @@ const mockedDb = mock(Db);
 const mockedCollection = mock(Collection);
 
 @Entity()
-class TestEntity extends BaseEntity<string>{
+class TestEntity extends BaseDocEntity<string>{
     @Property()
     value: number;
 }

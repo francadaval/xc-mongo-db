@@ -1,10 +1,10 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "../connection";
-import { Collection, InferIdType, WithId, WithoutId } from "mongodb";
-import { BaseEntity } from "../entity";
+import { Collection, Document, InferIdType, WithoutId } from "mongodb";
+import { BaseDocEntity } from "../entity";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export abstract class BaseRepository<T extends BaseEntity<any>> {
+export abstract class BaseRepository<T extends BaseDocEntity<any>> {
     protected abstract logger: Logger
     readonly collection: Collection;
 
@@ -13,20 +13,21 @@ export abstract class BaseRepository<T extends BaseEntity<any>> {
         this.collection = client.db(dbName).collection(collectionName);
     }
 
-    async insertOne(doc: T): Promise<void> {
+    async insertOne(entity: T): Promise<void> {
         this.logger.log(`insertOne`);
-        await this.collection.insertOne(doc);
+        await this.collection.insertOne(entity.serialize());
     }
 
-    async insertMany(docs: T[]): Promise<void> {
+    async insertMany(entities: T[]): Promise<void> {
         this.logger.log(`insertMany`);
+        const docs = entities.map(entity => entity.serialize());
         await this.collection.insertMany(docs);
     }
 
-    async findOne(_id: InferIdType<T>): Promise<WithId<T>> {
+    async findOne(_id: InferIdType<T>): Promise<T> {
         this.logger.log(`findOne`);
         const response = await this.collection.findOne({_id});
-        return response as WithId<T>;
+        return this.createEntity(response);
     }
 
     async deleteOne(_id: InferIdType<T>): Promise<void> {
@@ -42,5 +43,9 @@ export abstract class BaseRepository<T extends BaseEntity<any>> {
     async updateOne(_id: InferIdType<T>, doc: Partial<WithoutId<T>>): Promise<void> {
         this.logger.log(`updateOne`);
         await this.collection.updateOne({_id}, {$set: doc});
+    }
+
+    protected createEntity(_data: Document): T {
+        throw new Error('Not implemented');
     }
 }

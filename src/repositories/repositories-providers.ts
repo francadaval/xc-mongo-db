@@ -4,11 +4,11 @@ import { BaseRepository } from "./base-repository";
 import { MetadataKeys } from "../decorators/metadata-keys";
 import { EntityProperties } from "../decorators";
 import { RepositoryMethodsBuilder } from "./builder/repo-method-builder";
-import { BaseEntity } from "@src/entity";
+import { BaseDocEntity } from "../entity";
 
 const logger = new Logger('repositoryFactoryProvider');
 
-export function repositoryFactoryProvider<T extends BaseEntity<unknown>> (type: Abstract<BaseRepository<T>>): FactoryProvider {
+export function repositoryFactoryProvider<T extends BaseDocEntity<unknown>> (type: Abstract<BaseRepository<T>>): FactoryProvider {
     return {
         provide: type,
         useFactory: (connectionService: ConnectionService, methodsBuilder: RepositoryMethodsBuilder) =>
@@ -17,7 +17,7 @@ export function repositoryFactoryProvider<T extends BaseEntity<unknown>> (type: 
     }
 }
 
-function createRepository<T extends BaseEntity<unknown>>(
+function createRepository<T extends BaseDocEntity<unknown>>(
     RepoType: Abstract<BaseRepository<T>>,
     connectionService: ConnectionService,
     methodsBuilder: RepositoryMethodsBuilder
@@ -36,14 +36,14 @@ function createRepository<T extends BaseEntity<unknown>>(
     return repo;
 }
 
-function createIndexes(entityProperties: EntityProperties, repository: BaseRepository<BaseEntity<unknown>>) {
+function createIndexes(entityProperties: EntityProperties, repository: BaseRepository<BaseDocEntity<unknown>>) {
     Object.entries(entityProperties)
         .filter(property => property[1].unique)
         .map(property => property[1].propertyDBName || property[0])
         .forEach(property => repository.collection.createIndex(property, {unique: true}));
 }
 
-function createRepoMethods<T extends BaseEntity<unknown>>(entityProperties: EntityProperties, methods: any, RepoType: Abstract<BaseRepository<T>>, methodsBuilder: RepositoryMethodsBuilder) {
+function createRepoMethods<T extends BaseDocEntity<unknown>>(entityProperties: EntityProperties, methods: any, RepoType: Abstract<BaseRepository<T>>, methodsBuilder: RepositoryMethodsBuilder) {
     const className = Object.getPrototypeOf(RepoType).name;
 
     const propertiesNames = getPropertiesNames(entityProperties);
@@ -52,6 +52,12 @@ function createRepoMethods<T extends BaseEntity<unknown>>(entityProperties: Enti
     methods?.forEach(method => {
         RepoType.prototype[method] = methodsBuilder.buildRepositoryMethod(method, propertiesNames, dbPropertiesNames);
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (RepoType.prototype as any).createEntity = function (data: Document): T {
+        return new (Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType))(data);
+    }
+
     logger.log(`${createRepository.name}: ${className}, ${methods?.length || 0} methods, ${propertiesNames.length} entity propert`);
     return propertiesNames;
 }

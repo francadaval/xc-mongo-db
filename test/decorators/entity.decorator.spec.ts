@@ -1,16 +1,24 @@
 import { Entity, Property } from '@src/decorators'; 
 import { MetadataKeys } from '@src/decorators/metadata-keys';
-import { BaseEntity } from '@src/entity';
+import { BaseDocEntity, BaseEntity } from '@src/entity';
 
 const COLLECION_NAME = 'collectionName';
 const PARAMETERS = {collectionName: COLLECION_NAME};
-class TestEntity extends BaseEntity<string> {
+
+class SubEntity extends BaseEntity{
+    @Property()
+    subValue: number;
+
+    @Property()
+    subValue2: string;
+}
+
+class TestEntity extends BaseDocEntity<string> {
     @Property({
         propertyDBName: 'mainValue',
-        type: Number
+        type: SubEntity
     })
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    value: Number;
+    value: SubEntity;
 
     @Property()
     name: string;
@@ -19,7 +27,7 @@ class TestEntity extends BaseEntity<string> {
 const PROPERTIES = {
     value: {
         propertyDBName: 'mainValue',
-        type: Number
+        type: SubEntity
     },
     name: {}
 }
@@ -40,7 +48,10 @@ const EXT_PROPERTIES = {
 }
 
 const ID = '123';
-const VALUE = 123;
+const VALUE = {
+    subValue: 1,
+    subValue2: 'test'
+};
 const NAME = 'test';
 
 describe(Entity.name, () => {
@@ -65,6 +76,12 @@ describe(Entity.name, () => {
     });
 
     it('should populate all properties on creation', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntity);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+
         const instance = new TestEntity({
             _id: ID,
             mainValue: VALUE,
@@ -72,11 +89,17 @@ describe(Entity.name, () => {
         });
 
         expect(instance._id).toBe(ID);
-        expect(instance.value).toBe(VALUE);
+        expect(instance.value).toStrictEqual(VALUE_ENTITY);
         expect(instance.name).toBe(NAME);
     });
 
     it('should populate all properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntity);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+        
         const instance = new TestEntity();
         instance.populate({
             _id: ID,
@@ -85,11 +108,15 @@ describe(Entity.name, () => {
         });
 
         expect(instance._id).toBe(ID);
-        expect(instance.value).toBe(VALUE);
+        expect(instance.value).toStrictEqual(VALUE_ENTITY);
         expect(instance.name).toBe(NAME);
     });
 
     it('should serialize all properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntity);
+        decorator(SubEntity);
+        
         const instance = new TestEntity({
             _id: ID,
             mainValue: VALUE,
@@ -99,7 +126,7 @@ describe(Entity.name, () => {
         const serialized = instance.serialize();
 
         expect(serialized._id).toBe(ID);
-        expect(serialized.mainValue).toBe(VALUE);
+        expect(serialized.mainValue).toStrictEqual(VALUE);
         expect(serialized.name).toBe(NAME);
     });
 });

@@ -1,9 +1,9 @@
 import { Id } from "@src/decorators";
-import { BaseEntity } from "@src/entity";
+import { BaseDocEntity } from "@src/entity";
 
 describe(Id.name, () => {
     it('should redefine _id getter', () => { 
-        class TestClass extends BaseEntity<number> {
+        class TestClass extends BaseDocEntity<number> {
             @Id()
             id?: number;
         }
@@ -13,7 +13,7 @@ describe(Id.name, () => {
     });
 
     it('should redefine _id setter', () => {
-        class TestClass extends BaseEntity<number> {
+        class TestClass extends BaseDocEntity<number> {
             @Id()
             id?: number;
         }
@@ -25,7 +25,7 @@ describe(Id.name, () => {
     it('should throw error if @Id is assigned twice', () => {
         
         expect(() => {
-            class TestClass extends BaseEntity<number> {
+            class TestClass extends BaseDocEntity<number> {
                 @Id()
                 id1?: number;
                 @Id()

@@ -2,14 +2,13 @@ import { Logger } from "@nestjs/common";
 import { ConnectionService } from "@src/connection";
 import { EntityProperties } from "@src/decorators";
 import { MetadataKeys } from "@src/decorators/metadata-keys";
-import { BaseEntity } from "@src/entity";
+import { BaseDocEntity } from "@src/entity";
 import { BaseRepository, repositoryFactoryProvider } from "@src/repositories";
 import { RepositoryMethodsBuilder } from "@src/repositories/builder/repo-method-builder";
 import { Collection, Db, MongoClient } from "mongodb";
 import { mock } from "ts-jest-mocker";
 
-class TestEntity extends BaseEntity {
-}
+class TestEntity extends BaseDocEntity {}
 
 class TestSubEntity {
 }
@@ -41,6 +40,9 @@ const mockedDb = mock<Db>();
 
 class TestRepo extends BaseRepository<TestEntity> {
     protected logger = new Logger('TestRepo');
+    protected createEntity(data: Document): TestEntity {
+        return new TestEntity(data);
+    }
 }
 
 describe(repositoryFactoryProvider.name, () => {

@@ -1,2 +1,2 @@
 src/tests
-src/no-test.ts
+src/e2e-test.ts

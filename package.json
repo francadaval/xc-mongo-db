@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "no-test": "node ./dist/no-test.js"
+    "e2e-test": "node ./dist/e2e-test.js"
   },
   "keywords": [
     "mongodb"

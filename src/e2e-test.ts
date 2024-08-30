@@ -1,11 +1,12 @@
 import { NestFactory } from "@nestjs/core";
-import { TestModule } from "./tests/test-module";
-import { TestRepo } from "./tests/test-repo";
-import { TestRepo2 } from "./tests/test-repo-2";
+import { TestModule } from "./e2e-tests/test-module";
+import { TestRepo } from "./e2e-tests/test-repo";
+import { TestRepo2 } from "./e2e-tests/test-repo-2";
 import { INestApplicationContext, Logger } from "@nestjs/common";
-import { ExtendedEntityRepository } from "./tests/extended-entity-repo";
-import { TestEntity2 } from "./tests/test-entity-2";
-import { TestEntity } from "./tests/test-entity";
+import { ExtendedEntityRepository } from "./e2e-tests/extended-entity-repo";
+import { TestEntity2 } from "./e2e-tests/test-entity-2";
+import { TestEntity } from "./e2e-tests/test-entity";
+import { TestSubEntity } from "./e2e-tests/test-sub-entity";
 
 const logger = new Logger("Main");
 const RUN_TEST1 = true;
@@ -50,10 +51,10 @@ async function repo1Tests(appContext: INestApplicationContext) {
     entity.value = 42;
     entity.date = new Date();
     entity.lockAndStock = 16;
-    entity.subEntity = {
+    entity.subEntity = new TestSubEntity({
         name: "Test subentity",
         value: 13
-    };
+    });
 
     await testRepo.insertOne(entity);
 
