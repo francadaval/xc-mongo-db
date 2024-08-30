@@ -37,9 +37,9 @@ function createRepository<T extends BaseDocEntity<unknown>>(
 }
 
 function createIndexes(entityProperties: EntityProperties, repository: BaseRepository<BaseDocEntity<unknown>>) {
-    Object.entries(entityProperties)
-        .filter(property => property[1].unique)
-        .map(property => property[1].propertyDBName || property[0])
+    Object.values(entityProperties)
+        .filter(property => property.unique)
+        .map(property => property.dbProperty)
         .forEach(property => repository.collection.createIndex(property, {unique: true}));
 }
 
@@ -68,21 +68,21 @@ function getPropertiesNames(entityProperties: EntityProperties, forDb: boolean =
 
 function addPropertiesNames(propertiesNames: string[], entityProperties: EntityProperties, root: string, forDb: boolean): string[] {
     const names = Object.keys(entityProperties);
-    const dbNames = Object.values(entityProperties).map(property => property.propertyDBName)
+    const dbNames = Object.values(entityProperties).map(property => property.dbProperty)
 
-    const newNames = names.map((name, index) => root + (forDb ? dbNames[index] || name : name));
+    const newNames = names.map((name, index) => root + (forDb ? dbNames[index]: name));
 
     propertiesNames = propertiesNames.concat(newNames);
 
     const subEntitiesNames = Object.keys(entityProperties)
         .filter(propertyName => entityProperties[propertyName].type);
     const subEntitiesDbNames = Object.keys(entityProperties)
-        .map(propertyName => entityProperties[propertyName].propertyDBName);
+        .map(propertyName => entityProperties[propertyName].dbProperty);
 
     subEntitiesNames.forEach((subentityName, index) => {
         const subEntitytype = entityProperties[subentityName].type;
         const subEntitiesDbName = subEntitiesDbNames[index];
-        const name = forDb ? subEntitiesDbName || subentityName : subentityName;
+        const name = forDb ? subEntitiesDbName: subentityName;
         const subEntityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, subEntitytype);
         propertiesNames = addPropertiesNames(propertiesNames, subEntityProperties, `${root}${name}.`, forDb);
     });

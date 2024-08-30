@@ -4,6 +4,6 @@ import { BaseTestEntity } from "./base-test-entity";
 @Entity()
 export class ExtendedEntity extends BaseTestEntity {
     @Property({
-        propertyDBName: 'extended'
+        dbProperty: 'extended'
     }) extendedProperty: string;
 }

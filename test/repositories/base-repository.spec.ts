@@ -103,7 +103,6 @@ describe(BaseRepository.name, () => {
         });
     });
 
-    
     describe('insertMany', () => {
         it('should delegate to Collection', async () => {
             mockedCollection.insertMany.mockResolvedValue(INSERT_MANY_RESULT);

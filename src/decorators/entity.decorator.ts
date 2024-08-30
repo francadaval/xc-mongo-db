@@ -24,7 +24,7 @@ export function Entity(parameters?: EntityDecoratorParameters) {
             superPrototype.populate.apply(this, [data]);
             for (const property in entityProperties) {
                 const parameters = entityProperties[property];
-                const value = data[parameters.propertyDBName || property];
+                const value = data[parameters.dbProperty];
 
                 this[property] = (parameters.type && value !== undefined) ? new parameters.type(value) : value;
             }
@@ -37,7 +37,7 @@ export function Entity(parameters?: EntityDecoratorParameters) {
                 const value = parameters.type && this[property] instanceof BaseEntity
                     ? this[property].serialize()
                     : this[property];
-                serialized[entityProperties[property].propertyDBName || property] = value;
+                serialized[entityProperties[property].dbProperty] = value;
             }
             return serialized;
         };

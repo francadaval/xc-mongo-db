@@ -15,19 +15,22 @@ class TestSubEntity {
 
 const TEST_ENTITY_PROPERTIES: EntityProperties = {
     prop1: {
-        propertyDBName: 'prop_1',
+        dbProperty: 'prop_1',
         type: TestSubEntity
     },
     prop2: {
+        dbProperty: 'prop2',
         unique: true
     }
 }
 
 const TEST_SUBENTITY_PROPERTIES: EntityProperties = {
     subprop1: {
-        propertyDBName: 'subprop_1'
+        dbProperty: 'subprop_1'
     },
-    subprop2: {}
+    subprop2: {
+        dbProperty: 'subprop2'
+    }
 }
 
 const EXPECTED_PROP_NAMES = ['prop1', 'prop2', 'prop1.subprop1', 'prop1.subprop2'];
@@ -62,13 +65,16 @@ describe(repositoryFactoryProvider.name, () => {
         Reflect.defineMetadata(MetadataKeys.ENTITY_PROPERTIES, TEST_SUBENTITY_PROPERTIES, TestSubEntity);
         
         const expected = expect.any(TestRepo);
+        const expectedEntity = expect.any(TestEntity);
         
         // Act
         const factory = repositoryFactoryProvider(TestRepo);
         const actual = factory.useFactory(mockedConnectionService, methodsBuilder);
+        const actualEntity = actual.createEntity({});
 
         // Assert
         expect(actual).toEqual(expected);
+        expect(actualEntity).toEqual(expectedEntity);
         expect(actual.method1).toBeDefined();
         expect(actual.method2).toBeDefined();
         expect(methodsBuilder.buildRepositoryMethod).toHaveBeenCalledWith(

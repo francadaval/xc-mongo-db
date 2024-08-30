@@ -15,7 +15,7 @@ class SubEntity extends BaseEntity{
 
 class TestEntity extends BaseDocEntity<string> {
     @Property({
-        propertyDBName: 'mainValue',
+        dbProperty: 'mainValue',
         type: SubEntity
     })
     value: SubEntity;
@@ -31,24 +31,26 @@ class TestIdEntity extends BaseDocEntity<string> {
 
 const PROPERTIES = {
     value: {
-        propertyDBName: 'mainValue',
+        dbProperty: 'mainValue',
         type: SubEntity
     },
-    name: {}
+    name: {
+        dbProperty: 'name'
+    }
 }
 
 const EXT_COLLECION_NAME = 'extCollectionName';
 const EXT_PARAMETERS = {collectionName: EXT_COLLECION_NAME};
 class ExtendedTestClass extends TestEntity {
     @Property({
-        propertyDBName: 'extended'
+        dbProperty: 'extended'
     })
     extendedProperty: string;
 }
 const EXT_PROPERTIES = {
     ...PROPERTIES,
     extendedProperty: {
-        propertyDBName: 'extended'
+        dbProperty: 'extended'
     }
 }
 

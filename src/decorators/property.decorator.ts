@@ -8,17 +8,19 @@ export type EntityProperties = {
 }
 
 export type PropertyDecoratorParameters = {
-    propertyDBName?: string
+    dbProperty?: string
     type?: Type
     unique?: boolean
 };
 
-export function Property(parameters?: PropertyDecoratorParameters) {
+export function Property(parameters: PropertyDecoratorParameters = {}) {
     return function (target: object, propertyKey: string) {
+        parameters.dbProperty = parameters.dbProperty || propertyKey;
+        
         const targetConstructor = target.constructor;
-
         const properties: EntityProperties = {...Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor)} || {};
-        properties[propertyKey] = parameters || {};
+        properties[propertyKey] = parameters;
+
         Reflect.defineMetadata(MetadataKeys.ENTITY_PROPERTIES, properties, targetConstructor);
 
         logger.debug(`Property registered: ${targetConstructor.name}:${propertyKey}.`)
