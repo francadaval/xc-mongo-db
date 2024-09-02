@@ -23,7 +23,7 @@ function createRepository<T extends BaseDocEntity<unknown>>(
     methodsBuilder: RepositoryMethodsBuilder
 ): BaseRepository<T> {
     
-    const methods = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
+    const methods: string[] = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
     const entityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType);
     const entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, entityType);
     
@@ -43,7 +43,7 @@ function createIndexes(entityProperties: EntityProperties, repository: BaseRepos
         .forEach(property => repository.collection.createIndex(property, {unique: true}));
 }
 
-function createRepoMethods<T extends BaseDocEntity<unknown>>(entityProperties: EntityProperties, methods: any, RepoType: Abstract<BaseRepository<T>>, methodsBuilder: RepositoryMethodsBuilder) {
+function createRepoMethods<T extends BaseDocEntity<unknown>>(entityProperties: EntityProperties, methods: string[], RepoType: Abstract<BaseRepository<T>>, methodsBuilder: RepositoryMethodsBuilder) {
     const className = Object.getPrototypeOf(RepoType).name;
 
     const propertiesNames = getPropertiesNames(entityProperties);
