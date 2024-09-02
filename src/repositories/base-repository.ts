@@ -42,7 +42,7 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
 
     async updateOne(_id: InferIdType<T>, doc: Partial<WithoutId<T>>): Promise<void> {
         this.logger.log(`updateOne`);
-        await this.collection.updateOne({_id}, {$set: doc});
+        await this.collection.updateOne({_id}, {$set: doc.serialize()});
     }
 
     protected createEntity(_data: Document): T {

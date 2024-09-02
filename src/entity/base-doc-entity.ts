@@ -10,14 +10,20 @@ export abstract class BaseDocEntity<T = ObjectId> extends BaseEntity{
     }
 
     set _id(_id: T) {
-        this.__id = _id;
+        if(_id !== undefined ) {
+            this.__id = _id;
+        } else {
+            delete this.__id;
+        }
     }
 
     serialize(): any {
-        return {
-            ...super.serialize(),
-            _id: this._id,
-        };
+        const serialized = {...super.serialize()};
+        if(this._id !== undefined) {
+            serialized._id = this._id;
+        }
+
+        return serialized;
     }
 
     populate(data: any = {}): void {

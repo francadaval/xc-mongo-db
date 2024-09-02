@@ -61,7 +61,9 @@ function getSerializeFunction(superPrototype: any, entityProperties: EntityPrope
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
             const value = serializeProperty(this[property], parameters.type, parameters.password)
-            serialized[entityProperties[property].dbProperty] = value;
+            if(value !== undefined) {
+                serialized[entityProperties[property].dbProperty] = value;
+            }
         }
         return serialized;
     }
@@ -84,16 +86,22 @@ function getDeserializeFunction(superPrototype: any, entityProperties: EntityPro
         superPrototype.deserialize.apply(this, [data]);
 
         if (idProperty) {
-            this[idProperty] = data[idProperty];
+            if (data[idProperty] !== undefined) {
+                this[idProperty] = data[idProperty];
+            } else {
+                delete this[idProperty];
+            }
         }
 
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
             const value = data[property];
 
-            this[property] = (parameters.type && value !== undefined)
-                ? instantiateType(parameters.type, value, true)
-                : value;
+            if( value !== undefined ) {
+                this[property] = parameters.type
+                    ? instantiateType(parameters.type, value, true)
+                    : value;
+            }
         }
     }
 }

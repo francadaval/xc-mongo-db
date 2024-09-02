@@ -21,7 +21,11 @@ export function Id() {
                 return this[propertyKey];
             },
             set: function (value) {
-                this[propertyKey] = value;
+                if(value !== undefined) {
+                    this[propertyKey] = value;
+                } else {
+                    delete this[propertyKey];
+                }
             }
         });
 
