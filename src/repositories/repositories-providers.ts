@@ -76,7 +76,7 @@ function addPropertiesNames(propertiesNames: string[], entityProperties: EntityP
 
     const subEntitiesNames = Object.keys(entityProperties)
         .filter(propertyName => entityProperties[propertyName].type);
-    const subEntitiesDbNames = Object.keys(entityProperties)
+    const subEntitiesDbNames = subEntitiesNames
         .map(propertyName => entityProperties[propertyName].dbProperty);
 
     subEntitiesNames.forEach((subentityName, index) => {
