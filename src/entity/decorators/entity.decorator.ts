@@ -23,7 +23,7 @@ export function Entity(parameters?: EntityDecoratorParameters) {
 
         const superPrototype = Object.getPrototypeOf(target.prototype);
 
-        target.prototype.fromDoc = getFromDbFunction(superPrototype, entityProperties);
+        target.prototype.fromDoc = getFromDocFunction(superPrototype, entityProperties);
 
         target.prototype.toDoc = getToDocFunction(superPrototype, entityProperties);
 
@@ -31,20 +31,16 @@ export function Entity(parameters?: EntityDecoratorParameters) {
     };
 }
 
-function getFromDbFunction(superPrototype: any, entityProperties: EntityProperties) {
+function getFromDocFunction(superPrototype: any, entityProperties: EntityProperties) {
     return function(data: any): void {
         superPrototype.fromDoc.apply(this, [data]);
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
             const value = data[parameters.dbProperty];
 
-            if (parameters.password) {
-                delete this[property];
-            } else {
-                this[property] = (parameters.type && value !== undefined)
-                    ? instantiateType(parameters.type, value)
-                    : value;
-            }
+            this[property] = (parameters.type && value !== undefined)
+                ? instantiateType(parameters.type, value)
+                : value;
         }
     }
 }

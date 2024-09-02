@@ -128,7 +128,7 @@ describe(Entity.name, () => {
         expect(instance._id).toBe(ID);
         expect(instance.value).toStrictEqual(VALUE_ENTITY);
         expect(instance.name).toBe(NAME);
-        expect(instance.password).toBeUndefined();
+        expect(instance.password).toBe(PASSWORD);
     });
 
     it('should populate all properties from doc', () => {
@@ -149,7 +149,7 @@ describe(Entity.name, () => {
         expect(instance._id).toBe(ID);
         expect(instance.value).toStrictEqual(VALUE_ENTITY);
         expect(instance.name).toBe(NAME);
-        expect(instance.password).toBeUndefined();
+        expect(instance.password).toBe(PASSWORD);
     });
 
     it('should serialize all properties to doc', () => {
