@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Logger, Type } from "@nestjs/common";
-import { MetadataKeys } from "./metadata-keys";
-import { BaseEntity } from "../entity";
+import { MetadataKeys } from "../../common/metadata-keys";
+import { BaseEntity } from "../base-entity";
 import { EntityProperties } from "./property.decorator";
 
 type AnyDeepArray<T> = T | T[] | AnyDeepArray<T>[];

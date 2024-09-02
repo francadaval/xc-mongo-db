@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
-import { ConnectionService } from "../connection";
-import { RepositoriesModule, repositoryFactoryProvider } from "../repositories";
+import { ConnectionService, RepositoriesModule, repositoryFactoryProvider } from "../";
 import { TestRepo } from "./test-repo";
 import { TestRepo2 } from "./test-repo-2";
 import { ExtendedEntityRepository } from "./extended-entity-repo";

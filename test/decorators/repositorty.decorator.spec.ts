@@ -1,7 +1,8 @@
 import { Logger } from '@nestjs/common';
 import { ConnectionService } from '@src/connection';
-import { Entity, Property, Repository, RepositoryMethod } from '@src/decorators';
-import { MetadataKeys } from '@src/decorators/metadata-keys';
+import { Entity, Property } from '@src/entity/decorators';
+import { Repository, RepositoryMethod } from '@src/repositories/decorators';
+import { MetadataKeys } from '@src/common/metadata-keys';
 import { BaseDocEntity } from '@src/entity';
 import { BaseRepository } from '@src/repositories';
 import { Collection, Db, MongoClient } from 'mongodb';

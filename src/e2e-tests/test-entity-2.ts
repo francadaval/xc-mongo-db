@@ -1,5 +1,4 @@
-import { BaseDocEntity } from "../entity";
-import { Entity, Id, Property } from "../decorators";
+import { BaseDocEntity, Entity, Id, Property } from "../";
 
 @Entity({
     collectionName: 'test_collection_2'

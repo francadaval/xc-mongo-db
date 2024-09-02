@@ -1,7 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { ConnectionService } from "@src/connection";
-import { EntityProperties } from "@src/decorators";
-import { MetadataKeys } from "@src/decorators/metadata-keys";
+import { EntityProperties } from "@src/entity/decorators";
+import { MetadataKeys } from "@src/common/metadata-keys";
 import { BaseDocEntity } from "@src/entity";
 import { BaseRepository, repositoryFactoryProvider } from "@src/repositories";
 import { RepositoryMethodsBuilder } from "@src/repositories/builder/repo-method-builder";

@@ -1,5 +1,4 @@
-import { BaseDocEntity } from "../entity";
-import { Entity, Property } from "../decorators";
+import { BaseDocEntity, Entity, Property } from "../";
 import { TestSubEntity } from "./test-sub-entity";
 
 @Entity()

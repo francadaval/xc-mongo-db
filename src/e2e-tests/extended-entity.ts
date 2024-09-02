@@ -1,4 +1,4 @@
-import { Entity, Property } from "../decorators";
+import { Entity, Property } from "../";
 import { BaseTestEntity } from "./base-test-entity";
 
 @Entity()

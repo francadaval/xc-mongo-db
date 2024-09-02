@@ -1,7 +1,6 @@
 import { Logger, Type } from "@nestjs/common";
-import { MetadataKeys } from "./metadata-keys";
-import { EntityDecoratorParameters } from "./entity.decorator";
-import { BaseDocEntity } from "../entity";
+import { MetadataKeys } from "../../common/metadata-keys";
+import { BaseDocEntity, EntityDecoratorParameters } from "../../entity";
 
 const logger = new Logger(Repository.name);
 

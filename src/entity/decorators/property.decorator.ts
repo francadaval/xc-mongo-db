@@ -1,5 +1,5 @@
 import { Logger, Type } from "@nestjs/common";
-import { MetadataKeys } from "./metadata-keys";
+import { MetadataKeys } from "../../common/metadata-keys";
 
 const logger = new Logger(Property.name);
 

@@ -1,5 +1,4 @@
-import { Repository, RepositoryMethod } from "../decorators";
-import { BaseRepository } from "../repositories/base-repository";
+import { Repository, RepositoryMethod, BaseRepository } from "../";
 import { TestEntity } from "./test-entity";
 
 const TEST_DB = 'test_db';
@@ -8,27 +7,27 @@ const TEST_DB = 'test_db';
 export abstract class TestRepo extends BaseRepository<TestEntity> {
 
     @RepositoryMethod()
-    findOneByValue(value: number): Promise<TestEntity> {
+    findOneByValue(_value: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     }
 
     @RepositoryMethod()
-    findOneByLockAndStock(lockAndStock: number): Promise<TestEntity> {
+    findOneByLockAndStock(_lockAndStock: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     }
 
     @RepositoryMethod()
-    findOneByValueAndLockAndStock(lockAndStock: number): Promise<TestEntity> {
+    findOneByValueAndLockAndStock(_lockAndStock: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     }
 
     @RepositoryMethod()
-    countBySubEntityValue(value: number): Promise<TestEntity> {
+    countBySubEntityValue(_value: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     }
 
     @RepositoryMethod()
-    findOneByLockAndStockAndValueGreaterThan(lockAndStock: number, value: number): Promise<TestEntity> {
+    findOneByLockAndStockAndValueGreaterThan(_lockAndStock: number, _value: number): Promise<TestEntity> {
         throw new Error('Repository not implemented.');
     }
 }

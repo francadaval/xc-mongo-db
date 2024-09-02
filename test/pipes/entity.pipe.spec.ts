@@ -1,5 +1,4 @@
-import { Entity, Property } from "@src/decorators";
-import { BaseEntity } from "@src/entity";
+import { BaseEntity, Entity, Property } from "@src/entity";
 import { EntityPipe } from "@src/pipes/entity.pipe";
 
 @Entity()

@@ -1,5 +1,5 @@
-import { Entity, Id, Property } from '@src/decorators'; 
-import { MetadataKeys } from '@src/decorators/metadata-keys';
+import { Entity, Id, Property } from '@src/entity/decorators'; 
+import { MetadataKeys } from '@src/common/metadata-keys';
 import { BaseDocEntity, BaseEntity } from '@src/entity';
 
 const COLLECION_NAME = 'collectionName';

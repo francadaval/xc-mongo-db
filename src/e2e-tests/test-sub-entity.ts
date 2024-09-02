@@ -1,5 +1,4 @@
-import { BaseEntity } from "../entity";
-import { Entity, Property } from "../decorators";
+import { BaseEntity, Entity, Property  } from "../";
 
 @Entity()
 export class TestSubEntity extends BaseEntity {

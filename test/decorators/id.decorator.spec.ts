@@ -1,4 +1,4 @@
-import { Id } from "@src/decorators";
+import { Id } from "@src/entity/decorators";
 import { BaseDocEntity } from "@src/entity";
 
 describe(Id.name, () => {
