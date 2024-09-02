@@ -1,6 +1,7 @@
 import { Entity, Id, Property } from '@src/entity/decorators'; 
 import { MetadataKeys } from '@src/common/metadata-keys';
 import { BaseDocEntity, BaseEntity } from '@src/entity';
+import { compareSync } from 'bcrypt';
 
 const COLLECION_NAME = 'collectionName';
 const PARAMETERS = {collectionName: COLLECION_NAME};
@@ -22,6 +23,11 @@ class TestEntity extends BaseDocEntity<string> {
 
     @Property()
     name: string;
+
+    @Property({
+        password: true
+    })
+    password: string;
 }
 
 class TestIdEntity extends BaseDocEntity<string> {
@@ -54,6 +60,10 @@ const PROPERTIES = {
     },
     name: {
         dbProperty: 'name'
+    },
+    password: {
+        dbProperty: 'password',
+        password: true
     }
 }
 
@@ -78,6 +88,7 @@ const VALUE = {
     subValue2: 'test'
 };
 const NAME = 'test';
+const PASSWORD = 'pass_F4K3!';
 
 describe(Entity.name, () => {
     it('should add parameters to reflect metadata, properties parameters should exist', () => {
@@ -110,12 +121,14 @@ describe(Entity.name, () => {
         const instance = new TestEntity({
             _id: ID,
             mainValue: VALUE,
-            name: NAME
+            name: NAME,
+            password: PASSWORD
         });
 
         expect(instance._id).toBe(ID);
         expect(instance.value).toStrictEqual(VALUE_ENTITY);
         expect(instance.name).toBe(NAME);
+        expect(instance.password).toBeUndefined();
     });
 
     it('should populate all properties', () => {
@@ -129,12 +142,14 @@ describe(Entity.name, () => {
         instance.populate({
             _id: ID,
             mainValue: VALUE,
-            name: NAME
+            name: NAME,
+            password: PASSWORD
         });
 
         expect(instance._id).toBe(ID);
         expect(instance.value).toStrictEqual(VALUE_ENTITY);
         expect(instance.name).toBe(NAME);
+        expect(instance.password).toBeUndefined();
     });
 
     it('should serialize all properties', () => {
@@ -144,15 +159,18 @@ describe(Entity.name, () => {
         
         const instance = new TestEntity({
             _id: ID,
-            mainValue: VALUE,
-            name: NAME
-        });
+            value: VALUE,
+            name: NAME,
+            password: PASSWORD
+        }, false);
 
         const serialized = instance.serialize();
 
         expect(serialized._id).toBe(ID);
         expect(serialized.mainValue).toStrictEqual(VALUE);
         expect(serialized.name).toBe(NAME);
+        expect(serialized.password).not.toBe(PASSWORD);
+        expect(compareSync(PASSWORD, serialized.password)).toBe(true);
     });
 
     it('should deserialize all properties', () => {
@@ -166,12 +184,14 @@ describe(Entity.name, () => {
         instance.deserialize({
             _id: ID,
             value: VALUE,
-            name: NAME
+            name: NAME,
+            password: PASSWORD
         });
 
         expect(instance._id).toBe(ID);
         expect(instance.value).toStrictEqual(VALUE_ENTITY);
         expect(instance.name).toBe(NAME);
+        expect(instance.password).toBe(PASSWORD);
     });
 
     it('should deserialize all properties on creation with fromDB = false', () => {

@@ -11,6 +11,7 @@ export type PropertyDecoratorParameters = {
     dbProperty?: string
     type?: Type
     unique?: boolean
+    password?: boolean
 };
 
 export function Property(parameters: PropertyDecoratorParameters = {}) {

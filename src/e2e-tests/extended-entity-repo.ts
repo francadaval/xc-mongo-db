@@ -9,5 +9,5 @@ export abstract class ExtendedEntityRepository extends BaseRepository<ExtendedEn
     @RepositoryMethod()
     findOneByValue(_value: number): Promise<ExtendedEntity> {
         throw new Error('Repository not implemented.')
-    };
+    }
 }

@@ -3,6 +3,7 @@ import { Logger, Type } from "@nestjs/common";
 import { MetadataKeys } from "../../common/metadata-keys";
 import { BaseEntity } from "../base-entity";
 import { EntityProperties } from "./property.decorator";
+import { hashSync } from "bcrypt";
 
 type AnyDeepArray<T> = T | T[] | AnyDeepArray<T>[];
 
@@ -37,9 +38,13 @@ function getPopulateFunction(superPrototype: any, entityProperties: EntityProper
             const parameters = entityProperties[property];
             const value = data[parameters.dbProperty];
 
-            this[property] = (parameters.type && value !== undefined)
-                ? instantiateType(parameters.type, value)
-                : value;
+            if (parameters.password) {
+                delete this[property];
+            } else {
+                this[property] = (parameters.type && value !== undefined)
+                    ? instantiateType(parameters.type, value)
+                    : value;
+            }
         }
     }
 }
@@ -55,19 +60,23 @@ function getSerializeFunction(superPrototype: any, entityProperties: EntityPrope
         const serialized = superPrototype.serialize.apply(this);
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
-            const value = parameters.type
-                ? serializeProperty(this[property], parameters.type)
-                : this[property];
+            const value = serializeProperty(this[property], parameters.type, parameters.password)
             serialized[entityProperties[property].dbProperty] = value;
         }
         return serialized;
     }
 }
 
-function serializeProperty(value: any, type: Type<BaseEntity>): any {
+function serializeProperty(value: any, type: Type<BaseEntity>, isPassword: boolean): any {
     return Array.isArray(value)
-        ? value.map((item: any) => serializeProperty(item, type))
-        : (value instanceof BaseEntity ? value.serialize() : value);
+        ? value.map((item: any) => serializeProperty(item, type, isPassword))
+        : serializedValue(value, isPassword);
+}
+
+function serializedValue(value: any, isPassword: boolean): any {
+    let serializedValue = value instanceof BaseEntity ? value.serialize() : value;
+    serializedValue = serializedValue && isPassword ? hashedPassword(serializedValue) : serializedValue;
+    return serializedValue;
 }
 
 function getDeserializeFunction(superPrototype: any, entityProperties: EntityProperties, idProperty: string) {
@@ -87,4 +96,13 @@ function getDeserializeFunction(superPrototype: any, entityProperties: EntityPro
                 : value;
         }
     }
+}
+
+function hashedPassword(password: string): string {
+    if(!password || !(typeof(password) === 'string')) {
+        logger.error('Password is not a string.');
+        return password;
+    }
+
+    return hashSync(password, 10);
 }
