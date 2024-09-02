@@ -8,15 +8,15 @@ import { mock } from "ts-jest-mocker";
 class TestEntity extends BaseDocEntity<number> {
     value: number;
 
-    serialize() {
+    toDoc() {
         return {
             _id: this._id,
             value: this.value
         };
     }
 
-    populate(data?: Document): void {
-        super.populate(data);
+    fromDoc(data?: Document): void {
+        super.fromDoc(data);
         this.value = data.value
     }
 }
@@ -84,7 +84,7 @@ describe(BaseRepository.name, () => {
             const actual = await underTest.findOne(_ID);
 
             expect(actual).toBeInstanceOf(TestEntity);
-            expect(actual.serialize()).toStrictEqual(DOC_WITH_ID);
+            expect(actual.toDoc()).toStrictEqual(DOC_WITH_ID);
 
             expect(mockedCollection.findOne).toHaveBeenCalledWith({_id: _ID});
             expect(mockedCollection.findOne).toHaveBeenCalledTimes(1);

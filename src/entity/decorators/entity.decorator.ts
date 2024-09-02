@@ -23,17 +23,17 @@ export function Entity(parameters?: EntityDecoratorParameters) {
 
         const superPrototype = Object.getPrototypeOf(target.prototype);
 
-        target.prototype.populate = getPopulateFunction(superPrototype, entityProperties);
+        target.prototype.fromDoc = getFromDbFunction(superPrototype, entityProperties);
 
-        target.prototype.serialize = getSerializeFunction(superPrototype, entityProperties);
+        target.prototype.toDoc = getToDocFunction(superPrototype, entityProperties);
 
-        target.prototype.deserialize = getDeserializeFunction(superPrototype, entityProperties, idProperty);
+        target.prototype.fromJson = getFromJsonFunction(superPrototype, entityProperties, idProperty);
     };
 }
 
-function getPopulateFunction(superPrototype: any, entityProperties: EntityProperties) {
+function getFromDbFunction(superPrototype: any, entityProperties: EntityProperties) {
     return function(data: any): void {
-        superPrototype.populate.apply(this, [data]);
+        superPrototype.fromDoc.apply(this, [data]);
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
             const value = data[parameters.dbProperty];
@@ -49,41 +49,41 @@ function getPopulateFunction(superPrototype: any, entityProperties: EntityProper
     }
 }
 
-function instantiateType(type: Type<BaseEntity>, data: any, fromDb = false): AnyDeepArray<BaseEntity>{
+function instantiateType(type: Type<BaseEntity>, data: any, fromDoc = false): AnyDeepArray<BaseEntity>{
     return Array.isArray(data)
         ? data.map((item: any) => instantiateType(type, item))
-        : new type(data, fromDb);
+        : new type(data, fromDoc);
 }
 
-function getSerializeFunction(superPrototype: any, entityProperties: EntityProperties) {
+function getToDocFunction(superPrototype: any, entityProperties: EntityProperties) {
     return function (): any {
-        const serialized = superPrototype.serialize.apply(this);
+        const doc = superPrototype.toDoc.apply(this);
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
-            const value = serializeProperty(this[property], parameters.type, parameters.password)
+            const value = docProperty(this[property], parameters.type, parameters.password)
             if(value !== undefined) {
-                serialized[entityProperties[property].dbProperty] = value;
+                doc[entityProperties[property].dbProperty] = value;
             }
         }
-        return serialized;
+        return doc;
     }
 }
 
-function serializeProperty(value: any, type: Type<BaseEntity>, isPassword: boolean): any {
+function docProperty(value: any, type: Type<BaseEntity>, isPassword: boolean): any {
     return Array.isArray(value)
-        ? value.map((item: any) => serializeProperty(item, type, isPassword))
-        : serializedValue(value, isPassword);
+        ? value.map((item: any) => docProperty(item, type, isPassword))
+        : docValue(value, isPassword);
 }
 
-function serializedValue(value: any, isPassword: boolean): any {
-    let serializedValue = value instanceof BaseEntity ? value.serialize() : value;
-    serializedValue = serializedValue && isPassword ? hashedPassword(serializedValue) : serializedValue;
-    return serializedValue;
+function docValue(value: any, isPassword: boolean): any {
+    let docValue = value instanceof BaseEntity ? value.toDoc() : value;
+    docValue = docValue && isPassword ? hashedPassword(docValue) : docValue;
+    return docValue;
 }
 
-function getDeserializeFunction(superPrototype: any, entityProperties: EntityProperties, idProperty: string) {
+function getFromJsonFunction(superPrototype: any, entityProperties: EntityProperties, idProperty: string) {
     return function (data: any): void {
-        superPrototype.deserialize.apply(this, [data]);
+        superPrototype.fromJson.apply(this, [data]);
 
         if (idProperty) {
             if (data[idProperty] !== undefined) {

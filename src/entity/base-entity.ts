@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export abstract class BaseEntity {
-    constructor(data: any = {}, fromDB = true) {
-        if (fromDB) {
-            this.populate(data);
+    constructor(data: any = {}, fromDoc = true) {
+        if (fromDoc) {
+            this.fromDoc(data);
         } else {
-            this.deserialize(data);
+            this.fromJson(data);
         }
     }
 
-    serialize(): any {
+    toDoc(): any {
         return {};
     }
 
-    populate(_data: any = {}): void {}
+    fromDoc(_data: any = {}): void {}
 
-    deserialize(_data: any = {}): void {}
+    fromJson(_data: any = {}): void {}
 }

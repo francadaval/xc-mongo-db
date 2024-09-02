@@ -111,7 +111,7 @@ describe(Entity.name, () => {
         expect(actualProperties).toEqual(EXT_PROPERTIES);
     });
 
-    it('should populate all properties on creation', () => {
+    it('should populate all properties from doc on creation', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntity);
         decorator(SubEntity);
@@ -131,7 +131,7 @@ describe(Entity.name, () => {
         expect(instance.password).toBeUndefined();
     });
 
-    it('should populate all properties', () => {
+    it('should populate all properties from doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntity);
         decorator(SubEntity);
@@ -139,7 +139,7 @@ describe(Entity.name, () => {
         const VALUE_ENTITY = new SubEntity(VALUE);
         
         const instance = new TestEntity();
-        instance.populate({
+        instance.fromDoc({
             _id: ID,
             mainValue: VALUE,
             name: NAME,
@@ -152,7 +152,7 @@ describe(Entity.name, () => {
         expect(instance.password).toBeUndefined();
     });
 
-    it('should serialize all properties', () => {
+    it('should serialize all properties to doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntity);
         decorator(SubEntity);
@@ -164,16 +164,16 @@ describe(Entity.name, () => {
             password: PASSWORD
         }, false);
 
-        const serialized = instance.serialize();
+        const doc = instance.toDoc();
 
-        expect(serialized._id).toBe(ID);
-        expect(serialized.mainValue).toStrictEqual(VALUE);
-        expect(serialized.name).toBe(NAME);
-        expect(serialized.password).not.toBe(PASSWORD);
-        expect(compareSync(PASSWORD, serialized.password)).toBe(true);
+        expect(doc._id).toBe(ID);
+        expect(doc.mainValue).toStrictEqual(VALUE);
+        expect(doc.name).toBe(NAME);
+        expect(doc.password).not.toBe(PASSWORD);
+        expect(compareSync(PASSWORD, doc.password)).toBe(true);
     });
 
-    it('should deserialize all properties', () => {
+    it('should populate all properties from JSON', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntity);
         decorator(SubEntity);
@@ -181,7 +181,7 @@ describe(Entity.name, () => {
         const VALUE_ENTITY = new SubEntity(VALUE);
 
         const instance = new TestEntity();
-        instance.deserialize({
+        instance.fromJson({
             _id: ID,
             value: VALUE,
             name: NAME,
@@ -194,7 +194,7 @@ describe(Entity.name, () => {
         expect(instance.password).toBe(PASSWORD);
     });
 
-    it('should deserialize all properties on creation with fromDB = false', () => {
+    it('should populate all properties from JSON on creation with fromDoc = false', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntity);
         decorator(SubEntity);
@@ -212,19 +212,19 @@ describe(Entity.name, () => {
         expect(instance.name).toBe(NAME);
     });
 
-    it('should deserialize id property as well', () => {
+    it('should populate id property from doc as well', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestIdEntity);
 
         const instance = new TestIdEntity();
-        instance.deserialize({
+        instance.fromJson({
             customId: ID
         });
 
         expect(instance._id).toBe(ID);
     });
 
-    it('should serialize array properties', () => {
+    it('should serialize array properties to doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithArray);
         decorator(SubEntity);
@@ -235,14 +235,14 @@ describe(Entity.name, () => {
             array2: [VALUE]
         });
 
-        const serialized = instance.serialize();
+        const doc = instance.toDoc();
 
-        expect(serialized._id).toBe(ID);
-        expect(serialized.array).toStrictEqual(['test']);
-        expect(serialized.array2).toStrictEqual([VALUE]);
+        expect(doc._id).toBe(ID);
+        expect(doc.array).toStrictEqual(['test']);
+        expect(doc.array2).toStrictEqual([VALUE]);
     });
 
-    it('should populate array properties', () => {
+    it('should populate array properties from doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithArray);
         decorator(SubEntity);
@@ -250,7 +250,7 @@ describe(Entity.name, () => {
         const VALUE_ENTITY = new SubEntity(VALUE);
 
         const instance = new TestEntityWithArray();
-        instance.populate({
+        instance.fromDoc({
             _id: ID,
             array: ['test'],
             array2: [VALUE]
@@ -261,7 +261,7 @@ describe(Entity.name, () => {
         expect(instance.array2).toStrictEqual([VALUE_ENTITY]);
     });
 
-    it('should deserialize array properties', () => {
+    it('should populate array properties from JSON', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithArray);
         decorator(SubEntity);
@@ -269,7 +269,7 @@ describe(Entity.name, () => {
         const VALUE_ENTITY = new SubEntity(VALUE);
 
         const instance = new TestEntityWithArray();
-        instance.deserialize({
+        instance.fromJson({
             _id: ID,
             array: ['test'],
             array2: [VALUE]
@@ -280,7 +280,7 @@ describe(Entity.name, () => {
         expect(instance.array2).toStrictEqual([VALUE_ENTITY]);
     });
 
-    it('should serialize deep array properties', () => {
+    it('should serialize deep array properties to doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithDeepArray);
         decorator(SubEntity);
@@ -291,14 +291,14 @@ describe(Entity.name, () => {
             array2: [[[VALUE]]]
         });
 
-        const serialized = instance.serialize();
+        const doc = instance.toDoc();
 
-        expect(serialized._id).toBe(ID);
-        expect(serialized.array).toStrictEqual([['test']]);
-        expect(serialized.array2).toStrictEqual([[[VALUE]]]);
+        expect(doc._id).toBe(ID);
+        expect(doc.array).toStrictEqual([['test']]);
+        expect(doc.array2).toStrictEqual([[[VALUE]]]);
     });
 
-    it('should populate deep array properties', () => {
+    it('should populate deep array properties to doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithDeepArray);
         decorator(SubEntity);
@@ -306,7 +306,7 @@ describe(Entity.name, () => {
         const VALUE_ENTITY = new SubEntity(VALUE);
 
         const instance = new TestEntityWithDeepArray();
-        instance.populate({
+        instance.fromDoc({
             _id: ID,
             array: [['test']],
             array2: [[[VALUE]]]
@@ -317,7 +317,7 @@ describe(Entity.name, () => {
         expect(instance.array2).toStrictEqual([[[VALUE_ENTITY]]]);
     });
 
-    it('should deserialize deep array properties', () => {
+    it('should populate deep array properties from JSON', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithDeepArray);
         decorator(SubEntity);
@@ -325,7 +325,7 @@ describe(Entity.name, () => {
         const VALUE_ENTITY = new SubEntity(VALUE);
 
         const instance = new TestEntityWithDeepArray();
-        instance.deserialize({
+        instance.fromJson({
             _id: ID,
             array: [['test']],
             array2: [[[VALUE]]]

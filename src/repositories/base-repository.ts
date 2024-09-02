@@ -15,12 +15,12 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
 
     async insertOne(entity: T): Promise<void> {
         this.logger.log(`insertOne`);
-        await this.collection.insertOne(entity.serialize());
+        await this.collection.insertOne(entity.toDoc());
     }
 
     async insertMany(entities: T[]): Promise<void> {
         this.logger.log(`insertMany`);
-        const docs = entities.map(entity => entity.serialize());
+        const docs = entities.map(entity => entity.toDoc());
         await this.collection.insertMany(docs);
     }
 
@@ -42,7 +42,7 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
 
     async updateOne(_id: InferIdType<T>, doc: Partial<WithoutId<T>>): Promise<void> {
         this.logger.log(`updateOne`);
-        await this.collection.updateOne({_id}, {$set: doc.serialize()});
+        await this.collection.updateOne({_id}, {$set: doc.toDoc()});
     }
 
     protected createEntity(_data: Document): T {
