@@ -9,6 +9,7 @@ export class EntityPipe implements PipeTransform {
         this.entityType = entityType;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     transform(value: any): BaseEntity {
         EntityPipe.logger.debug(`Transforming ${JSON.stringify(value)} to ${this.entityType.name}`);
         return new this.entityType(value, false);
