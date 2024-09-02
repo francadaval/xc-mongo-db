@@ -4,6 +4,8 @@ import { MetadataKeys } from "./metadata-keys";
 import { BaseEntity } from "../entity";
 import { EntityProperties } from "./property.decorator";
 
+type AnyDeepArray<T> = T | T[] | AnyDeepArray<T>[];
+
 const logger = new Logger(Entity.name);
 
 export type EntityDecoratorParameters = {
@@ -20,41 +22,69 @@ export function Entity(parameters?: EntityDecoratorParameters) {
 
         const superPrototype = Object.getPrototypeOf(target.prototype);
 
-        target.prototype.populate = function (data: any): void {
-            superPrototype.populate.apply(this, [data]);
-            for (const property in entityProperties) {
-                const parameters = entityProperties[property];
-                const value = data[parameters.dbProperty];
+        target.prototype.populate = getPopulateFunction(superPrototype, entityProperties);
 
-                this[property] = (parameters.type && value !== undefined) ? new parameters.type(value) : value;
-            }
-        };
+        target.prototype.serialize = getSerializeFunction(superPrototype, entityProperties);
 
-        target.prototype.serialize = function (): any {
-            const serialized = superPrototype.serialize.apply(this);
-            for (const property in entityProperties) {
-                const parameters = entityProperties[property];
-                const value = parameters.type && this[property] instanceof BaseEntity
-                    ? this[property].serialize()
-                    : this[property];
-                serialized[entityProperties[property].dbProperty] = value;
-            }
-            return serialized;
-        };
-
-        target.prototype.deserialize = function (data: any): void {
-            superPrototype.deserialize.apply(this, [data]);
-
-            if (idProperty) {
-                this[idProperty] = data[idProperty];
-            }
-
-            for (const property in entityProperties) {
-                const parameters = entityProperties[property];
-                const value = data[property];
-
-                this[property] = (parameters.type && value !== undefined) ? new parameters.type(value, false) : value;
-            }
-        }
+        target.prototype.deserialize = getDeserializeFunction(superPrototype, entityProperties, idProperty);
     };
+}
+
+function getPopulateFunction(superPrototype: any, entityProperties: EntityProperties) {
+    return function(data: any): void {
+        superPrototype.populate.apply(this, [data]);
+        for (const property in entityProperties) {
+            const parameters = entityProperties[property];
+            const value = data[parameters.dbProperty];
+
+            this[property] = (parameters.type && value !== undefined)
+                ? instantiateType(parameters.type, value)
+                : value;
+        }
+    }
+}
+
+function instantiateType(type: Type<BaseEntity>, data: any, fromDb = false): AnyDeepArray<BaseEntity>{
+    return Array.isArray(data)
+        ? data.map((item: any) => instantiateType(type, item))
+        : new type(data, fromDb);
+}
+
+function getSerializeFunction(superPrototype: any, entityProperties: EntityProperties) {
+    return function (): any {
+        const serialized = superPrototype.serialize.apply(this);
+        for (const property in entityProperties) {
+            const parameters = entityProperties[property];
+            const value = parameters.type
+                ? serializeProperty(this[property], parameters.type)
+                : this[property];
+            serialized[entityProperties[property].dbProperty] = value;
+        }
+        return serialized;
+    }
+}
+
+function serializeProperty(value: any, type: Type<BaseEntity>): any {
+    return Array.isArray(value)
+        ? value.map((item: any) => serializeProperty(item, type))
+        : (value instanceof BaseEntity ? value.serialize() : value);
+}
+
+function getDeserializeFunction(superPrototype: any, entityProperties: EntityProperties, idProperty: string) {
+    return function (data: any): void {
+        superPrototype.deserialize.apply(this, [data]);
+
+        if (idProperty) {
+            this[idProperty] = data[idProperty];
+        }
+
+        for (const property in entityProperties) {
+            const parameters = entityProperties[property];
+            const value = data[property];
+
+            this[property] = (parameters.type && value !== undefined)
+                ? instantiateType(parameters.type, value, true)
+                : value;
+        }
+    }
 }

@@ -29,6 +29,24 @@ class TestIdEntity extends BaseDocEntity<string> {
     customId: string;
 }
 
+class TestEntityWithArray extends BaseDocEntity<string> {
+    @Property()
+    array: string[];
+    @Property({
+        type: SubEntity
+    })
+    array2: SubEntity[];
+}
+
+class TestEntityWithDeepArray extends BaseDocEntity<string> {
+    @Property()
+    array: string[][];
+    @Property({
+        type: SubEntity
+    })
+    array2: SubEntity[][][];
+}
+
 const PROPERTIES = {
     value: {
         dbProperty: 'mainValue',
@@ -184,5 +202,117 @@ describe(Entity.name, () => {
         });
 
         expect(instance._id).toBe(ID);
+    });
+
+    it('should serialize array properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntityWithArray);
+        decorator(SubEntity);
+
+        const instance = new TestEntityWithArray({
+            _id: ID,
+            array: ['test'],
+            array2: [VALUE]
+        });
+
+        const serialized = instance.serialize();
+
+        expect(serialized._id).toBe(ID);
+        expect(serialized.array).toStrictEqual(['test']);
+        expect(serialized.array2).toStrictEqual([VALUE]);
+    });
+
+    it('should populate array properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntityWithArray);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+
+        const instance = new TestEntityWithArray();
+        instance.populate({
+            _id: ID,
+            array: ['test'],
+            array2: [VALUE]
+        });
+
+        expect(instance._id).toBe(ID);
+        expect(instance.array).toStrictEqual(['test']);
+        expect(instance.array2).toStrictEqual([VALUE_ENTITY]);
+    });
+
+    it('should deserialize array properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntityWithArray);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+
+        const instance = new TestEntityWithArray();
+        instance.deserialize({
+            _id: ID,
+            array: ['test'],
+            array2: [VALUE]
+        });
+
+        expect(instance._id).toBe(ID);
+        expect(instance.array).toStrictEqual(['test']);
+        expect(instance.array2).toStrictEqual([VALUE_ENTITY]);
+    });
+
+    it('should serialize deep array properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntityWithDeepArray);
+        decorator(SubEntity);
+
+        const instance = new TestEntityWithDeepArray({
+            _id: ID,
+            array: [['test']],
+            array2: [[[VALUE]]]
+        });
+
+        const serialized = instance.serialize();
+
+        expect(serialized._id).toBe(ID);
+        expect(serialized.array).toStrictEqual([['test']]);
+        expect(serialized.array2).toStrictEqual([[[VALUE]]]);
+    });
+
+    it('should populate deep array properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntityWithDeepArray);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+
+        const instance = new TestEntityWithDeepArray();
+        instance.populate({
+            _id: ID,
+            array: [['test']],
+            array2: [[[VALUE]]]
+        });
+
+        expect(instance._id).toBe(ID);
+        expect(instance.array).toStrictEqual([['test']]);
+        expect(instance.array2).toStrictEqual([[[VALUE_ENTITY]]]);
+    });
+
+    it('should deserialize deep array properties', () => {
+        const decorator = Entity(PARAMETERS);
+        decorator(TestEntityWithDeepArray);
+        decorator(SubEntity);
+
+        const VALUE_ENTITY = new SubEntity(VALUE);
+
+        const instance = new TestEntityWithDeepArray();
+        instance.deserialize({
+            _id: ID,
+            array: [['test']],
+            array2: [[[VALUE]]]
+        });
+
+        expect(instance._id).toBe(ID);
+        expect(instance.array).toStrictEqual([['test']]);
+        expect(instance.array2).toStrictEqual([[[VALUE_ENTITY]]]);
     });
 });
