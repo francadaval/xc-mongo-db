@@ -16,6 +16,7 @@ import {
     LessThanEqualModifier,
     LessThanModifier
 } from "./filter-modifiers";
+import { ConnectionService } from "../connection";
 
 const METHOD_BUILDERS = [
     CountByBuilder,
@@ -35,12 +36,14 @@ const FILTER_MODIFIERS = [
 
 @Module({
     providers: [
+        ConnectionService,
         RepositoryMethodsBuilder,
         ...MethodBuilderProviders(METHOD_BUILDERS),
         ...FilterModifierProviders(FILTER_MODIFIERS)
     ],
     exports: [
-        RepositoryMethodsBuilder
+        RepositoryMethodsBuilder,
+        ConnectionService
     ]
 })
 export class RepositoriesModule {}
