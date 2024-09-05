@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { DynamicModule, Module } from "@nestjs/common";
 import { RepositoryMethodsBuilder } from './builder/repo-method-builder';
 import {
     MethodBuilderProviders,
@@ -17,6 +17,7 @@ import {
     LessThanModifier
 } from "./filter-modifiers";
 import { ConnectionService } from "../connection";
+import { MongoClientOptions } from "mongodb";
 
 const METHOD_BUILDERS = [
     CountByBuilder,
@@ -34,16 +35,24 @@ const FILTER_MODIFIERS = [
     LessThanModifier
 ]
 
-@Module({
-    providers: [
-        ConnectionService,
-        RepositoryMethodsBuilder,
-        ...MethodBuilderProviders(METHOD_BUILDERS),
-        ...FilterModifierProviders(FILTER_MODIFIERS)
-    ],
-    exports: [
-        RepositoryMethodsBuilder,
-        ConnectionService
-    ]
-})
-export class RepositoriesModule {}
+@Module({})
+export class RepositoriesModule {
+    static forRoot(connectionUri: string, options?: MongoClientOptions): DynamicModule {
+        return {
+            module: RepositoriesModule,
+            providers: [
+                {
+                    provide: ConnectionService,
+                    useValue: new ConnectionService(connectionUri, options)
+                },
+                RepositoryMethodsBuilder,
+                ...MethodBuilderProviders(METHOD_BUILDERS),
+                ...FilterModifierProviders(FILTER_MODIFIERS)
+            ],
+            exports: [
+                RepositoryMethodsBuilder,
+                ConnectionService
+            ]
+        }
+    }
+}

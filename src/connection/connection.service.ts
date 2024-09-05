@@ -1,14 +1,13 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { MongoClient } from "mongodb";
-
-const TEST_URI = "mongodb://root:epdsrntrMDB@localhost:27017";
+import { MongoClient, MongoClientOptions } from "mongodb";
 
 @Injectable()
 export class ConnectionService {
     private readonly logger = new Logger(ConnectionService.name);
-    private client: MongoClient = new MongoClient(TEST_URI);
+    private client: MongoClient;
 
-    constructor() {
+    constructor(connection_uri: string, options?: MongoClientOptions) {
+        this.client = new MongoClient(connection_uri, options);
         this.testConnection();
     }
 

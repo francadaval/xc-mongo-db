@@ -4,9 +4,11 @@ import { TestRepo } from "./test-repo";
 import { TestRepo2 } from "./test-repo-2";
 import { ExtendedEntityRepository } from "./extended-entity-repo";
 
+const TEST_URI = "mongodb://root:epdsrntrMDB@localhost:27017";
+
 @Module({
     imports: [
-        RepositoriesModule
+        RepositoriesModule.forRoot(TEST_URI)
     ],
     providers: [
         repositoryFactoryProvider(TestRepo),
