@@ -1,13 +1,19 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { MongoClient, MongoClientOptions } from "mongodb";
 
+type MongoClientFactory = (uri: string, options?: MongoClientOptions) => MongoClient;
+
 @Injectable()
 export class ConnectionService {
     private readonly logger = new Logger(ConnectionService.name);
     private client: MongoClient;
 
-    constructor(connection_uri: string, options?: MongoClientOptions) {
-        this.client = new MongoClient(connection_uri, options);
+    constructor(
+        connection_uri: string,
+        options?: MongoClientOptions,
+        mongoClientFactory: MongoClientFactory = (uri,options) => new MongoClient(uri,options)
+    ) {
+        this.client = mongoClientFactory(connection_uri,options);
         this.testConnection();
     }
 

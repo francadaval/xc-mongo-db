@@ -8,7 +8,16 @@ const TEST_URI = "mongodb://root:epdsrntrMDB@localhost:27017";
 
 @Module({
     imports: [
-        RepositoriesModule.forRoot(TEST_URI)
+        RepositoriesModule.registerAsync({
+            useFactory: () => {
+                return {
+                    connectionUri: TEST_URI
+                };
+            }
+        })
+//        RepositoriesModule.register({
+//            connectionUri: TEST_URI
+//        })
     ],
     providers: [
         repositoryFactoryProvider(TestRepo),
