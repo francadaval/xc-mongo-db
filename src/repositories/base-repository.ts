@@ -27,7 +27,7 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
     async findOne(_id: InferIdType<T>): Promise<T> {
         this.logger.log(`findOne`);
         const response = await this.collection.findOne({_id});
-        return this.createEntity(response);
+        return response !== null ? this.createEntity(response) : null;
     }
 
     async deleteOne(_id: InferIdType<T>): Promise<void> {
