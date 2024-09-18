@@ -16,18 +16,16 @@ export type EntityDecoratorParameters = {
 export function Entity(parameters?: EntityDecoratorParameters) {
     return function (target: Type<BaseEntity>) {
         Reflect.defineMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, parameters || {}, target);
+
         const entityProperties: EntityProperties = Reflect.getOwnMetadata(MetadataKeys.ENTITY_PROPERTIES, target) || {};
         const idProperty: string = Reflect.getOwnMetadata(MetadataKeys.ID_PROPERTY, target);
-
-        logger.debug(`${target.name} evaluated.`);
-
         const superPrototype = Object.getPrototypeOf(target.prototype);
-
+        
         target.prototype.fromDoc = getFromDocFunction(superPrototype, entityProperties);
-
         target.prototype.toDoc = getToDocFunction(superPrototype, entityProperties);
-
         target.prototype.fromJson = getFromJsonFunction(superPrototype, entityProperties, idProperty);
+
+        logger.log(`${target.name} entity, implementation completed.`);
     };
 }
 

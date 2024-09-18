@@ -22,16 +22,18 @@ function createRepository<T extends BaseDocEntity<unknown>>(
     connectionService: ConnectionService,
     methodsBuilder: RepositoryMethodsBuilder
 ): BaseRepository<T> {
-    
     const methods: string[] = Reflect.getMetadata(MetadataKeys.REPOSITORY_METHODS, RepoType);
     const entityType = Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType);
     const entityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, entityType);
+    const className = Object.getPrototypeOf(RepoType).name;
     
     createRepoMethods<T>(entityProperties, methods, RepoType, methodsBuilder);
 
     const repo = new (RepoType as Type)(connectionService);
     
     createIndexes(entityProperties, repo);
+
+    logger.log(`${className}, instance created.`);
     
     return repo;
 }
@@ -58,7 +60,7 @@ function createRepoMethods<T extends BaseDocEntity<unknown>>(entityProperties: E
         return new (Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType))(data);
     }
 
-    logger.log(`${createRepository.name}: ${className}, ${methods?.length || 0} methods, ${propertiesNames.length} entity propert`);
+    logger.debug(`${createRepository.name}: ${className}, ${methods?.length || 0} methods, ${propertiesNames.length} entity propert`);
     return propertiesNames;
 }
 
