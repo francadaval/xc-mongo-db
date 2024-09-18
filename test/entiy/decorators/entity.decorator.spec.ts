@@ -36,6 +36,10 @@ class TestIdEntity extends BaseDocEntity<string> {
 }
 
 class TestEntityWithArray extends BaseDocEntity<string> {
+    @Property({
+        default: []
+    })
+    defaultArray: string[];
     @Property()
     array: string[];
     @Property({
@@ -224,7 +228,7 @@ describe(Entity.name, () => {
         expect(instance._id).toBe(ID);
     });
 
-    it('should serialize array properties to doc', () => {
+    it('should serialize array properties and default value to doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithArray);
         decorator(SubEntity);
@@ -240,9 +244,10 @@ describe(Entity.name, () => {
         expect(doc._id).toBe(ID);
         expect(doc.array).toStrictEqual(['test']);
         expect(doc.array2).toStrictEqual([VALUE]);
+        expect(doc.defaultArray).toStrictEqual([]);
     });
 
-    it('should populate array properties from doc', () => {
+    it('should populate array properties and default value from doc', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithArray);
         decorator(SubEntity);
@@ -259,9 +264,10 @@ describe(Entity.name, () => {
         expect(instance._id).toBe(ID);
         expect(instance.array).toStrictEqual(['test']);
         expect(instance.array2).toStrictEqual([VALUE_ENTITY]);
+        expect(instance.defaultArray).toStrictEqual([]);
     });
 
-    it('should populate array properties from JSON', () => {
+    it('should populate array properties and default value from JSON', () => {
         const decorator = Entity(PARAMETERS);
         decorator(TestEntityWithArray);
         decorator(SubEntity);
@@ -278,6 +284,7 @@ describe(Entity.name, () => {
         expect(instance._id).toBe(ID);
         expect(instance.array).toStrictEqual(['test']);
         expect(instance.array2).toStrictEqual([VALUE_ENTITY]);
+        expect(instance.defaultArray).toStrictEqual([]);
     });
 
     it('should serialize deep array properties to doc', () => {

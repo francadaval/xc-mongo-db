@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Logger, Type } from "@nestjs/common";
 import { MetadataKeys } from "../../common/metadata-keys";
 
@@ -12,6 +13,7 @@ export type PropertyDecoratorParameters = {
     type?: Type
     unique?: boolean
     password?: boolean
+    default?: any
 };
 
 export function Property(parameters: PropertyDecoratorParameters = {}) {

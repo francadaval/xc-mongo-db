@@ -36,7 +36,11 @@ function getFromDocFunction(superPrototype: any, entityProperties: EntityPropert
         superPrototype.fromDoc.apply(this, [data]);
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
-            const value = data[parameters.dbProperty];
+
+            let value = data[parameters.dbProperty];
+            if( value === undefined || value === null ) {
+                value = parameters.default;
+            }
 
             this[property] = (parameters.type && value !== undefined)
                 ? instantiateType(parameters.type, value)
@@ -91,7 +95,11 @@ function getFromJsonFunction(superPrototype: any, entityProperties: EntityProper
 
         for (const property in entityProperties) {
             const parameters = entityProperties[property];
-            const value = data[property];
+
+            let value = data[property];
+            if( value === undefined || value === null ) {
+                value = parameters.default;
+            }
 
             if( value !== undefined ) {
                 this[property] = parameters.type
