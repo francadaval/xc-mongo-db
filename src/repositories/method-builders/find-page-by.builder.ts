@@ -5,6 +5,17 @@ import { Collection, Document, WithId } from "mongodb";
 import { Page, PageRequest } from "src/pagination";
 
 const FIND_PAGE_BY = 'findPageBy';
+const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_INDEX = 0;
+
+function checkPageRequest(pageRequest: PageRequest): PageRequest {
+    pageRequest.page_index = pageRequest.page_index || DEFAULT_INDEX;
+    pageRequest.page_index = pageRequest.page_index < 0 ? DEFAULT_INDEX : pageRequest.page_index;
+    pageRequest.page_size = pageRequest.page_size || DEFAULT_PAGE_SIZE;
+    pageRequest.page_size = pageRequest.page_size < 1 ? DEFAULT_PAGE_SIZE : pageRequest.page_size;
+
+    return pageRequest;
+}
 
 export class FindPageByBuilder extends MethodBuilder {
     
@@ -23,11 +34,13 @@ export class FindPageByBuilder extends MethodBuilder {
     
         this.logger.debug(`"${methodName}" created`);   
         return async function (...args) {
-            const pagination: PageRequest = args.pop();
+            let pageRequest: PageRequest = args.pop();
+            pageRequest = checkPageRequest(pageRequest);
+
             const $total_size = (this.collection as Collection).countDocuments(getFilter(args));
             const $items = (this.collection as Collection).find(getFilter(args), {
-                skip: pagination.page_index * pagination.page_size,
-                limit: pagination.page_size
+                skip: pageRequest.page_index * pageRequest.page_size,
+                limit: pageRequest.page_size
             }).toArray();
 
             const [total_size, items] = await Promise.all([$total_size, $items]);
@@ -35,8 +48,8 @@ export class FindPageByBuilder extends MethodBuilder {
             return {
                 items,
                 total_size,
-                page_index: pagination.page_index,
-                page_size: pagination.page_size
+                page_index: pageRequest.page_index,
+                page_size: pageRequest.page_size
             }
         }
     }
