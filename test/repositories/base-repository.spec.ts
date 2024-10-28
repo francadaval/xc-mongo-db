@@ -149,5 +149,15 @@ describe(BaseRepository.name, () => {
             expect(mockedCollection.updateOne).toHaveBeenCalledWith({_id: _ID}, {$set: DOC_WITHOUT_ID});
             expect(mockedCollection.updateOne).toHaveBeenCalledTimes(1);
         });
+
+        it('should admit partial updates', async () => {
+            mockedCollection.updateOne.mockResolvedValue(null);
+
+            const actual = await underTest.updateOne(_ID, {value: 20});
+
+            expect(actual).toBeUndefined();
+            expect(mockedCollection.updateOne).toHaveBeenCalledWith({_id: _ID}, {$set: {value: 20}});
+            expect(mockedCollection.updateOne).toHaveBeenCalledTimes(1);
+        });
     });
 });
