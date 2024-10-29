@@ -91,7 +91,10 @@ function addPropertiesNames(propertiesNames: string[], entityProperties: EntityP
         const subEntitiesDbName = subEntitiesDbNames[index];
         const name = forDb ? subEntitiesDbName: subentityName;
         const subEntityProperties: EntityProperties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, subEntitytype);
-        propertiesNames = addPropertiesNames(propertiesNames, subEntityProperties, `${root}${name}.`, forDb);
+
+        if(subEntityProperties) {
+            propertiesNames = addPropertiesNames(propertiesNames, subEntityProperties, `${root}${name}.`, forDb);
+        }
     });
 
     return propertiesNames;
