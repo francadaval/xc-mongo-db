@@ -21,6 +21,10 @@ const TEST_ENTITY_PROPERTIES: EntityProperties = {
     prop2: {
         dbProperty: 'prop2',
         unique: true
+    },
+    prop3: {
+        dbProperty: 'prop3',
+        index: -1
     }
 }
 
@@ -33,8 +37,8 @@ const TEST_SUBENTITY_PROPERTIES: EntityProperties = {
     }
 }
 
-const EXPECTED_PROP_NAMES = ['prop1', 'prop2', 'prop1.subprop1', 'prop1.subprop2'];
-const EXPECTED_DB_PROP_NAMES = ['prop_1', 'prop2', 'prop_1.subprop_1', 'prop_1.subprop2'];
+const EXPECTED_PROP_NAMES = ['prop1', 'prop2', 'prop3', 'prop1.subprop1', 'prop1.subprop2'];
+const EXPECTED_DB_PROP_NAMES = ['prop_1', 'prop2', 'prop3', 'prop_1.subprop_1', 'prop_1.subprop2'];
 
 const mockedConnectionService = mock<ConnectionService>();
 const mockedCollection = mock<Collection>();
@@ -88,6 +92,7 @@ describe(repositoryFactoryProvider.name, () => {
             EXPECTED_DB_PROP_NAMES
         );
         expect(methodsBuilder.buildRepositoryMethod).toHaveBeenCalledTimes(2);
-        expect(mockedCollection.createIndex).toHaveBeenCalledWith('prop2', {unique: true});
+        expect(mockedCollection.createIndex).toHaveBeenCalledWith({prop2: 1}, {unique: true});
+        expect(mockedCollection.createIndex).toHaveBeenCalledWith({prop3: -1}, {unique: false});
     });
 });

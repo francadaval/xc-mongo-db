@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Logger, Type } from "@nestjs/common";
 import { MetadataKeys } from "../../common/metadata-keys";
+import { IndexDirection } from "mongodb";
 
 const logger = new Logger(Property.name);
 
@@ -14,6 +15,7 @@ export type PropertyDecoratorParameters = {
     unique?: boolean
     password?: boolean
     default?: any
+    index?: IndexDirection
 };
 
 export function Property(parameters: PropertyDecoratorParameters = {}) {

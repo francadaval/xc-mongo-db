@@ -40,9 +40,14 @@ function createRepository<T extends BaseDocEntity<unknown>>(
 
 function createIndexes(entityProperties: EntityProperties, repository: BaseRepository<BaseDocEntity<unknown>>) {
     Object.values(entityProperties)
-        .filter(property => property.unique)
-        .map(property => property.dbProperty)
-        .forEach(property => repository.collection.createIndex(property, {unique: true}));
+        .filter(property => (property.unique || property.index))
+        .map(property => ({
+            indexSpec: property.index ? { [property.dbProperty]: property.index }: { [property.dbProperty]: 1 },
+            options: {
+                unique: property.unique || false
+            }
+        }))
+        .forEach(index => repository.collection.createIndex(index.indexSpec, index.options));
 }
 
 function createRepoMethods<T extends BaseDocEntity<unknown>>(entityProperties: EntityProperties, methods: string[], RepoType: Abstract<BaseRepository<T>>, methodsBuilder: RepositoryMethodsBuilder) {
