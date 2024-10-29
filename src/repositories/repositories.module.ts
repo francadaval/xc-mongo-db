@@ -9,12 +9,14 @@ import {
     DeleteAllByBuilder
 } from "./method-builders";
 import {
-    GreaterThanModifier,
-    FilterModifierProviders,
-    GreaterThanEqualModifier,
     BetweenModifier,
+    FilterModifierProviders,
+    GreaterThanModifier,
+    GreaterThanEqualModifier,
+    InModifier,
     LessThanEqualModifier,
-    LessThanModifier
+    LessThanModifier,
+    MatchAllModifier
 } from "./filter-modifiers";
 import { ConnectionService } from "../connection";
 import { MongoClientOptions } from "mongodb";
@@ -29,10 +31,12 @@ const METHOD_BUILDERS = [
 
 const FILTER_MODIFIERS = [
     BetweenModifier,
-    GreaterThanEqualModifier,
     GreaterThanModifier,
+    GreaterThanEqualModifier,
+    InModifier,
     LessThanEqualModifier,
-    LessThanModifier
+    LessThanModifier,
+    MatchAllModifier
 ]
 
 export interface RepositoriesModuleOptions {
