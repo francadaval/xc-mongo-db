@@ -1,7 +1,8 @@
 import { FindAllByBuilder } from '@src/repositories/method-builders';
 import * as utils from './utils';
 
-const FIND_RESULT = [];
+const FIND_RESULT = [{},{}];
+const EXPECTED = [{created: true},{created: true}];
 
 describe(FindAllByBuilder.name, () => {
     let builderUnderTest: FindAllByBuilder;
@@ -19,10 +20,14 @@ describe(FindAllByBuilder.name, () => {
     });
     
     describe('buildMethod', () => {
-        it('should return built method', () => {
+        it('should return built method', async () => {
             utils.mockedFindCursor.toArray.mockReturnValue(Promise.resolve(FIND_RESULT));
             utils.mockedCollection.find.mockReturnValue(utils.mockedFindCursor);
-            utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT);
+            utils.mockedBaseRepository.createEntity.mockReturnValue({created: true});
+            
+            await utils.builderShouldReturnBuiltMethod(builderUnderTest, EXPECTED);
+
+            expect(utils.mockedBaseRepository.createEntity).toHaveBeenCalledTimes(2);
         });
 
         it(

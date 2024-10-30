@@ -19,9 +19,12 @@ describe(FindOneByBuilder.name, () => {
     });
     
     describe('buildMethod', () => {
-        it('should return built method', () => {
-            utils.mockedCollection.findOne.mockReturnValue(Promise.resolve(FIND_RESULT));
-            utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT)
+        it('should return built method', async () => {
+            utils.mockedCollection.findOne.mockReturnValue(Promise.resolve({}));
+            utils.mockedBaseRepository.createEntity.mockReturnValue(FIND_RESULT);
+            await utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT);
+
+            expect(utils.mockedBaseRepository.createEntity).toHaveBeenCalledWith({});
         });
 
         it(

@@ -41,9 +41,11 @@ export class FindPageByBuilder extends MethodBuilder {
             const $items = (this.collection as Collection).find(getFilter(args), {
                 skip: pageRequest.page_index * pageRequest.page_size,
                 limit: pageRequest.page_size
-            }).toArray();
+            }).toArray()
+            
+            const [total_size, docs] = await Promise.all([$total_size, $items]);
 
-            const [total_size, items] = await Promise.all([$total_size, $items]);
+            const items = docs.map(item => this.createEntity(item));
 
             return {
                 items,

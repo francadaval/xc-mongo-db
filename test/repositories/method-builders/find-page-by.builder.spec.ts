@@ -8,8 +8,9 @@ const PAGE_REQUEST: PageRequest = {
     page_index: 2,
     page_size: 5
 }
-const FIND_RESULT: Page<Document> = {
-    items: [],
+const FIND_RESULT: Document[] = [{},{}];
+const EXPECTED_RESULT: Page<Document> = {
+    items: [{created: true},{created: true}],
     total_size: 10,
     page_size: 5,
     page_index: 2
@@ -32,13 +33,15 @@ describe(FindPageByBuilder.name, () => {
     });
     
     describe('buildMethod', () => {
-        it('should return built method', () => {
+        it('should return built method', async () => {
             utils.mockedCollection.countDocuments.mockReturnValue(Promise.resolve(COUNT_RESULT));
-            utils.mockedFindCursor.toArray.mockReturnValue(Promise.resolve(FIND_RESULT.items));
+            utils.mockedFindCursor.toArray.mockReturnValue(Promise.resolve(FIND_RESULT));
             utils.mockedCollection.find.mockReturnValue(utils.mockedFindCursor);
-            utils.mockedCollection.findOne.mockReturnValue(Promise.resolve(FIND_RESULT));
+            utils.mockedBaseRepository.createEntity.mockReturnValue({created: true});
 
-            utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT, DUMMY_PARAM, PAGE_REQUEST);
+            await utils.builderShouldReturnBuiltMethod(builderUnderTest, EXPECTED_RESULT, DUMMY_PARAM, PAGE_REQUEST);
+
+            expect(utils.mockedBaseRepository.createEntity).toHaveBeenCalledTimes(2);
         });
 
         it(

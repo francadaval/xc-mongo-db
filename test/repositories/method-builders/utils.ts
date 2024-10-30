@@ -27,6 +27,10 @@ const EMPTY_GROUPS = [];
 
 export const mockedCollection = mock<Collection>();
 export const mockedFindCursor = mock<FindCursor>()
+export const mockedBaseRepository = {
+    collection: mockedCollection,
+    createEntity: jest.fn(),
+};
 
 export function builderShouldReturnVerb(modifierUnderTest: MethodBuilder): void {
     const name = modifierUnderTest.getVerb();
@@ -39,12 +43,12 @@ export function builderShouldReturnVerb(modifierUnderTest: MethodBuilder): void 
 export async function builderShouldReturnBuiltMethod(builderUnderTest: MethodBuilder, expectedResult: unknown, ...args: unknown[]) {
     args = args || [DUMMY_VALUE];
     const actualMethod = builderUnderTest.buildMethod(METHOD_NAME, GROUPS);
-    const actualResult = await actualMethod.call({
-        collection: mockedCollection
-    }, ...args);
+    const actualResult = await actualMethod.call(mockedBaseRepository, ...args);
 
     expect(gtGetCondition).toHaveBeenCalled();
     expect(actualResult).toEqual(expectedResult);
+
+    return actualResult;
 }
 
 export function shouldThrowErrorIfNoprovidedGroups(builderUnderTest: MethodBuilder) {
