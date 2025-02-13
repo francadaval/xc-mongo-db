@@ -22,8 +22,8 @@ export class FindOneByBuilder extends MethodBuilder {
         
         this.logger.debug(`"${methodName}" created`);
         return async function (...args) {
-            const doc = await (this.collection as Collection).findOne(getFilter(args));
-            return this.createEntity(doc);
+            const response = await (this.collection as Collection).findOne(getFilter(args));
+            return response !== null ? this.createEntity(response): null;
         }
     }
 }
