@@ -20,7 +20,7 @@ describe(UpdateByBuilder.name, () => {
     describe('buildMethod', () => {
         it('should return built method', () => {
             utils.mockedCollection.updateMany.mockReturnValue(Promise.resolve(void 0));
-            utils.mockedBaseRepository.createEntity.mockReturnValue({
+            utils.mockedBaseRepository.createEntityFromPlainObject.mockReturnValue({
                 toDoc: () => ({newValue: 14})
             });
 

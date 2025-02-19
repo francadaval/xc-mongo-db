@@ -37,11 +37,11 @@ describe(FindPageByBuilder.name, () => {
             utils.mockedCollection.countDocuments.mockReturnValue(Promise.resolve(COUNT_RESULT));
             utils.mockedFindCursor.toArray.mockReturnValue(Promise.resolve(FIND_RESULT));
             utils.mockedCollection.find.mockReturnValue(utils.mockedFindCursor);
-            utils.mockedBaseRepository.createEntity.mockReturnValue({created: true});
+            utils.mockedBaseRepository.createEntityFromDoc.mockReturnValue({created: true});
 
             await utils.builderShouldReturnBuiltMethod(builderUnderTest, EXPECTED_RESULT, DUMMY_PARAM, PAGE_REQUEST);
 
-            expect(utils.mockedBaseRepository.createEntity).toHaveBeenCalledTimes(2);
+            expect(utils.mockedBaseRepository.createEntityFromDoc).toHaveBeenCalledTimes(2);
         });
 
         it(

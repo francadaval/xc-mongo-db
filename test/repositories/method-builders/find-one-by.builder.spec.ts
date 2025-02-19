@@ -21,10 +21,10 @@ describe(FindOneByBuilder.name, () => {
     describe('buildMethod', () => {
         it('should return built method', async () => {
             utils.mockedCollection.findOne.mockReturnValue(Promise.resolve({}));
-            utils.mockedBaseRepository.createEntity.mockReturnValue(FIND_RESULT);
+            utils.mockedBaseRepository.createEntityFromDoc.mockReturnValue(FIND_RESULT);
             await utils.builderShouldReturnBuiltMethod(builderUnderTest, FIND_RESULT);
 
-            expect(utils.mockedBaseRepository.createEntity).toHaveBeenCalledWith({});
+            expect(utils.mockedBaseRepository.createEntityFromDoc).toHaveBeenCalledWith({});
         });
 
         it(

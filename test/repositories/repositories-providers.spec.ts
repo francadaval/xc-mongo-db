@@ -47,7 +47,7 @@ const mockedDb = mock<Db>();
 
 class TestRepo extends BaseRepository<TestEntity> {
     protected logger = new Logger('TestRepo');
-    protected createEntity(data: Document): TestEntity {
+    protected createEntityFromDoc(data: Document): TestEntity {
         return new TestEntity(data);
     }
 }
@@ -74,7 +74,7 @@ describe(repositoryFactoryProvider.name, () => {
         // Act
         const factory = repositoryFactoryProvider(TestRepo);
         const actual = factory.useFactory(mockedConnectionService, methodsBuilder);
-        const actualEntity = actual.createEntity({});
+        const actualEntity = actual.createEntityFromPlainObject({});
 
         // Assert
         expect(actual).toEqual(expected);

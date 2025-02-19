@@ -23,11 +23,11 @@ describe(FindAllByBuilder.name, () => {
         it('should return built method', async () => {
             utils.mockedFindCursor.toArray.mockReturnValue(Promise.resolve(FIND_RESULT));
             utils.mockedCollection.find.mockReturnValue(utils.mockedFindCursor);
-            utils.mockedBaseRepository.createEntity.mockReturnValue({created: true});
+            utils.mockedBaseRepository.createEntityFromDoc.mockReturnValue({created: true});
             
             await utils.builderShouldReturnBuiltMethod(builderUnderTest, EXPECTED);
 
-            expect(utils.mockedBaseRepository.createEntity).toHaveBeenCalledTimes(2);
+            expect(utils.mockedBaseRepository.createEntityFromDoc).toHaveBeenCalledTimes(2);
         });
 
         it(

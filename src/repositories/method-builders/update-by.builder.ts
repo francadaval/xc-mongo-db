@@ -26,7 +26,7 @@ export class UpdateByBuilder extends MethodBuilder {
             logger.debug(`"${methodName}" called with ${JSON.stringify(args)}`);
             const filter = getFilter(args);
             logger.debug(`args after getFilter: ${JSON.stringify(args)}`);
-            const doc = args[0].toDoc ? args[0].toDoc() : this.createEntity(args[0]).toDoc();
+            const doc = args[0].toDoc ? args[0].toDoc() : this.createEntityFromPlainObject(args[0]).toDoc();
             logger.debug(`update by ${JSON.stringify(filter)} with ${JSON.stringify(doc)}`);
             await (this.collection as Collection).updateMany(filter, {$set: doc});
         }

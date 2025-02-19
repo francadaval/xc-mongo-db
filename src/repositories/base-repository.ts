@@ -27,7 +27,7 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
     async findOne(_id: InferIdType<T>): Promise<T> {
         this.logger.log(`findOne`);
         const response = await this.collection.findOne({_id});
-        return response !== null ? this.createEntity(response) : null;
+        return response !== null ? this.createEntityFromDoc(response) : null;
     }
 
     async deleteOne(_id: InferIdType<T>): Promise<void> {
@@ -42,11 +42,15 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
 
     async updateOne(_id: InferIdType<T>, doc: Partial<WithoutId<T>>): Promise<void> {
         this.logger.log(`updateOne`);
-        const updating = doc.toDoc ? doc.toDoc() : doc;
+        const updating = doc.toDoc ? doc.toDoc() : this.createEntityFromPlainObject(doc).toDoc();
         await this.collection.updateOne({_id}, {$set: updating});
     }
 
-    protected createEntity(_data: Document): T {
+    protected createEntityFromDoc(_data: Document): T {
+        throw new Error('Not implemented');
+    }
+
+    protected createEntityFromPlainObject(_data: Partial<WithoutId<T>>): T {
         throw new Error('Not implemented');
     }
 }

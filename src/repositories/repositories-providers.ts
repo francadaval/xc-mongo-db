@@ -5,6 +5,7 @@ import { MetadataKeys } from "../common/metadata-keys";
 import { EntityProperties } from "../entity/decorators";
 import { RepositoryMethodsBuilder } from "./builder/repo-method-builder";
 import { BaseDocEntity } from "../entity";
+import { WithoutId } from "mongodb";
 
 const logger = new Logger('repositoryFactoryProvider');
 
@@ -61,9 +62,14 @@ function createRepoMethods<T extends BaseDocEntity<unknown>>(entityProperties: E
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (RepoType.prototype as any).createEntity = function (data: Document): T {
+    (RepoType.prototype as any).createEntityFromPlainObject = function (data: WithoutId<T>): T {
+        return new (Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType))(data, false);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (RepoType.prototype as any).createEntityFromDoc = function (data: Document): T {
         return new (Reflect.getMetadata(MetadataKeys.ENTITY_TYPE, RepoType))(data);
-    }
+    };
 
     logger.debug(`${createRepository.name}: ${className}, ${methods?.length || 0} methods, ${propertiesNames.length} entity propert`);
     return propertiesNames;

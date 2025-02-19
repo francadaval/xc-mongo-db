@@ -30,7 +30,8 @@ export const mockedCollection = mock<Collection>();
 export const mockedFindCursor = mock<FindCursor>()
 export const mockedBaseRepository = {
     collection: mockedCollection,
-    createEntity: jest.fn(),
+    createEntityFromDoc: jest.fn(),
+    createEntityFromPlainObject: jest.fn()
 };
 
 export function builderShouldReturnVerb(modifierUnderTest: MethodBuilder): void {

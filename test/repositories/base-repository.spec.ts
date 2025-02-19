@@ -19,12 +19,21 @@ class TestEntity extends BaseDocEntity<number> {
         super.fromDoc(data);
         this.value = data.value
     }
+
+    fromJson(data?: any): void {
+        super.fromJson(data);
+        this.value = data.value;
+    }
 }
 
 class TestRepository extends BaseRepository<TestEntity> {
     protected logger = new Logger('BaseRepository');
-    protected createEntity(data: Document): TestEntity {
+    protected createEntityFromDoc(data: Document): TestEntity {
         return new TestEntity(data);
+    }
+
+    protected createEntityFromPlainObject(data: Partial<TestEntity>): TestEntity {
+        return new TestEntity(data, false);
     }
 }
 
