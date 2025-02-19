@@ -69,6 +69,20 @@ async function repo1Tests(appContext: INestApplicationContext) {
     } catch (err) {
         logger.error(err);
     }
+
+    await testRepo.updateByValue(42, {
+        subEntity: {
+            name: "Updated subentity",
+            value: 77
+        }
+    });
+
+    try {
+        let count1_4 = await testRepo.countBySubEntityValue(77);
+        logger.log(`count1_4: ${count1_4}`);
+    } catch (err) {
+        logger.error(err);
+    }
 }
 
 async function repo2Tests(appContext: INestApplicationContext) {

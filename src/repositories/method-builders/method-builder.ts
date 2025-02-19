@@ -18,7 +18,6 @@ export abstract class MethodBuilder {
 
     protected getFilter(groups: ParsedMethodGroup[], args: ConditionArguments): Filter<Document> {
         const filter: Filter<Document> = {};
-        args = [...args];
 
         groups.forEach(group => {
             const modifier = this.filterModifiers[group.modifier];

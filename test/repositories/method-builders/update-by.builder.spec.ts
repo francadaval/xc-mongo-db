@@ -1,17 +1,12 @@
-import { DeleteAllByBuilder } from '@src/repositories/method-builders';
+import { UpdateByBuilder } from '@src/repositories/method-builders';
 import * as utils from './utils';
-import { DeleteResult } from 'mongodb';
 
-const DELETE_RESULT: DeleteResult = {
-    acknowledged: true,
-    deletedCount: 1
-};
-
-describe(DeleteAllByBuilder.name, () => {
-    let builderUnderTest: DeleteAllByBuilder;
+describe(UpdateByBuilder.name, () => {
+    let builderUnderTest: UpdateByBuilder;
 
     beforeEach(() => {
-        builderUnderTest = new DeleteAllByBuilder();
+        jest.clearAllMocks();
+        builderUnderTest = new UpdateByBuilder();
         builderUnderTest.setModifiers(utils.MODIFIERS);
     });
 
@@ -21,11 +16,15 @@ describe(DeleteAllByBuilder.name, () => {
             () => utils.builderShouldReturnVerb(builderUnderTest)
         );
     });
-    
+
     describe('buildMethod', () => {
         it('should return built method', () => {
-            utils.mockedCollection.deleteMany.mockReturnValue(Promise.resolve(DELETE_RESULT));
-            utils.builderShouldReturnBuiltMethod(builderUnderTest, DELETE_RESULT.deletedCount);
+            utils.mockedCollection.updateMany.mockReturnValue(Promise.resolve(void 0));
+            utils.mockedBaseRepository.createEntity.mockReturnValue({
+                toDoc: () => ({newValue: 14})
+            });
+
+            utils.builderShouldReturnBuiltMethod(builderUnderTest, void 0, 15, {newValue: 14});
         });
 
         it(

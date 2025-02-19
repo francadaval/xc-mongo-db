@@ -1,3 +1,4 @@
+import { WithoutId } from "mongodb";
 import { Repository, RepositoryMethod, BaseRepository } from "../";
 import { TestEntity } from "./test-entity";
 
@@ -28,6 +29,11 @@ export abstract class TestRepo extends BaseRepository<TestEntity> {
 
     @RepositoryMethod()
     findOneByLockAndStockAndValueGreaterThan(_lockAndStock: number, _value: number): Promise<TestEntity> {
+        throw new Error('Repository not implemented.');
+    }
+
+    @RepositoryMethod()
+    updateByValue(_value: number, _doc: Partial<WithoutId<TestEntity>>): Promise<void> {
         throw new Error('Repository not implemented.');
     }
 }

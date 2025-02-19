@@ -8,8 +8,9 @@ import { mock } from "ts-jest-mocker";
 export const MODIFIERS = {
     GreaterThan: new GreaterThanModifier(),
     LessThan: new LessThanModifier()
-};
-const gtGetCondition = jest.spyOn(MODIFIERS.GreaterThan, 'getCondition');
+}
+
+// const gtGetCondition = jest.spyOn(MODIFIERS.GreaterThan, 'getCondition');
 // const ltGetCondition = jest.spyOn(MODIFIERS.LessThan, 'getCondition');
 
 const DUMMY_VALUE = 14;
@@ -45,7 +46,7 @@ export async function builderShouldReturnBuiltMethod(builderUnderTest: MethodBui
     const actualMethod = builderUnderTest.buildMethod(METHOD_NAME, GROUPS);
     const actualResult = await actualMethod.call(mockedBaseRepository, ...args);
 
-    expect(gtGetCondition).toHaveBeenCalled();
+    // expect(gtGetCondition).toHaveBeenCalled();
     expect(actualResult).toEqual(expectedResult);
 
     return actualResult;

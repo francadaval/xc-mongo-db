@@ -6,7 +6,8 @@ import {
     FindAllByBuilder,
     FindOneByBuilder,
     FindPageByBuilder,
-    DeleteAllByBuilder
+    DeleteAllByBuilder,
+    UpdateByBuilder
 } from "./method-builders";
 import {
     BetweenModifier,
@@ -26,7 +27,8 @@ const METHOD_BUILDERS = [
     DeleteAllByBuilder,
     FindAllByBuilder,
     FindOneByBuilder,
-    FindPageByBuilder
+    FindPageByBuilder,
+    UpdateByBuilder
 ];
 
 const FILTER_MODIFIERS = [

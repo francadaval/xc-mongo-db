@@ -8,5 +8,5 @@ export class TestEntity extends BaseDocEntity {
     @Property() value?: number;
     @Property() lockAndStock?: number
     @Property() date?: Date;
-    @Property({ type: TestSubEntity}) subEntity: TestSubEntity
+    @Property({ type: TestSubEntity}) subEntity: Partial<TestSubEntity>
 }
