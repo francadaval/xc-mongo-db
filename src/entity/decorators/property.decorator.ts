@@ -23,7 +23,7 @@ export function Property(parameters: PropertyDecoratorParameters = {}) {
         parameters.dbProperty = parameters.dbProperty || propertyKey;
         
         const targetConstructor = target.constructor;
-        const properties: EntityProperties = {...Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor)} || {};
+        const properties: EntityProperties = {...(Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor) || {})};
         properties[propertyKey] = parameters;
 
         Reflect.defineMetadata(MetadataKeys.ENTITY_PROPERTIES, properties, targetConstructor);
