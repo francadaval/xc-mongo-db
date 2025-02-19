@@ -21,7 +21,8 @@ export class CountByBuilder extends MethodBuilder{
         
         this.logger.debug(`"${methodName}" created`);
         return async function (...args) {
-            return (this.collection as Collection).countDocuments(getFilter(args));
+            const filter = getFilter(args);
+            return (this.collection as Collection).countDocuments(filter);
         }
     }
 }

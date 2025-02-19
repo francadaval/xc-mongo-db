@@ -37,8 +37,9 @@ export class FindPageByBuilder extends MethodBuilder {
             let pageRequest: PageRequest = args.pop();
             pageRequest = checkPageRequest(pageRequest);
 
-            const $total_size = (this.collection as Collection).countDocuments(getFilter(args));
-            const $items = (this.collection as Collection).find(getFilter(args), {
+            const filter = getFilter(args);
+            const $total_size = (this.collection as Collection).countDocuments(filter);
+            const $items = (this.collection as Collection).find(filter, {
                 skip: pageRequest.page_index * pageRequest.page_size,
                 limit: pageRequest.page_size
             }).toArray()

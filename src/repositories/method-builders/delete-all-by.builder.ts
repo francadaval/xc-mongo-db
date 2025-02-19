@@ -21,7 +21,8 @@ export class DeleteAllByBuilder extends MethodBuilder {
         
         this.logger.debug(`"${methodName}" created`);
         return async function (...args) {
-            const result = await (this.collection as Collection).deleteMany(getFilter(args), {
+            const filter = getFilter(args);
+            const result = await (this.collection as Collection).deleteMany(filter, {
                 writeConcern: { w: 'majority' }
             });
             return result.deletedCount;

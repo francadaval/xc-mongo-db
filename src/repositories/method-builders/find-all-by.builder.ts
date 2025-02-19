@@ -22,7 +22,8 @@ export class FindAllByBuilder extends MethodBuilder {
     
         this.logger.debug(`"${methodName}" created`);   
         return async function (...args) {
-            const docs = await (this.collection as Collection).find(getFilter(args)).toArray();
+            const filter = getFilter(args);
+            const docs = await (this.collection as Collection).find(filter).toArray();
             return docs.map(doc => this.createEntityFromDoc(doc));
         }
     }
