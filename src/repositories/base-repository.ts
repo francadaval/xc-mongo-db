@@ -13,15 +13,20 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
         this.collection = client.db(dbName).collection(collectionName);
     }
 
-    async insertOne(entity: T): Promise<void> {
+    async insertOne(entity: T): Promise<any> {
         this.logger.log(`insertOne`);
-        await this.collection.insertOne(entity.toDoc());
+        const doc = entity.toDoc();
+        await this.collection.insertOne(doc);
+
+        return doc._id;
     }
 
-    async insertMany(entities: T[]): Promise<void> {
+    async insertMany(entities: T[]): Promise<any[]> {
         this.logger.log(`insertMany`);
         const docs = entities.map(entity => entity.toDoc());
         await this.collection.insertMany(docs);
+
+        return docs.map(doc => doc._id);
     }
 
     async findOne(_id: InferIdType<T>): Promise<T> {
