@@ -32,7 +32,7 @@ export class MethodNameParser {
 
     constructor(private readonly verbs: string[], private readonly modifiers: string[]) {}
 
-    parse(methodName: string, properties: string[], dbPropertyNames: string[]) {
+    parse(methodName: string, properties: string[], dbPropertyNames: string[]): [string, ParsedMethodGroup[]] {
         this.methodName = methodName;
         this.properties = properties;
         this.dbPropertyNames = dbPropertyNames;
@@ -43,14 +43,8 @@ export class MethodNameParser {
         this.createCompundedGroups();
         this.splitModifiers();
         this.matchGroupsProperties();
-    }
 
-    getVerb(): string {
-        return this.verb;
-    }
-
-    getMatchedGroups() {
-        return this.firstMatchedGroups;
+        return [this.verb, this.firstMatchedGroups];
     }
 
     private reset() {

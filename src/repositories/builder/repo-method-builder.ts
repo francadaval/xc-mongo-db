@@ -41,12 +41,12 @@ export class RepositoryMethodsBuilder {
         const modifiers = Object.keys(this.filterModifiers);
 
         const parser = new MethodNameParser(verbs, modifiers);
-        parser.parse(methodName, propertiesNames, dbPropertiesNames);
+        const [verb, matchedGroups] = parser.parse(methodName, propertiesNames, dbPropertiesNames);
 
-        const builder = this.methodBuilders[parser.getVerb()];
+        const builder = this.methodBuilders[verb];
 
         builder.setModifiers(this.filterModifiers);
-        return builder.buildMethod(methodName, parser.getMatchedGroups());
+        return builder.buildMethod(methodName, matchedGroups);
     }
 
     private throwError(message: string) {
