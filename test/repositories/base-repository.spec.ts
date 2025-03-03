@@ -104,9 +104,8 @@ describe(BaseRepository.name, () => {
         it('should delegate to Collection', async () => {
             mockedCollection.insertOne.mockResolvedValue(INSERT_ONE_RESULT);
 
-            const actual = await underTest.insertOne(DOC_WITHOUT_ID);
+            await underTest.insertOne(DOC_WITHOUT_ID);
 
-            expect(actual).toBeUndefined();
             expect(mockedCollection.insertOne).toHaveBeenCalledWith(DOC_WITHOUT_ID);
             expect(mockedCollection.insertOne).toHaveBeenCalledTimes(1);
         });
@@ -115,10 +114,11 @@ describe(BaseRepository.name, () => {
     describe('insertMany', () => {
         it('should delegate to Collection', async () => {
             mockedCollection.insertMany.mockResolvedValue(INSERT_MANY_RESULT);
+            const docs = [DOC_WITHOUT_ID];
 
-            const actual = await underTest.insertMany([DOC_WITHOUT_ID]);
+            const actual = await underTest.insertMany(docs);
 
-            expect(actual).toBeUndefined();
+            expect(actual).toHaveLength(docs.length);
             expect(mockedCollection.insertMany).toHaveBeenCalledWith([DOC_WITHOUT_ID]);
             expect(mockedCollection.insertMany).toHaveBeenCalledTimes(1);
         });
