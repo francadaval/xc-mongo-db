@@ -5,7 +5,7 @@ import { BaseDocEntity } from "../entity";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export abstract class BaseRepository<T extends BaseDocEntity<any>> {
-    protected abstract logger: Logger
+    protected logger: Logger
     readonly collection: Collection;
 
     constructor(protected connectionService: ConnectionService, dbName: string, collectionName: string) {
