@@ -4,6 +4,7 @@ import { RepositoriesModule, repositoryFactoryProvider } from "@src/repositories
 
 import { SimpleTestEntityRepository } from "./simple-test-entity.repository";
 import { TEST_URI } from "../consts";
+import { PropertiesTestEntityRepository } from "./properties-test-entity.repository";
 
 @Module({
     imports: [
@@ -16,7 +17,8 @@ import { TEST_URI } from "../consts";
         })
     ],
     providers: [
-        repositoryFactoryProvider(SimpleTestEntityRepository)
+        repositoryFactoryProvider(SimpleTestEntityRepository),
+        repositoryFactoryProvider(PropertiesTestEntityRepository)
     ]
 })
-export class SimpleTestEntityModule {}
+export class TestModule {}

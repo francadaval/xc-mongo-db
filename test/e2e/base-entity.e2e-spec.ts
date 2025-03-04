@@ -1,7 +1,7 @@
 import { INestApplicationContext } from "@nestjs/common";
-import { SimpleTestEntity } from "./simple/simple-test.entity";
+import { SimpleTestEntity } from "./test-module/simple-test.entity";
 import { NestFactory } from "@nestjs/core";
-import { SimpleTestEntityModule } from "./simple/simple-test-entity.module";
+import { TestModule } from "./test-module/test.module";
 import { BaseEntity } from "@src/entity";
 
 describe('BaseEntity Tests', () => {
@@ -9,7 +9,7 @@ describe('BaseEntity Tests', () => {
     let app: INestApplicationContext;
 
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(SimpleTestEntityModule);
+        app = await NestFactory.createApplicationContext(TestModule);
     });
 
     afterAll(async () => {
