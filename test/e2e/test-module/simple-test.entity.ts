@@ -7,4 +7,10 @@ export class SimpleTestEntity extends BaseDocEntity {
 
     @Property()
     value?: number;
+
+    @Property()
+    tags: string[];
+
+    @Property()
+    date: Date;
 }

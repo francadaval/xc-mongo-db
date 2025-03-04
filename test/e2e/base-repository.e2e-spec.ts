@@ -8,7 +8,9 @@ import { SimpleTestEntity } from "./test-module/simple-test.entity";
 
 const TEST_ENTITY_JSON = {
     name: 'Test Entity',
-    value: 42
+    value: 42,
+    tags: ['tag1', 'tag2', 'tag3'],
+    date: new Date()
 };
 
 describe('BaseRepository Tests', () => {
@@ -81,6 +83,40 @@ describe('BaseRepository Tests', () => {
         expect(ids.length).toEqual(2);
         expect(ids[0]).toBeDefined();
         expect(ids[1]).toBeDefined();
+    });
+
+        
+    it('array property should be saved', async () => {
+        const saved_entity = await repo.findOne(entity_id);
+
+        expect(saved_entity.tags).toEqual(TEST_ENTITY_JSON.tags);
+    });
+
+
+    it('array property should be updated', async () => {
+        const tags = ['tag1', 'tag2'];
+
+        await repo.updateOne(entity_id, {tags});
+
+        const saved_entity = await repo.findOne(entity_id);
+
+        expect(saved_entity.tags).toEqual(tags);
+    })
+
+    it('date property should be saved', async () => {
+        const saved_entity = await repo.findOne(entity_id); 
+
+        expect(saved_entity.date).toEqual(TEST_ENTITY_JSON.date);
+    });
+
+    it('date property should be updated', async () => {
+        const date = new Date();
+
+        await repo.updateOne(entity_id, {date});
+
+        const saved_entity = await repo.findOne(entity_id);
+
+        expect(saved_entity.date).toEqual(date);
     });
 
     it('deleteOne should delete entity', async () => {

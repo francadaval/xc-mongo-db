@@ -6,7 +6,7 @@ import { BaseDocEntity, Entity, Id, Property } from "@src/entity";
 export class PropertiesTestEntity extends BaseDocEntity<string> {
     @Id()
     @Property()
-    name?: string;
+    name: string;
 
     @Property({
         password: true
