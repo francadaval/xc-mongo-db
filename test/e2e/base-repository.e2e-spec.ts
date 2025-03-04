@@ -21,9 +21,10 @@ describe('BaseRepository Tests', () => {
         app = await NestFactory.createApplicationContext(TestModule);
         repo = app.get(SimpleTestEntityRepository);
     });
-
+    
     afterAll(async () => {
         app.close();
+        repo.collection.drop();
     });
 
     it('application context should be created', async () => {
