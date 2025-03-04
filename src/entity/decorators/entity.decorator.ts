@@ -105,6 +105,10 @@ function getFromJsonFunction(superPrototype: any, entityProperties: EntityProper
                     : value;
             }
         }
+
+        Object.keys(data).filter(key => !entityProperties[key]).forEach(key => {
+            this[key] = data[key];
+        });
     }
 }
 

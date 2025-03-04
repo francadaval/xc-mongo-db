@@ -9,8 +9,10 @@ export class BaseTestEntity extends BaseDocEntity {
     value?: number;
 
     @Property()
-    tags: string[];
+    tags?: string[];
 
     @Property()
-    date: Date;
+    date?: Date;
+
+    noStored: string;
 }

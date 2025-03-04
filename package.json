@@ -10,8 +10,8 @@
     "build": "npm run clean & tsc",
     "clean": "tsc --build --clean & rimraf dist",
     "test": "jest",
-    "test:e2e": "jest --config ./jest-e2e.config.js --detectOpenHandles",
-    "test:e2e-watch": "jest --config ./jest-e2e.config.js --detectOpenHandles --watch",
+    "test:e2e": "jest --config ./jest-e2e.config.js",
+    "test:e2e-watch": "jest --config ./jest-e2e.config.js --watch",
     "e2e-test": "npm run build & node ./dist/e2e-test.js"
   },
   "keywords": [
