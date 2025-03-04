@@ -1,5 +1,5 @@
 import { INestApplicationContext } from "@nestjs/common";
-import { SimpleTestEntity } from "./test-module/simple-test.entity";
+import { BaseTestEntity } from "./test-module/base/base-test.entity";
 import { NestFactory } from "@nestjs/core";
 import { TestModule } from "./test-module/test.module";
 import { BaseEntity } from "@src/entity";
@@ -21,13 +21,13 @@ describe('BaseEntity Tests', () => {
     });
 
     it('entity should be created', async () => {
-        const entity = new SimpleTestEntity();
+        const entity = new BaseTestEntity();
 
         expect(entity).toBeDefined();
     });
 
     it('toDoc should be overriden and return plain object document', async () => {
-        const entity = new SimpleTestEntity();
+        const entity = new BaseTestEntity();
         entity.name = 'Test Entity';
         entity.value = 42;
 
@@ -36,13 +36,13 @@ describe('BaseEntity Tests', () => {
         expect(doc).toBeDefined();
         expect(doc.name).toEqual(entity.name);
         expect(doc.value).toEqual(entity.value);
-        expect(doc instanceof SimpleTestEntity).toBeFalsy();
+        expect(doc instanceof BaseTestEntity).toBeFalsy();
         expect(doc instanceof BaseEntity).toBeFalsy();
         expect(doc instanceof Object).toBeTruthy();
     });
 
     it('fromJson should be overriden and populate entity from plain object like entity', async () => {
-        const entity = new SimpleTestEntity();
+        const entity = new BaseTestEntity();
         const doc = {
             name: 'Test Entity',
             value: 42
@@ -55,14 +55,14 @@ describe('BaseEntity Tests', () => {
     });
 
     it('fromJson should be overriden and populate entity from another entity instance', async () => {
-        const entity = new SimpleTestEntity();
+        const entity = new BaseTestEntity();
         const doc = {
             name: 'Test Entity',
             value: 42
         };
         entity.fromJson(doc);
 
-        const entity2 = new SimpleTestEntity();
+        const entity2 = new BaseTestEntity();
         entity2.fromJson(entity);
 
         expect(entity2.name).toEqual(entity.name);
@@ -70,7 +70,7 @@ describe('BaseEntity Tests', () => {
     });
 
     it('fromDoc should be overriden and populate entity from plain object document', async () => {
-        const entity = new SimpleTestEntity();
+        const entity = new BaseTestEntity();
         const doc = {
             name: 'Test Entity',
             value: 42

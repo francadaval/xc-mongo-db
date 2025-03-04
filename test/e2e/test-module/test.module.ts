@@ -2,9 +2,9 @@ import { Module } from "@nestjs/common";
 
 import { RepositoriesModule, repositoryFactoryProvider } from "@src/repositories";
 
-import { SimpleTestEntityRepository } from "./simple-test-entity.repository";
+import { BaseTestEntityRepository } from "./base/base-test-entity.repository";
 import { TEST_URI } from "../consts";
-import { PropertiesTestEntityRepository } from "./properties-test-entity.repository";
+import { PropertiesTestEntityRepository } from "./properties/properties-test-entity.repository";
 
 @Module({
     imports: [
@@ -17,7 +17,7 @@ import { PropertiesTestEntityRepository } from "./properties-test-entity.reposit
         })
     ],
     providers: [
-        repositoryFactoryProvider(SimpleTestEntityRepository),
+        repositoryFactoryProvider(BaseTestEntityRepository),
         repositoryFactoryProvider(PropertiesTestEntityRepository)
     ]
 })

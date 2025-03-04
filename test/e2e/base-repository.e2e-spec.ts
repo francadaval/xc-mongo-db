@@ -3,8 +3,8 @@ import { INestApplicationContext } from "@nestjs/common";
 import { ObjectId } from "mongodb";
 
 import { TestModule } from "./test-module/test.module";
-import { SimpleTestEntityRepository } from "./test-module/simple-test-entity.repository";
-import { SimpleTestEntity } from "./test-module/simple-test.entity";
+import { BaseTestEntityRepository } from "./test-module/base/base-test-entity.repository";
+import { BaseTestEntity } from "./test-module/base/base-test.entity";
 
 const TEST_ENTITY_JSON = {
     name: 'Test Entity',
@@ -16,12 +16,12 @@ const TEST_ENTITY_JSON = {
 describe('BaseRepository Tests', () => {
 
     let app: INestApplicationContext;
-    let repo: SimpleTestEntityRepository;
+    let repo: BaseTestEntityRepository;
     let entity_id: ObjectId;
 
     beforeAll(async () => {
         app = await NestFactory.createApplicationContext(TestModule);
-        repo = app.get(SimpleTestEntityRepository);
+        repo = app.get(BaseTestEntityRepository);
     });
     
     afterAll(async () => {
@@ -44,7 +44,7 @@ describe('BaseRepository Tests', () => {
     });
 
     it('insertOne should insert entity and rerturn id', async () => {
-        const entity = new SimpleTestEntity();
+        const entity = new BaseTestEntity();
         entity.fromJson(TEST_ENTITY_JSON);
 
         entity_id = await repo.insertOne(entity);
@@ -72,10 +72,10 @@ describe('BaseRepository Tests', () => {
     });
 
     it('insertMany should insert multiple entities and return ids', async () => {
-        const entity1 = new SimpleTestEntity();
+        const entity1 = new BaseTestEntity();
         entity1.fromJson(TEST_ENTITY_JSON);
 
-        const entity2 = new SimpleTestEntity();
+        const entity2 = new BaseTestEntity();
         entity2.fromJson(TEST_ENTITY_JSON);
 
         const ids = await repo.insertMany([entity1, entity2]);

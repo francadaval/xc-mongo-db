@@ -3,8 +3,8 @@ import { NestFactory } from "@nestjs/core";
 import { compare } from 'bcrypt';
 
 import { TestModule } from "./test-module/test.module";
-import { PropertiesTestEntityRepository } from "./test-module/properties-test-entity.repository";
-import { PropertiesTestEntity } from "./test-module/properties-test.entity";
+import { PropertiesTestEntityRepository } from "./test-module/properties/properties-test-entity.repository";
+import { PropertiesTestEntity } from "./test-module/properties/properties-test.entity";
 import { MongoServerError } from "mongodb";
 
 const TEST_ENTITY_JSON = {

@@ -1,7 +1,7 @@
 import { BaseDocEntity, Entity, Property } from "@src/entity";
 
 @Entity()
-export class SimpleTestEntity extends BaseDocEntity {
+export class BaseTestEntity extends BaseDocEntity {
     @Property()
     name?: string;
 
