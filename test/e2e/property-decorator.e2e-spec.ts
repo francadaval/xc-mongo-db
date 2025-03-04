@@ -53,15 +53,6 @@ describe('Property Decorator Tests', () => {
         expect(repo).toBeDefined();
     });
 
-    it('indexes on collection should be created', async () => {
-        const indexes = await repo.collection.indexes();
-        const value_1 = indexes.filter((index: any) => index.name === 'value_1');
-        const uniqueValue_1 = indexes.filter((index: any) => index.name === 'uniqueValue_1');
-
-        expect(value_1).toBeDefined();
-        expect(uniqueValue_1).toBeDefined();
-    });
-
     it('entity id should return name', async () => {
         test_entity.fromJson(TEST_ENTITY_JSON);
 
@@ -87,6 +78,15 @@ describe('Property Decorator Tests', () => {
 
         expect(saved_entity).toBeDefined();
         expect(saved_entity._id).toBe(test_entity._id);
+    });
+
+    it('indexes on collection should be created', async () => {
+        const indexes = await repo.collection.indexes();
+        const value_1 = indexes.filter((index: any) => index.name === 'value_1');
+        const uniqueValue_1 = indexes.filter((index: any) => index.name === 'uniqueValue_1');
+
+        expect(value_1).toBeDefined();
+        expect(uniqueValue_1).toBeDefined();
     });
 
     it('saved entity password should be hashed', async () => {
