@@ -15,7 +15,17 @@ const config = {
       {
         prefix: "<rootDir>/"
       }
-    )
+    ),
+    collectCoverage: true,
+    collectCoverageFrom: ['src/**/*.ts'],
+    coverageDirectory: "coverage",
+    coveragePathIgnorePatterns: [
+       "node_modules",
+       "test",
+       "index.ts",
+       "interface.ts"
+    ],
+    coverageProvider: "v8",
 }
 
 module.exports = config;
