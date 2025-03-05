@@ -12,7 +12,8 @@ const TEST_ENTITY_JSON = {
     password: 'test_password',
     uniqueValue: 42,
     value: 1,
-    nonExistent: 'non_test'
+    nonExistent: 'non_test',
+    value1: 2
 };
 
 const TEST_ENTITY_JSON_UNIQUE = {
@@ -74,10 +75,11 @@ describe('Property Decorator Tests', () => {
     it('repository should save entity', async () => {
         await repo.insertOne(test_entity);
 
-        const saved_entity = await repo.findOne(test_entity._id);
+        const saved_entity = await repo.findOne(TEST_ENTITY_JSON.name);
 
         expect(saved_entity).toBeDefined();
-        expect(saved_entity._id).toBe(test_entity._id);
+        expect(saved_entity._id).toBe(TEST_ENTITY_JSON.name);
+        expect(saved_entity.name).toBe(TEST_ENTITY_JSON.name);
     });
 
     it('indexes on collection should be created', async () => {
@@ -90,11 +92,20 @@ describe('Property Decorator Tests', () => {
     });
 
     it('saved entity password should be hashed', async () => {
-        const saved_entity = await repo.findOne(test_entity._id);
+        const saved_entity = await repo.findOne(TEST_ENTITY_JSON.name);
 
         expect(saved_entity.password).not.toBe(TEST_ENTITY_JSON.password);
         const pass_check = await compare(TEST_ENTITY_JSON.password, saved_entity.password);
         expect(pass_check).toBe(true);
+    });
+
+    it('property name for value1 should be value_1 in DB document', async () => {
+        const doc = test_entity.toDoc();
+        const saved_entity = await repo.findOne(TEST_ENTITY_JSON.name);
+
+        expect(doc.value_1).toBe(TEST_ENTITY_JSON.value1);
+        expect(doc.value1).toBeUndefined();
+        expect(saved_entity.value1).toBe(TEST_ENTITY_JSON.value1);
     });
 
     it('modify entity name should update id', async () => {
@@ -104,11 +115,8 @@ describe('Property Decorator Tests', () => {
     });
 
     it('trying to save duplicate unique value should throw error', async () => {
-        const test_entity_unique = new PropertiesTestEntity();
-        test_entity_unique.fromJson(TEST_ENTITY_JSON_UNIQUE);
-
-        const test_entity_unique2 = new PropertiesTestEntity();
-        test_entity_unique2.fromJson(TEST_ENTITY_JSON_UNIQUE);
+        const test_entity_unique = new PropertiesTestEntity(TEST_ENTITY_JSON_UNIQUE, false);
+        const test_entity_unique2 = new PropertiesTestEntity(TEST_ENTITY_JSON_UNIQUE, false);
         test_entity_unique2.name += '2';
 
         await repo.insertOne(test_entity_unique);
@@ -124,7 +132,7 @@ describe('Property Decorator Tests', () => {
 
         await repo.insertOne(test_entity_default);
 
-        const saved_entity = await repo.findOne(test_entity_default._id);
+        const saved_entity = await repo.findOne(test_entity_default.name);
 
         expect(saved_entity.value).toBe(101);
     });

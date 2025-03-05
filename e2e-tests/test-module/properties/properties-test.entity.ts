@@ -23,4 +23,9 @@ export class PropertiesTestEntity extends BaseDocEntity<string> {
         unique: true
     })
     uniqueValue?: number;
+
+    @Property({
+        dbProperty: 'value_1',
+    })
+    value1?: number;
 }
