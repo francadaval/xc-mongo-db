@@ -10,8 +10,9 @@
     "build": "npm run clean & tsc",
     "clean": "tsc --build --clean & rimraf dist",
     "test": "jest",
+    "test:watch": "jest --watch",
     "test:e2e": "jest --config ./jest-e2e.config.js",
-    "test:e2e-watch": "jest --config ./jest-e2e.config.js --watch"
+    "test:e2e:watch": "jest --config ./jest-e2e.config.js --watch"
   },
   "keywords": [
     "mongodb"
