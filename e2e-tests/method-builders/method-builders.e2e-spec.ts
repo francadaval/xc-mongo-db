@@ -124,6 +124,40 @@ describe('Method Builders Tests', () => {
         await resetCollection();
     });
 
+    it('updateByValue1 should update documents', async () => {
+        const value1 = 2;
+        const update = { value2: 3 };
+        const updatedEntities = TEST_ENTITIES.filter(entity => entity.value1 === value1);
+
+        await repo.updateByValue1(value1, update);
+        const results = await repo.findAllByValue1(value1);
+        
+        expect(results.length).toEqual(updatedEntities.length);
+        updatedEntities.forEach(entity => {
+            const result = results.find(result => result.name === entity.name);
+            expect(result.value2).toEqual(update.value2);
+        });
+        
+        await resetCollection();
+    });
+
+    it('updateByValue2 should update documents', async () => {
+        const value2 = 4;
+        const update = { value1: 3 };
+        const updatedEntities = TEST_ENTITIES.filter(entity => entity.value2 === value2);
+
+        await repo.updateByValue2(value2, update);
+        const results = await repo.findAllByValue2(value2);
+        
+        expect(results.length).toEqual(updatedEntities.length);
+        updatedEntities.forEach(entity => {
+            const result = results.find(result => result.name === entity.name);
+            expect(result.value1).toEqual(update.value1);
+        });
+        
+        await resetCollection();
+    });
+
     async function resetCollection() {
         await repo.deleteAll();
         await repo.insertMany(TEST_ENTITIES.map(entity => new TestEntity(entity, false)));
@@ -132,4 +166,4 @@ describe('Method Builders Tests', () => {
 
 // TODO: Failing tests
 // * findOneByName can not be declared if name is @Id
-// * findOneByValue1 can not be declared if value1 is not @Property
+// * findOneByValue3 can not be declared if value3 is not @Property

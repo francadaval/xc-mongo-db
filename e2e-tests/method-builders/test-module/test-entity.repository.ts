@@ -45,4 +45,14 @@ export class TestEntityRepository extends BaseRepository<TestEntity> {
     deleteAllByValue2(_value2: number): Promise<number> {
         throw new Error('Method not implemented.');
     }
+
+    @RepositoryMethod()
+    updateByValue1(_value1: number, _update: Partial<TestEntity>): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
+    @RepositoryMethod()
+    updateByValue2(_value2: number, _update: Partial<TestEntity>): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
 }
