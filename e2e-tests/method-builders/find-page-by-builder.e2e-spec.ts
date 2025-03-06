@@ -2,8 +2,8 @@ import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
 import { TestModule } from "./test-module/test.module";
-import { PageTestEntity } from "./test-module/page-test.entity";
-import { PageTestEntityRepository } from "./test-module/page-test-entity.repository";
+import { PageTestEntity } from "./test-module/page/page-test.entity";
+import { PageTestEntityRepository } from "./test-module/page/page-test-entity.repository";
 import { PageRequest } from "@src/pagination";
 
 const DEFAULT_INDEX = 0;

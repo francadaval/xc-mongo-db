@@ -7,10 +7,10 @@ import { NestedTestEntity } from "./nested-test.entity";
 })
 export class NestingTestEntity extends BaseDocEntity {
     @Property()
-    name?: string;
+    name: string;
 
     @Property()
-    value?: number;
+    nestedValue2: number;
 
     @Property({
         type: NestedTestEntity

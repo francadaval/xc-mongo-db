@@ -2,8 +2,8 @@ import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
 import { TestModule } from "./test-module/test.module";
-import { TestEntityRepository } from "./test-module/test-entity.repository";
-import { TestEntity } from "./test-module/test.entity";
+import { TestEntityRepository } from "./test-module/base/test-entity.repository";
+import { TestEntity } from "./test-module/base/test.entity";
 
 describe('Method Builders Tests', () => {
     var app: INestApplicationContext;

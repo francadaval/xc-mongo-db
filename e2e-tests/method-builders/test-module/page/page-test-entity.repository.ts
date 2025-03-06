@@ -1,5 +1,5 @@
 import { Page, PageRequest } from "@src/pagination";
-import { E2E_TEST_DB } from "../../consts";
+import { E2E_TEST_DB } from "../../../consts";
 import { PageTestEntity } from "./page-test.entity";
 import { BaseRepository, Repository, RepositoryMethod } from "@src/repositories";
 

@@ -3,8 +3,9 @@ import { Module } from "@nestjs/common";
 import { RepositoriesModule, repositoryFactoryProvider } from "@src/repositories";
 
 import { TEST_URI } from "../../consts";
-import { TestEntityRepository } from "./test-entity.repository";
-import { PageTestEntityRepository } from "./page-test-entity.repository";
+import { TestEntityRepository } from "./base/test-entity.repository";
+import { PageTestEntityRepository } from "./page/page-test-entity.repository";
+import { NestedTestEntityRepository } from "./nested/nested-test-entity.repository";
 
 @Module({
     imports: [
@@ -18,7 +19,8 @@ import { PageTestEntityRepository } from "./page-test-entity.repository";
     ],
     providers: [
         repositoryFactoryProvider(TestEntityRepository),
-        repositoryFactoryProvider(PageTestEntityRepository)
+        repositoryFactoryProvider(PageTestEntityRepository),
+        repositoryFactoryProvider(NestedTestEntityRepository)
     ]
 })
 export class TestModule {}
