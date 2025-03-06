@@ -137,3 +137,12 @@ describe('Property Decorator Tests', () => {
         expect(saved_entity.value).toBe(101);
     });
 });
+
+// TODO: Failing tests:
+//    * Two properties with the same dbProperty name
+//    * Property with both password and unique set to true
+//    * Property with both password and default set
+//    * Property with both unique and default set
+//    * Property with both index and default set
+//    * Property with both index and password set
+//
