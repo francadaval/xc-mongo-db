@@ -1,9 +1,9 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { BetweenTestRepository } from "./test-module/base/between-test.repository";
+import { BetweenTestRepository } from "./test-module/repositories/between-test.repository";
 import { TestModule } from "./test-module/test.module";
-import { BetweenTestEntity } from "./test-module/base/test.entity";
+import { BetweenTestEntity } from "./test-module/repositories/test.entity";
 
 describe('Between Filter Modifier', () => {
 
@@ -111,7 +111,7 @@ describe('Between Filter Modifier', () => {
         await resetCollection();
     });
 
-    it('updateBy with between modifier should return 0 if not found', async () => {
+    it('updateBy with between modifier should not update if not found', async () => {
         const update = {
             value: 200
         };
@@ -127,13 +127,10 @@ describe('Between Filter Modifier', () => {
     async function resetCollection() {
         await repo.collection.deleteMany({});
 
-        testEntities = [];
-        for (let i = 0; i < 100; i++) {
-            testEntities.push(new BetweenTestEntity({
-                name: `name_${i}`,
-                value: i
-            }));
-        }
+        testEntities = Array.from({length: 100}, (_, i) => new BetweenTestEntity({
+            name: `name-${i}`,
+            value: i
+        }, false));
 
         await repo.insertMany(testEntities);
     }

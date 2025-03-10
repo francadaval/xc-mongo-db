@@ -5,7 +5,7 @@ import { BaseDocEntity, EntityDecoratorParameters } from "../../entity";
 const logger = new Logger(Repository.name);
 
 export function Repository(db: string, entityType: Type<BaseDocEntity<unknown>>) {
-    // TODO: Find typing for this
+    // TODO: Find type for this
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (RepoType: any) {
         Reflect.defineMetadata(MetadataKeys.ENTITY_TYPE, entityType, RepoType);
