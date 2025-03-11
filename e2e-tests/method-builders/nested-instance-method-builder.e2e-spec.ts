@@ -30,11 +30,22 @@ const ENTITY_3 = {
     nested: {
         name: 'nested_name_2_3',
         value: 1,
-        value2: 1
+        value2: 3
     }
 };
 
-const ENTITIES = [ENTITY_1, ENTITY_2, ENTITY_3];
+
+const ENTITY_4 = {
+    name: 'entity_name_4',
+    nestedValue2: 1,
+    nested: {
+        name: 'nested_name_2_3',
+        value: 1,
+        value2: 3
+    }
+};
+
+const ENTITIES = [ENTITY_1, ENTITY_2, ENTITY_3, ENTITY_4];
 
 describe('Nested instance - Method Builders Tests', () => {
     var app: INestApplicationContext;
@@ -84,6 +95,15 @@ describe('Nested instance - Method Builders Tests', () => {
         expect(result.nestedValue2).toBe(nestedValue2);
     });
 
+    it('findOneByValue2OfNested should return result for nested entity property value2', async () => {
+        const nestedValue2 = ENTITY_1.nested.value2;
+
+        const result = await repo.findOneByValue2OfNested(nestedValue2);
+
+        expect(result.name).toBe(ENTITY_1.name);
+        expect(result.nested.value2).toBe(nestedValue2);
+    });
+
     it('findAllByNestedName should return documents', async () => {
         const nestedName = ENTITY_2.nested.name;
         const result = await repo.findAllByNestedName(nestedName);
@@ -118,6 +138,17 @@ describe('Nested instance - Method Builders Tests', () => {
         });
     });
 
+    it('findAllByValue2OfNested should return results for nested entity property value2', async () => {
+        const nestedValue2 = ENTITY_2.nested.value2;
+        const result = await repo.findAllByValue2OfNested(nestedValue2);
+        const expectedLength = ENTITIES.filter((entity) => entity.nested.value2 === nestedValue2).length;
+
+        expect(result.length).toBe(expectedLength);
+        result.forEach((entity) => {
+            expect(entity.nested.value2).toBe(nestedValue2);
+        });
+    });
+
     it('countByNestedName should return count', async () => {
         const nestedName = ENTITY_2.nested.name;
         const expected = ENTITIES.filter((entity) => entity.nested.name === nestedName).length;
@@ -138,6 +169,14 @@ describe('Nested instance - Method Builders Tests', () => {
         const nestedValue2 = ENTITY_2.nestedValue2;
         const expected = ENTITIES.filter((entity) => entity.nestedValue2 === nestedValue2).length;
         const count = await repo.countByNestedValue2(nestedValue2);
+
+        expect(count).toBe(expected);
+    });
+
+    it('countByValue2OfNested should return count for nested entity property value2', async () => {
+        const nestedValue2 = ENTITY_2.nested.value2;
+        const expected = ENTITIES.filter((entity) => entity.nested.value2 === nestedValue2).length;
+        const count = await repo.countByValue2OfNested(nestedValue2);
 
         expect(count).toBe(expected);
     });
@@ -176,6 +215,19 @@ describe('Nested instance - Method Builders Tests', () => {
 
         expect(deleted).toBe(expected);
         const result = await repo.findAllByNestedValue2(nestedValue2);
+        expect(result.length).toBe(0);
+
+        await resetCollection();
+    });
+
+    it('deleteAllByValue2OfNested should delete documents for nested entity property value2', async () => {
+        const nestedValue2 = ENTITY_2.nested.value2;
+        const expected = ENTITIES.filter((entity) => entity.nested.value2 === nestedValue2).length;
+
+        const deleted = await repo.deleteAllByValue2OfNested(nestedValue2);
+
+        expect(deleted).toBe(expected);
+        const result = await repo.findAllByValue2OfNested(nestedValue2);
         expect(result.length).toBe(0);
 
         await resetCollection();
@@ -226,14 +278,38 @@ describe('Nested instance - Method Builders Tests', () => {
         const update = {
             nested: {
                 name: 'new_nested_name',
-                value: 12
+                value: 11,
+                value2: 12
             }
         }
+        const expected = ENTITIES.filter((entity) => entity.nestedValue2 === nestedValue2).length
 
         await repo.updateByNestedValue2(nestedValue2, update as Partial<NestingTestEntity>);
         const result = await repo.findAllByNestedValue2(nestedValue2);
 
-        expect(result.length).toBe(ENTITIES.filter((entity) => entity.nestedValue2 === nestedValue2).length);
+        expect(result.length).toBe(expected);
+        result.forEach((entity) => {
+            expect(entity.nested).toEqual(update.nested);
+        });
+
+        await resetCollection();
+    });
+
+    it('updateByValue2OfNested should update documents for nested entity property value2', async () => {
+        const nestedValue2 = ENTITY_2.nested.value2;
+        const update = {
+            nested: {
+                name: 'new_nested_name',
+                value: 11,
+                value2: 12
+            }
+        }
+        const expected = ENTITIES.filter((entity) => entity.nested.value2 === nestedValue2).length;
+
+        await repo.updateByValue2OfNested(nestedValue2, update as Partial<NestingTestEntity>);
+        const result = await repo.findAllByValue2OfNested(12);
+
+        expect(result.length).toBe(expected);
         result.forEach((entity) => {
             expect(entity.nested).toEqual(update.nested);
         });

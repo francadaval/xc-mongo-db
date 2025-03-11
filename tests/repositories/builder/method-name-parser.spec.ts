@@ -9,6 +9,7 @@ const COMPLEX_METHOD_NAME = 'deleteByNameAndValueGreaterThan';
 const AND_TEST_METHOD_NAME = 'findByQuestionsAndAnswersAndValue';
 const DB_NAME_METHOD_NAME = 'findByTestValue';
 const NESTED_PROP_METHOD_NAME = 'findByTestValueIndex';
+const OF_NESTED_PROP_METHOD_NAME = 'findByIndexOfTestValue';
 
 describe(MethodNameParser.name, () => {
     let parserUnderTest: MethodNameParser;
@@ -89,6 +90,17 @@ describe(MethodNameParser.name, () => {
             expect(matchedGroups.length).toBe(1);
 
             expect(firstGroup.attribute).toBe('TestValueIndex');
+            expect(firstGroup.modifier).toBeUndefined();
+            expect(firstGroup.matchedDbProperty).toBe('test_value.index');
+        });
+
+        it('getMatchedGroups should recognize nested properties with "Of"', () => {
+            const [verb, matchedGroups] = parserUnderTest.parse(OF_NESTED_PROP_METHOD_NAME, PROPERTIES, PROPERTIES_DB_NAMES);
+            const firstGroup = matchedGroups[0];
+            
+            expect(matchedGroups.length).toBe(1);
+
+            expect(firstGroup.attribute).toBe('IndexOfTestValue');
             expect(firstGroup.modifier).toBeUndefined();
             expect(firstGroup.matchedDbProperty).toBe('test_value.index');
         });

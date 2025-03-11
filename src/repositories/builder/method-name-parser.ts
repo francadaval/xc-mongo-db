@@ -26,7 +26,9 @@ export class MethodNameParser {
     private initialGroups: ParsedMethodGroup[];
     private compoundedGroups: ParsedMethodGroup[][];
     private firstMatchedGroups: ParsedMethodGroup[];
-    private fomattedProperties: string[];
+    private formattedProperties: {
+        [key:string]: string
+    };
 
     private static logger = new Logger(MethodNameParser.name);
 
@@ -42,6 +44,7 @@ export class MethodNameParser {
         this.parseComplement();
         this.createCompundedGroups();
         this.splitModifiers();
+        this.compoundFormattedProperties();
         this.matchGroupsProperties();
 
         return [this.verb, this.firstMatchedGroups];
@@ -53,7 +56,7 @@ export class MethodNameParser {
         this.initialGroups = null;
         this.compoundedGroups = null;
         this.firstMatchedGroups = null;
-        this.fomattedProperties = null;
+        this.formattedProperties = null;
     }
 
     private funcRegex() {
@@ -169,8 +172,6 @@ export class MethodNameParser {
     }
 
     private matchGroupsProperties(): void {
-        this.fomattedProperties = this.properties.map(property => this.formatProperty(property));
-
         this.matchProperties(this.initialGroups);
         this.compoundedGroups.forEach( groups => this.matchProperties(groups));
 
@@ -181,8 +182,7 @@ export class MethodNameParser {
 
     private matchProperties(groups: ParsedMethodGroup[]): void {
         groups.forEach(group => {
-            const matchedIndex = this.fomattedProperties.findIndex(property => property === group.attribute);
-            group.matchedDbProperty = matchedIndex >= 0 ? this.dbPropertyNames[matchedIndex] : null;
+            group.matchedDbProperty = this.formattedProperties[group.attribute] || null;
         });
     }
 
@@ -191,7 +191,27 @@ export class MethodNameParser {
         throw new Error(message);
     }
 
-    private formatProperty(property: string): string {
+    private compoundFormattedProperties() {
+        this.formattedProperties = {};
+        this.properties.forEach((property, index) => {
+            this.formattedProperties[this.formatPropertyBlankJoin(property)] ||= this.dbPropertyNames[index];
+            const ofJoined = this.formatPropertyOfJoin(property);
+            if(ofJoined) {
+                this.formattedProperties[ofJoined] = this.dbPropertyNames[index];
+            }
+        });
+    }
+
+    private formatPropertyBlankJoin(property: string): string {
         return property.split('.').map(part => (part.charAt(0).toUpperCase() + part.slice(1))).join('');
+    }
+
+    private formatPropertyOfJoin(property: string): string {
+        const splitted = property.split('.');
+        if(splitted.length > 1) {
+            return splitted.reverse().map(part => (part.charAt(0).toUpperCase() + part.slice(1))).join('Of');
+        }
+
+        return null;
     }
 }

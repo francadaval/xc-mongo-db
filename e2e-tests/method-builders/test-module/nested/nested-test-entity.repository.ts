@@ -22,6 +22,11 @@ export class NestedTestEntityRepository extends BaseRepository<NestingTestEntity
     }
 
     @RepositoryMethod()
+    findOneByValue2OfNested(_value2: number): Promise<NestingTestEntity> {
+        throw new Error('Method not implemented.');
+    }
+
+    @RepositoryMethod()
     findAllByNestedName(_name: string): Promise<NestingTestEntity[]> {
         throw new Error('Method not implemented.');
     }
@@ -33,6 +38,11 @@ export class NestedTestEntityRepository extends BaseRepository<NestingTestEntity
 
     @RepositoryMethod()
     findAllByNestedValue2(_value2: number): Promise<NestingTestEntity[]> {
+        throw new Error('Method not implemented.');
+    }
+
+    @RepositoryMethod()
+    findAllByValue2OfNested(_value2: number): Promise<NestingTestEntity[]> {
         throw new Error('Method not implemented.');
     }
 
@@ -52,6 +62,11 @@ export class NestedTestEntityRepository extends BaseRepository<NestingTestEntity
     }
 
     @RepositoryMethod()
+    countByValue2OfNested(_value2: number): Promise<number> {
+        throw new Error('Method not implemented.');
+    }
+
+    @RepositoryMethod()
     deleteAllByNestedName(_name: string): Promise<number> {
         throw new Error('Method not implemented.');
     }
@@ -67,6 +82,11 @@ export class NestedTestEntityRepository extends BaseRepository<NestingTestEntity
     }
 
     @RepositoryMethod()
+    deleteAllByValue2OfNested(_value2: number): Promise<number> {
+        throw new Error('Method not implemented.');
+    }
+
+    @RepositoryMethod()
     updateByNestedName(_name: string, _update: Partial<NestingTestEntity>): Promise<void> {
         throw new Error('Method not implemented.');
     }
@@ -78,6 +98,11 @@ export class NestedTestEntityRepository extends BaseRepository<NestingTestEntity
 
     @RepositoryMethod()
     updateByNestedValue2(_value2: number, _update: Partial<NestingTestEntity>): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
+    @RepositoryMethod()
+    updateByValue2OfNested(_value2: number, _update: Partial<NestingTestEntity>): Promise<void> {
         throw new Error('Method not implemented.');
     }
 }
