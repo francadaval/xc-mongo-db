@@ -1,8 +1,11 @@
 import { INestApplicationContext } from "@nestjs/common";
-import { BaseTestEntity } from "./test-module/base/base-test.entity";
 import { NestFactory } from "@nestjs/core";
-import { TestModule } from "./test-module/test.module";
+
 import { BaseEntity } from "@src/entity";
+
+import { testModuleFactory } from "../utils/test-module.factory";
+import { BaseTestEntity } from "./repositories/base/base-test.entity";
+import { BaseTestEntityRepository } from "./repositories/base/base-test-entity.repository";
 
 describe('BaseEntity Tests', () => {
     const BASE_ENTITY_JSON = {
@@ -25,7 +28,8 @@ describe('BaseEntity Tests', () => {
     let app: INestApplicationContext;
 
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([BaseTestEntityRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
     });
 
     afterAll(async () => {

@@ -1,9 +1,9 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { BetweenTestRepository } from "./test-module/repositories/between-test.repository";
-import { TestModule } from "./test-module/test.module";
-import { BetweenTestEntity } from "./test-module/repositories/test.entity";
+import { testModuleFactory } from "../utils/test-module.factory";
+import { BetweenTestRepository } from "./repositories/between-test.repository";
+import { BetweenTestEntity } from "./repositories/test.entity";
 
 describe('Between Filter Modifier', () => {
 
@@ -12,7 +12,8 @@ describe('Between Filter Modifier', () => {
     let testEntities: BetweenTestEntity[];
 
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([BetweenTestRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(BetweenTestRepository);
         await resetCollection();
     });

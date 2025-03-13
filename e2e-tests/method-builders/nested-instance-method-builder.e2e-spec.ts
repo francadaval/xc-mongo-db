@@ -1,8 +1,10 @@
 import { INestApplicationContext } from "@nestjs/common";
-import { NestedTestEntityRepository } from "./test-module/nested/nested-test-entity.repository";
-import { TestModule } from "./test-module/test.module";
 import { NestFactory } from "@nestjs/core";
-import { NestingTestEntity } from "./test-module/nested/nesting-test.entity";
+
+import { testModuleFactory } from "../utils/test-module.factory";
+
+import { NestedTestEntityRepository } from "./repositories/nested/nested-test-entity.repository";
+import { NestingTestEntity } from "./repositories/nested/nesting-test.entity";
 
 const ENTITY_1 = {
     name: 'entity_name',
@@ -52,7 +54,8 @@ describe('Nested instance - Method Builders Tests', () => {
     var repo: NestedTestEntityRepository;
 
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([NestedTestEntityRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(NestedTestEntityRepository);
         await resetCollection();
     })

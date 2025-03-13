@@ -2,7 +2,7 @@ import { BaseRepository, Repository, RepositoryMethod } from "@src/repositories"
 
 import { NestingTestEntity } from "./nesting-test.entity";
 
-import { E2E_TEST_DB } from "../../../consts";
+import { E2E_TEST_DB } from "../../../utils/consts";
 
 @Repository(E2E_TEST_DB, NestingTestEntity)
 export class NestedTestEntityRepository extends BaseRepository<NestingTestEntity> {

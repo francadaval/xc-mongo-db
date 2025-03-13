@@ -1,8 +1,9 @@
 import { INestApplicationContext } from "@nestjs/common";
-import { ArrayFilterTestRepository } from "./test-module/repositories/array-filter-test.repository";
-import { ArrayFilterTestEntity } from "./test-module/repositories/array-filter-test.entity";
-import { TestModule } from "./test-module/test.module";
 import { NestFactory } from "@nestjs/core";
+
+import { testModuleFactory } from "../utils/test-module.factory";
+import { ArrayFilterTestRepository } from "./repositories/array-filter-test.repository";
+import { ArrayFilterTestEntity } from "./repositories/array-filter-test.entity";
 
 describe('Array Filter Modifiers', () => {
 
@@ -15,7 +16,8 @@ describe('Array Filter Modifiers', () => {
     let testEntities: ArrayFilterTestEntity[];
 
     beforeEach(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([ArrayFilterTestRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(ArrayFilterTestRepository);
         await resetCollection();
     });

@@ -1,11 +1,11 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { compare } from 'bcrypt';
-
-import { TestModule } from "./test-module/test.module";
-import { PropertiesTestEntityRepository } from "./test-module/properties/properties-test-entity.repository";
-import { PropertiesTestEntity } from "./test-module/properties/properties-test.entity";
 import { MongoServerError } from "mongodb";
+
+import { testModuleFactory } from "../utils/test-module.factory";
+import { PropertiesTestEntityRepository } from "./repositories/properties/properties-test-entity.repository";
+import { PropertiesTestEntity } from "./repositories/properties/properties-test.entity";
 
 const TEST_ENTITY_JSON = {
     name: 'test_name',
@@ -36,7 +36,8 @@ describe('Property Decorator Tests', () => {
     let test_entity: PropertiesTestEntity;
     
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([PropertiesTestEntityRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(PropertiesTestEntityRepository);
         test_entity = new PropertiesTestEntity();
     });
@@ -137,12 +138,3 @@ describe('Property Decorator Tests', () => {
         expect(saved_entity.value).toBe(101);
     });
 });
-
-// TODO: Failing tests:
-//    * Two properties with the same dbProperty name
-//    * Property with both password and unique set to true
-//    * Property with both password and default set
-//    * Property with both unique and default set
-//    * Property with both index and default set
-//    * Property with both index and password set
-//

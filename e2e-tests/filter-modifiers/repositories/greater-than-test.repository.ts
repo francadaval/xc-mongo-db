@@ -1,38 +1,38 @@
 import { BaseRepository, Repository, RepositoryMethod } from "@src/repositories";
 
-import { LessThanEqualTestEntity } from "./test.entity";
-import { E2E_TEST_DB } from "../../../consts";
+import { GreaterThanTestEntity } from "./test.entity";
+import { E2E_TEST_DB } from "../../utils/consts";
 
-@Repository(E2E_TEST_DB, LessThanEqualTestEntity)
-export class LessThanEqualTestRepository extends BaseRepository<LessThanEqualTestEntity> {
+@Repository(E2E_TEST_DB, GreaterThanTestEntity)
+export class GreaterThanTestRepository extends BaseRepository<GreaterThanTestEntity> {
 
     @RepositoryMethod()
-    findOneByValueLessThanEqual(_value: number): Promise<LessThanEqualTestEntity> {
+    findOneByValueGreaterThan(_value: number): Promise<GreaterThanTestEntity> {
         throw new Error('Method not implemented.');
     }
 
     @RepositoryMethod()
-    findAllByValueLessThanEqual(_value: number): Promise<LessThanEqualTestEntity[]> {
+    findAllByValueGreaterThan(_value: number): Promise<GreaterThanTestEntity[]> {
         throw new Error('Method not implemented.');
     }
 
     @RepositoryMethod()
-    countByValueLessThanEqual(_value: number): Promise<number> {
+    countByValueGreaterThan(_value: number): Promise<number> {
         throw new Error('Method not implemented.');
     }
 
     @RepositoryMethod()
-    deleteAllByValueLessThanEqual(_value: number): Promise<number> {
+    deleteAllByValueGreaterThan(_value: number): Promise<number> {
         throw new Error('Method not implemented.');
     }
 
     @RepositoryMethod()
-    updateByValueLessThanEqual(_value: number, _update: Partial<LessThanEqualTestEntity>): Promise<void> {
+    updateByValueGreaterThan(_value: number, _update: Partial<GreaterThanTestEntity>): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
     @RepositoryMethod()
-    findAllByValue(_value: number): Promise<LessThanEqualTestEntity[]> {
+    findAllByValue(_value: number): Promise<GreaterThanTestEntity[]> {
         throw new Error('Method not implemented.');
     }
 

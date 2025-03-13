@@ -1,7 +1,7 @@
 import { BaseRepository, Repository, RepositoryMethod } from "@src/repositories";
 
 import { TestEntity } from "./test.entity";
-import { E2E_TEST_DB } from "../../../consts";
+import { E2E_TEST_DB } from "../../../utils/consts";
 
 @Repository(E2E_TEST_DB, TestEntity)
 export class TestEntityRepository extends BaseRepository<TestEntity> {

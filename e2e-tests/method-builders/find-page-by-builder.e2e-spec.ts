@@ -1,10 +1,11 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { TestModule } from "./test-module/test.module";
-import { PageTestEntity } from "./test-module/page/page-test.entity";
-import { PageTestEntityRepository } from "./test-module/page/page-test-entity.repository";
 import { PageRequest } from "@src/pagination";
+
+import { testModuleFactory } from "../utils/test-module.factory";
+import { PageTestEntity } from "./repositories/page/page-test.entity";
+import { PageTestEntityRepository } from "./repositories/page/page-test-entity.repository";
 
 const DEFAULT_INDEX = 0;
 const DEFAULT_SIZE = 10;
@@ -15,7 +16,8 @@ describe('Method findPageBy Builders Tests', () => {
     let testEntities: PageTestEntity[];
 
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([PageTestEntityRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(PageTestEntityRepository);
         await resetCollection();
     });

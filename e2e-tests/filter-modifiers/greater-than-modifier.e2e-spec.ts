@@ -1,9 +1,9 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { GreaterThanTestEntity } from "./test-module/repositories/test.entity";
-import { TestModule } from "./test-module/test.module";
-import { GreaterThanTestRepository } from "./test-module/repositories/greater-than-test.repository";
+import { testModuleFactory } from "../utils/test-module.factory";
+import { GreaterThanTestEntity } from "./repositories/test.entity";
+import { GreaterThanTestRepository } from "./repositories/greater-than-test.repository";
 
 describe('Greater than Filter Modifier', () => {
 
@@ -12,7 +12,8 @@ describe('Greater than Filter Modifier', () => {
     let testEntities: GreaterThanTestEntity[];
     
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([GreaterThanTestRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(GreaterThanTestRepository);
         await resetCollection();
     });

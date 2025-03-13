@@ -1,9 +1,9 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { LessThanEqualTestEntity } from "./test-module/repositories/test.entity";
-import { TestModule } from "./test-module/test.module";
-import { LessThanEqualTestRepository } from "./test-module/repositories/less-than-equal-test.repository";
+import { testModuleFactory } from "../utils/test-module.factory";
+import { LessThanEqualTestEntity } from "./repositories/test.entity";
+import { LessThanEqualTestRepository } from "./repositories/less-than-equal-test.repository";
 
 describe('Greater than - Equal Filter Modifier', () => {
 
@@ -12,7 +12,8 @@ describe('Greater than - Equal Filter Modifier', () => {
     let testEntities: LessThanEqualTestEntity[];
     
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([LessThanEqualTestRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(LessThanEqualTestRepository);
         await resetCollection();
     });

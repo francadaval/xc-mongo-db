@@ -1,5 +1,5 @@
 import { BaseRepository, Repository, RepositoryMethod } from "@src/repositories";
-import { E2E_TEST_DB } from "../../../consts";
+import { E2E_TEST_DB } from "../../utils/consts";
 import { ArrayFilterTestEntity } from "./array-filter-test.entity";
 
 @Repository(E2E_TEST_DB, ArrayFilterTestEntity)

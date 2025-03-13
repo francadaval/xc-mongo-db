@@ -2,9 +2,9 @@ import { NestFactory } from "@nestjs/core";
 import { INestApplicationContext } from "@nestjs/common";
 import { ObjectId } from "mongodb";
 
-import { TestModule } from "./test-module/test.module";
-import { BaseTestEntityRepository } from "./test-module/base/base-test-entity.repository";
-import { BaseTestEntity } from "./test-module/base/base-test.entity";
+import { BaseTestEntityRepository } from "./repositories/base/base-test-entity.repository";
+import { BaseTestEntity } from "./repositories/base/base-test.entity";
+import { testModuleFactory } from "../utils/test-module.factory";
 
 const TEST_ENTITY_JSON = {
     name: 'Test Entity',
@@ -20,7 +20,8 @@ describe('BaseRepository Tests', () => {
     let entity_id: ObjectId;
 
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([BaseTestEntityRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(BaseTestEntityRepository);
     });
     

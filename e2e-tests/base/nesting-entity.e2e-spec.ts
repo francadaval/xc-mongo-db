@@ -1,10 +1,10 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { TestModule } from "./test-module/test.module";
-import { NestingTestEntityRepository } from "./test-module/nesting/nesting-test-entity.repository";
-import { NestingTestEntity } from "./test-module/nesting/nesting-test.entity";
-import { NestedTestEntity } from "./test-module/nesting/nested.entity";
+import { testModuleFactory } from "../utils/test-module.factory";
+import { NestingTestEntityRepository } from "./repositories/nesting/nesting-test-entity.repository";
+import { NestingTestEntity } from "./repositories/nesting/nesting-test.entity";
+import { NestedTestEntity } from "./repositories/nesting/nested.entity";
 
 const TEST_ENTITY_JSON = {
     name: 'test_name',
@@ -29,6 +29,7 @@ describe('Nesting Entity Tests', () => {
     let repo: NestingTestEntityRepository;
 
     beforeAll(async () => {
+        const TestModule = testModuleFactory([NestingTestEntityRepository]);
         app = await NestFactory.createApplicationContext(TestModule);
         repo = app.get(NestingTestEntityRepository);
     });

@@ -1,9 +1,9 @@
 import { INestApplicationContext } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { TestModule } from "./test-module/test.module";
-import { TestEntityRepository } from "./test-module/base/test-entity.repository";
-import { TestEntity } from "./test-module/base/test.entity";
+import { testModuleFactory } from "../utils/test-module.factory";
+import { TestEntityRepository } from "./repositories/base/test-entity.repository";
+import { TestEntity } from "./repositories/base/test.entity";
 
 describe('Method Builders Tests', () => {
     var app: INestApplicationContext;
@@ -28,7 +28,8 @@ describe('Method Builders Tests', () => {
     }];
 
     beforeAll(async () => {
-        app = await NestFactory.createApplicationContext(TestModule);
+        const testModule = testModuleFactory([TestEntityRepository]);
+        app = await NestFactory.createApplicationContext(testModule);
         repo = app.get(TestEntityRepository);
         await resetCollection();
     });
