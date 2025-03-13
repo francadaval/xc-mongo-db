@@ -7,12 +7,8 @@ export function Id() {
     return function (target: object, propertyKey: string) {
         const targetConstructor = target.constructor;
 
-        if (Reflect.hasMetadata(MetadataKeys.ID_PROPERTY, targetConstructor)) {
-            const idProperty = Reflect.getMetadata(MetadataKeys.ID_PROPERTY, targetConstructor);
-            const message = `Id already registered: ${targetConstructor.name}:${idProperty}.`;
-            logger.error(message);
-            throw new Error(message);
-        }
+        checkIdDoesntExist(targetConstructor, propertyKey);
+        checkIdIsNotProperty(targetConstructor, propertyKey);
 
         Reflect.defineMetadata(MetadataKeys.ID_PROPERTY, propertyKey, targetConstructor);
 
@@ -29,6 +25,24 @@ export function Id() {
             }
         });
 
-        logger.debug(`Id registered: ${targetConstructor.name}:${propertyKey}.`)
+        logger.debug(`${targetConstructor.name}:${propertyKey}: Id registered.`)
     };
+}
+
+function checkIdDoesntExist(targetConstructor: Function, propertyKey: string) {
+    const idProperty = Reflect.getMetadata(MetadataKeys.ID_PROPERTY, targetConstructor);
+    if (idProperty) {
+        const message = `${targetConstructor.name}:${propertyKey} - Id already registered: ${targetConstructor.name}:${idProperty}.`;
+        logger.error(message);
+        throw new Error(message);
+    }
+}
+
+function checkIdIsNotProperty(targetConstructor: Function, propertyKey: string) {
+    const properties = Reflect.getMetadata(MetadataKeys.ENTITY_PROPERTIES, targetConstructor) || {};
+    if (properties[propertyKey]) {
+        const message = `${targetConstructor.name}:${propertyKey} - @Id cannot be applied with @Property decorator.`;
+        logger.error(message);
+        throw new Error(message);
+    }
 }
