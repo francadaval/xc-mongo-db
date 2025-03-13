@@ -1,9 +1,9 @@
 import { BaseDocEntity, Entity, Property } from "@src/entity";
 
-import { NestedTestEntity } from "./nested-test.entity";
+import { NestedTestEntity as NestedEntity } from "./nested.entity";
 
 @Entity({
-    collectionName: 'nesting_test'
+    collectionName: 'base_nesting_test'
 })
 export class NestingTestEntity extends BaseDocEntity {
     @Property()
@@ -13,7 +13,7 @@ export class NestingTestEntity extends BaseDocEntity {
     value?: number;
 
     @Property({
-        type: NestedTestEntity
+        type: NestedEntity
     })
-    nested?: NestedTestEntity;
+    nested?: NestedEntity;
 }

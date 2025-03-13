@@ -1,6 +1,8 @@
 import { BaseDocEntity, Entity, Property } from "@src/entity";
 
-@Entity()
+@Entity({
+    collectionName: 'base_test'
+})
 export class BaseTestEntity extends BaseDocEntity {
     @Property()
     name?: string;

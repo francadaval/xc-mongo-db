@@ -4,7 +4,7 @@ import { NestFactory } from "@nestjs/core";
 import { TestModule } from "./test-module/test.module";
 import { NestingTestEntityRepository } from "./test-module/nesting/nesting-test-entity.repository";
 import { NestingTestEntity } from "./test-module/nesting/nesting-test.entity";
-import { NestedTestEntity } from "./test-module/nesting/nested-test.entity";
+import { NestedTestEntity } from "./test-module/nesting/nested.entity";
 
 const TEST_ENTITY_JSON = {
     name: 'test_name',
