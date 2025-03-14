@@ -6,6 +6,7 @@ import { declareIdPropertyEntity } from "./repositories/failing/id-property.enti
 import { declarePasswordAndUniquePropertyEntity } from "./repositories/failing/password-unique-property.entity";
 import { declarePasswordAndDefaultPropertyEntity } from "./repositories/failing/password-default-property.entity";
 import { declareUniqueDefaultEntity } from "./repositories/failing/unique-default-property.entity";
+import { declarePropertyIdEntity } from "./repositories/failing/property-id.entity";
 
 describe('Property Decorator Failing Tests', () => {
     let app: INestApplicationContext;
@@ -22,9 +23,15 @@ describe('Property Decorator Failing Tests', () => {
         }).rejects.toThrow();
     });
 
-    it('@Id decorator can not be applied with @Property decorator should throw and error', async () => {
+    it('@Id decorator applied with @Property decorator should throw and error', async () => {
         expect(async () => {
             declareIdPropertyEntity();
+        }).rejects.toThrow();
+    });
+
+    it('@Property decorator applied with @Id decorator should throw and error', async () => {
+        expect(async () => {
+            declarePropertyIdEntity();
         }).rejects.toThrow();
     });
 
