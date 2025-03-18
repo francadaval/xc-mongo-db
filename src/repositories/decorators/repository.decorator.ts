@@ -1,25 +1,24 @@
 import { Logger, Type } from "@nestjs/common";
 import { MetadataKeys } from "../../common/metadata-keys";
 import { BaseDocEntity, EntityDecoratorParameters } from "../../entity";
+import { BaseRepository } from "../base-repository";
 
 const logger = new Logger(Repository.name);
 
 export function Repository(db: string, entityType: Type<BaseDocEntity<unknown>>) {
-    // TODO: Find type for this
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return function (RepoType: any) {
-        Reflect.defineMetadata(MetadataKeys.ENTITY_TYPE, entityType, RepoType);
+    return function (target: Type<BaseRepository<BaseDocEntity<unknown>>>) {
+        Reflect.defineMetadata(MetadataKeys.ENTITY_TYPE, entityType, target);
         
         const entityParameters: EntityDecoratorParameters = Reflect.getMetadata(MetadataKeys.ENTITY_DECORATOR_PARAMETERS, entityType);
         
-        const newClass =  class extends RepoType {
+        const newClass =  class extends target {
             constructor(...args: any[]) {
                 super(args[0], db, entityParameters.collectionName || entityType.name);
-                this.logger = new Logger(RepoType.name);
+                this.logger = new Logger(target.name);
             }
-        } as typeof RepoType;
+        } as typeof target;
 
-        logger.log(`${RepoType.name}, class created.`);
+        logger.log(`${target.name}, class created.`);
 
         return newClass;
     };
