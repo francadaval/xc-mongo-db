@@ -18,12 +18,13 @@
     "mongodb"
   ],
   "dependencies": {
+    "@nestjs/common": "^11.0.9",
     "bcrypt": "^5.1.1",
     "mongodb": "^6.13.0"
   },
   "devDependencies": {
-    "@nestjs/common": "^11.0.9",
     "@nestjs/core": "^11.0.9",
+    "@nestjs/config": "^4.0.0",
     "@nestjs/testing": "^11.0.9",
     "@types/bcrypt": "^5.0.2",
     "@types/jest": "^29.5.14",

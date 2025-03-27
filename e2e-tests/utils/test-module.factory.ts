@@ -1,7 +1,7 @@
 import { Abstract, DynamicModule } from "@nestjs/common";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { BaseRepository, RepositoriesModule, repositoryFactoryProvider } from "@src/repositories";
-import { TEST_URI } from "./consts";
 import { BaseDocEntity } from "@src/entity";
 
 type RepositoryClass = Abstract<BaseRepository<BaseDocEntity<unknown>>>;
@@ -12,12 +12,14 @@ export function testModuleFactory(repositoryClasses: RepositoryClass[]): Dynamic
     return {
         module: TestModule,
         imports: [
+            ConfigModule.forRoot({
+                isGlobal: true
+            }),
             RepositoriesModule.registerAsync({
-                useFactory: () => {
-                    return {
-                        connectionUri: TEST_URI
-                    };
-                }
+                useFactory: (configService: ConfigService) => ({
+                        connectionUri: configService.get('E2E_TEST_MONGO_URI')
+                }),
+                inject: [ConfigService]
             })
         ],
         providers: repositoryClasses.map(repoClass => repositoryFactoryProvider(repoClass))
