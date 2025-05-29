@@ -15,6 +15,8 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
 
     async insertOne(entity: T): Promise<any> {
         this.logger.log(`insertOne`);
+
+        entity.assignDefaultValues();
         const doc = entity.toDoc();
         await this.collection.insertOne(doc);
 
@@ -23,7 +25,10 @@ export abstract class BaseRepository<T extends BaseDocEntity<any>> {
 
     async insertMany(entities: T[]): Promise<any[]> {
         this.logger.log(`insertMany`);
-        const docs = entities.map(entity => entity.toDoc());
+
+        entities.forEach(doc => doc.assignDefaultValues());
+        const docs = entities
+            .map(entity => entity.toDoc());
         await this.collection.insertMany(docs);
 
         return docs.map(doc => doc._id);

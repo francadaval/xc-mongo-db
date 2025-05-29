@@ -1,5 +1,7 @@
 import { BaseDocEntity, Entity, Id, Property } from "@src/entity";
 
+export const VALUE_DEFAULT = 101;
+
 @Entity({
     collectionName: 'properties_test'
 })
@@ -13,7 +15,7 @@ export class PropertiesTestEntity extends BaseDocEntity<string> {
     password?: string;
 
     @Property({
-        default: 101,
+        default: VALUE_DEFAULT,
         index: 1
     })
     value?: number;

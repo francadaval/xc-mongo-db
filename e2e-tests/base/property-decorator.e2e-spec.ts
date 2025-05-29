@@ -5,7 +5,7 @@ import { MongoServerError } from "mongodb";
 
 import { testModuleFactory } from "../utils/test-module.factory";
 import { PropertiesTestEntityRepository } from "./repositories/properties/properties-test-entity.repository";
-import { PropertiesTestEntity } from "./repositories/properties/properties-test.entity";
+import { PropertiesTestEntity, VALUE_DEFAULT } from "./repositories/properties/properties-test.entity";
 
 const TEST_ENTITY_JSON = {
     name: 'test_name',
@@ -27,6 +27,13 @@ const TEST_ENTITY_JSON_DEFAULT = {
     name: 'test_name_default',
     password: 'test_password_default',
     uniqueValue: 44
+}
+
+const TEST_ENTITY_JSON_NON_DEFAULT = {
+    name: 'test_name_non_default',
+    password: 'test_password_non_default',
+    uniqueValue: 45,
+    value: 200
 }
 
 describe('Property Decorator Tests', () => {
@@ -135,6 +142,21 @@ describe('Property Decorator Tests', () => {
 
         const saved_entity = await repo.findOne(test_entity_default.name);
 
-        expect(saved_entity.value).toBe(101);
+        expect(saved_entity.value).toBe(VALUE_DEFAULT);
+    });
+
+    // TODO: Check the default value is applied on entity creation but not on update
+    it('default value should not be set on update', async () => {
+        const test_entity_non_default = new PropertiesTestEntity(TEST_ENTITY_JSON_NON_DEFAULT, false);
+        const new_value1 = 120;
+        await repo.insertOne(test_entity_non_default);
+
+        await repo.updateOne(test_entity_non_default._id, {value1: new_value1});
+
+        const saved_entity = await repo.findOne(test_entity_non_default.name);
+
+        expect(saved_entity.value).toBe(TEST_ENTITY_JSON_NON_DEFAULT.value);
+        expect(saved_entity.value).not.toBe(VALUE_DEFAULT);
+        expect(saved_entity.value1).toBe(new_value1);
     });
 });

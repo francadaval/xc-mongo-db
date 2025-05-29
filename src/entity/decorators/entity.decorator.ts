@@ -24,9 +24,23 @@ export function Entity(parameters?: EntityDecoratorParameters) {
         target.prototype.fromDoc = getFromDocFunction(superPrototype, entityProperties);
         target.prototype.toDoc = getToDocFunction(superPrototype, entityProperties);
         target.prototype.fromJson = getFromJsonFunction(superPrototype, entityProperties, idProperty);
+        target.prototype.assignDefaultValues = getAssignDefaultValuesFunction(superPrototype, entityProperties);
 
         logger.log(`${target.name} entity, implementation completed.`);
     };
+}
+
+function getAssignDefaultValuesFunction(superPrototype: any, entityProperties: EntityProperties) {
+    return function (): void {
+        superPrototype.assignDefaultValues.apply(this);
+
+        for (const property in entityProperties) {
+            const parameters = entityProperties[property];
+            if (parameters.default !== undefined && this[property] === undefined) {
+                this[property] = parameters.default;
+            }
+        }
+    }
 }
 
 function getFromDocFunction(superPrototype: any, entityProperties: EntityProperties) {
@@ -36,9 +50,6 @@ function getFromDocFunction(superPrototype: any, entityProperties: EntityPropert
             const parameters = entityProperties[property];
 
             let value = data[parameters.dbProperty];
-            if( value === undefined || value === null ) {
-                value = parameters.default;
-            }
 
             this[property] = (parameters.type && value !== undefined)
                 ? instantiateType(parameters.type, value)
@@ -95,9 +106,6 @@ function getFromJsonFunction(superPrototype: any, entityProperties: EntityProper
             const parameters = entityProperties[property];
 
             let value = data[property];
-            if( value === undefined || value === null ) {
-                value = parameters.default;
-            }
 
             if( value !== undefined ) {
                 this[property] = parameters.type

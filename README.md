@@ -120,7 +120,7 @@ The `@Property` decorator accepts an object parameter of type `PropertyDecorator
 * **dbProperty**: The name of the property in the database document if it's different from the entity class attribute.
 * **unique**: A boolean flag, *true* if the value must be unique in the database collection. An unique index will be created in the MongoDb collection.
 * **password**: If *true* the value of this property is hashed before being stored in MongoDb. A password property cannot be unique, indexed or the entity id nor have a default value.
-* **default**: Establish a default value for the property when it's stored. A property with a default value cannot be null nor password.
+* **default**: Establish a default value for the property when it's stored. A property with a default value cannot be unique nor password.
 * **index**: An index with provided `IndexDirection` will be created in the collection for this property.
 * **type**: The type of the property when it's a nested object. The nested object type should extend the abstract class `BaseEntity`.
 

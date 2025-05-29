@@ -15,4 +15,6 @@ export abstract class BaseEntity {
     fromDoc(_data: any = {}): void {}
 
     fromJson(_data: any = {}): void {}
+
+    assignDefaultValues(): void {}
 }
