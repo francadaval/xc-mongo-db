@@ -1,6 +1,6 @@
 {
   "name": "xc-mongo-db",
-  "version": "0.0.8_dev",
+  "version": "0.0.8",
   "author": "Fran Cadaval",
   "description": "This library provides support for the MongoDB database.",
   "license": "ISC",
