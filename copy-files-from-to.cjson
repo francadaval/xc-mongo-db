@@ -1,0 +1,24 @@
+{
+    "copyFiles": [{
+        "from": {
+            "package": "package.json",
+            "default": {"skip": true}
+        },
+        "to": {
+            "package": "dist/package.json",
+            "default": {"skip": true}
+        }
+    },{
+        "from": {
+            "package": "README.md",
+            "default": {"skip": true}
+        },
+        "to": {
+            "package": "dist/README.md",
+            "default": {"skip": true}
+        }
+    }],
+    "copyFilesSettings": {
+        "whenFileExists": "overwrite"
+    }    
+}
