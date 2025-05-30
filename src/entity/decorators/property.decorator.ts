@@ -1,21 +1,27 @@
 import { Logger, Type } from "@nestjs/common";
-import { MetadataKeys } from "../../common/metadata-keys";
 import { IndexDirection } from "mongodb";
+
+import { MetadataKeys } from "../../common/metadata-keys";
+import { BaseEntity } from "../base-entity";
 
 const logger = new Logger(Property.name);
 
 export type EntityProperties = {
-    [propertyName: string]: PropertyDecoratorParameters<unknown>
+    [propertyName: string]: PropertyParameters<unknown>
 }
 
 export type PropertyDecoratorParameters<T> = {
     dbProperty?: string
-    type?: Type
     unique?: boolean
     password?: boolean
     default?: T
-    index?: IndexDirection
+    index?: IndexDirection,
+    type?: Type
 };
+
+export type PropertyParameters<T> = PropertyDecoratorParameters<T> & {
+    designType: Type
+}
 
 export function Property(parameters: PropertyDecoratorParameters<unknown> = {}) {
     return function (target: object, propertyKey: string) {
@@ -28,11 +34,12 @@ export function Property(parameters: PropertyDecoratorParameters<unknown> = {}) 
         checkPropertyIsNotId(targetConstructor, propertyKey);
         checkParameters(parameters, targetConstructor.name, propertyKey);
 
-        properties[propertyKey] = parameters;
+        const designType = Reflect.getMetadata("design:type", target, propertyKey);
+        checkPropertyDesignType(designType, targetConstructor.name, propertyKey);
+        properties[propertyKey] = {...parameters, designType };
 
         Reflect.defineMetadata(MetadataKeys.ENTITY_PROPERTIES, properties, targetConstructor);
-
-        logger.debug(`${targetConstructor.name}:${propertyKey}: Property registered.`)
+        logger.debug(`${targetConstructor.name}:${propertyKey}: Property registered, designType: ${designType.name}, type: ${parameters.type?.name}.`)
     };
 }
 
@@ -68,6 +75,15 @@ function checkParameters(parameters: PropertyDecoratorParameters<unknown>, targe
 
     if(parameters.unique && parameters.default !== undefined) {
         throwError(`${TARGET_NAME}: Property with both unique and default set.`);
+    }
+}
+
+// TODO: Improve type checking, add missing types
+// In case of arrays, the designType will be Array but the actual type of elements will be unknown.
+function checkPropertyDesignType(designType: Type, targetConstructorName: string, propertyKey: string) {
+    const basicTypes: Type[] = [String, Number, Boolean, Date, Array];
+    if (!(basicTypes.includes(designType) || designType.prototype instanceof BaseEntity)) {
+        logger.warn(`${targetConstructorName}:${propertyKey}: Property type ${designType} may be not supported.`);
     }
 }
 

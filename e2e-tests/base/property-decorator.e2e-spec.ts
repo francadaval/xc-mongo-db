@@ -145,7 +145,6 @@ describe('Property Decorator Tests', () => {
         expect(saved_entity.value).toBe(VALUE_DEFAULT);
     });
 
-    // TODO: Check the default value is applied on entity creation but not on update
     it('default value should not be set on update', async () => {
         const test_entity_non_default = new PropertiesTestEntity(TEST_ENTITY_JSON_NON_DEFAULT, false);
         const new_value1 = 120;
